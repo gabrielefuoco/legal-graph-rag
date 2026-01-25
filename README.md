@@ -46,5 +46,4 @@ Il sistema adotta un approccio **Hybrid Knowledge Graph + Vector Search**, senza
 
 Attualmente il progetto ha completato la **Fase 0 (Inizializzazione e Ingestione Dati)** ed è pronto per la **Fase 1 (Parsing e Costruzione del Grafo)**.
 
----
-*Based on [Proposta Tesi](DOCUMENTAZIONE/GraphRAG%20-%20Proposta%20Tesi%20Gabriele%20Fuoco.md)*
+
