@@ -44,15 +44,11 @@ class NormattivaClient:
             response = requests.post(url, json=payload)
             response.raise_for_status()
             
-            # API returns a string token directly or inside a wrapper? 
-            # OAS says response 202 content schema is just "type: string"
-            # But normally APIs return JSON. Let's assume it might be text or JSON wrapped.
-            # Reading OAS: "Nuova ricerca... restituito in risposta il token"
             
             token = response.text.strip().replace('"', '') # Clean up potential JSON string quotes
             logger.info(f"Search initiated. Token: {token}")
             
-            # CRITICAL STEP: Confirm the search
+            # Confirm the search
             if self._confirm_search(token):
                 return token
             else:
@@ -151,7 +147,7 @@ class NormattivaClient:
         start_date = f"{year}-01-01"
         end_date = f"{year}-12-31"
         
-        # Configure search parameters for the 'Avanzata' search
+        # Configure search parameters for the Advanced search
         params = {
             "annoProvvedimento": year,
             "dataInizioPubProvvedimento": start_date,
@@ -165,7 +161,8 @@ class NormattivaClient:
         if token:
             logger.info(f"Bulk search for {year} initiated (Token: {token}). Waiting for results...")
             # Increased timeout for bulk operations
-            return self.wait_and_download(token, poll_interval=10, timeout=1200) # 20 mins timeout
+            # TODO: Consider making timeout configurable @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            return self.wait_and_download(token, poll_interval=10, timeout=1200) # 20 mins timeout 
         else:
             logger.error(f"Failed to initiate bulk search for {year}")
             return None
