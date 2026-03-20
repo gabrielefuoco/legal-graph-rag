@@ -1,31 +1,94 @@
 import sys
 import os
 import logging
-from src.ingestion.teseo_downloader import TeseoDownloader
-from src.ingestion.normattiva_api import NormattivaClient
+import asyncio
+import argparse
+from src.ingestion.async_normattiva_client import AsyncNormattivaClient
+from src.ingestion.async_teseo_client import AsyncTeseoClient
+from src.ingestion.async_senato_scraper import AsyncSenatoScraper
+from src.ingestion.async_camera_client import AsyncCameraClient
+from src.ingestion.async_eurlex_client import AsyncEurLexClient
+from src.ingestion.async_corte_cost_client import AsyncCorteCostClient
 
-logging.basicConfig(level=logging.INFO)
+from src.parsing.transformers import enrich_and_load_pipeline
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-def ingest_all():
-    logger.info("Starting Full Ingestion Pipeline...")
-    
-    # 1. TESEO
-    logger.info("--- Step 1: TESEO Thesaurus ---")
-    teseo = TeseoDownloader()
-    teseo.download_teseo_rdf()
-    
-    # 2. Senato Bulk (Clone handled manually)
-    logger.info("--- Step 2: Senato Bulk Data ---")
-    logger.info("Skipping download: User taking care of cloning repository to data/raw/")
+async def run_pipeline(start_date: str = None, limit: int = 100):
+    """
+    Runs the full ingestion pipeline asynchronously.
+    """
+    logger.info(f"Starting Full Ingestion Pipeline (Start Date: {start_date}, Limit: {limit})...")
 
-    # 3. Normattiva
-    logger.info("--- Step 3: Normattiva API ---")
-    normattiva = NormattivaClient()
-    logger.info("Normattiva client ready (Async search requires valid parameters)")
+    # 1. TESEO (Async)
+    logger.info("--- Step 1: TESEO Thesaurus ---")
+    try:
+        await AsyncTeseoClient().run()
+    except Exception as e:
+        logger.error(f"TESEO ingestion failed: {e}")
+
+    # 2. Senato (Async)
+    logger.info("--- Step 2: Senato Ingestion ---")
+    try:
+        await AsyncSenatoScraper().run()
+    except Exception as e:
+        logger.error(f"Senato ingestion failed: {e}")
+
+    # 3. Camera (Async)
+    logger.info("--- Step 3: Camera dei Deputati ---")
+    try:
+        camera_client = AsyncCameraClient()
+        await camera_client.run() 
+    except Exception as e:
+        logger.error(f"Camera ingestion failed: {e}")
+
+    # 4. EUR-Lex (Async)
+    logger.info("--- Step 4: EUR-Lex ---")
+    try:
+        eurlex_client = AsyncEurLexClient()
+        s_date = start_date if start_date else "2024-01-01"
+        await eurlex_client.run(start_date=s_date, limit=limit)
+    except Exception as e:
+        logger.error(f"EUR-Lex ingestion failed: {e}")
+
+    # 5. Normattiva (Async)
+    logger.info("--- Step 5: Normattiva API ---")
+    try:
+        normattiva_client = AsyncNormattivaClient()
+        await normattiva_client.run(date=start_date)
+    except Exception as e:
+        logger.error(f"Normattiva ingestion failed: {e}")
+
+    # 6. Corte Costituzionale (Async)
+    logger.info("--- Step 6: Corte Costituzionale ---")
+    try:
+        await AsyncCorteCostClient().run()
+    except Exception as e:
+        logger.error(f"Corte Costituzionale ingestion failed: {e}")
+
+def main():
+    parser = argparse.ArgumentParser(description="Legal GraphRAG Management CLI.")
+    subparsers = parser.add_subparsers(dest="command", help="Sub-commands")
+
+    # Ingest command
+    ingest_parser = subparsers.add_parser("ingest", help="Run the ingestion pipeline.")
+    ingest_parser.add_argument("--start-date", type=str, default=None, help="Start date (YYYY-MM-DD)")
+    ingest_parser.add_argument("--limit", type=int, default=100, help="Limit items per source")
+
+    # Enrich and Load command (Phase 3)
+    enrich_parser = subparsers.add_parser("enrich-and-load", help="Enrich DTOs and load into Neo4j.")
+    enrich_parser.add_argument("--input", type=str, required=True, help="Path to input JSONL file (DocumentDTOs)")
+    enrich_parser.add_argument("--teseo-rdf", type=str, required=True, help="Path to TESEO RDF file")
+
+    args = parser.parse_args()
+
+    if args.command == "ingest":
+        asyncio.run(run_pipeline(start_date=args.start_date, limit=args.limit))
+    elif args.command == "enrich-and-load":
+        asyncio.run(enrich_and_load_pipeline(input_jsonl=args.input, teseo_rdf=args.teseo_rdf))
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "ingest":
-        ingest_all()
-    else:
-        print("Usage: python manage.py ingest")
+    main()

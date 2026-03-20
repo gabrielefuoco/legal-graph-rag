@@ -1,0 +1,14 @@
+
+
+|**Categoria**|**Entità (Label / Tipo)**|**Descrizione**|**Generato da (Origine / Tag)**|
+|---|---|---|---|
+|**Nodo**|`:Work`|Identità radice dell'atto legislativo globale. Contiene metadati FRBR, URN univoco assoluto, data di promulgazione e vigenza.|Estrazione dall'Header XML, specificamente dal blocco `<meta>` e dai sotto-blocchi `<FRBRWork>`, `<FRBRExpression>`.|
+|**Nodo**|`:StructuralUnit`|Nodo contenitore che forma l'ossatura gerarchica del documento. Conserva la numerazione e il testo delle rubriche assorbite.|Traversing DFS dei tag XML strutturali: `<libro>`, `<titolo>`, `<capo>`, `<sezione>`, `<articolo>`.|
+|**Nodo**|`:Expression`|Unità minima di senso e target della Vector Search. Contiene il testo con _Context Injection_, date di vigenza, metadati e l'array matematico `embedding`.|Traversing DFS dei tag XML atomici: `<comma>`, `<el>`, `<list>`, `<point>` e tag tabellari come `<table>`. L'embedding è generato dall'inferenza batch via LangChain/Qwen3.|
+|**Nodo**|`:TESEO_Concept`|Concetto ontologico/giuridico appartenente al Thesaurus del Senato. Funge da ponte semantico tra normative.|Ingestione del dizionario/thesaurus esterno (file RDF/SKOS di TESEO) durante la fase di setup del database.|
+|**Nodo**|`:IterLegis_Step`|_(Accessorio)_ Fase specifica dell'iter legislativo associata a un atto o a una modifica.|Transformer Layer: Dati JSONL scaricati in modo asincrono dalle API della Camera dei Deputati.|
+|**Arco**|`:PART_OF`|Relazione gerarchica top-down o bottom-up. Indica l'appartenenza strutturale (es. Comma appartiene ad Articolo).|Generato automaticamente dal parser deducendo la posizione di incapsulamento (annidamento) dei tag durante l'esplorazione dell'albero XML.|
+|**Arco**|`:NEXT`|Relazione sequenziale e topologica. Indica l'ordine logico di lettura originario del testo di legge.|Generato automaticamente dal parser seguendo l'ordine progressivo dei nodi "fratelli" incontrati nell'XML.|
+|**Arco**|`:CITES`|Relazione citazionale. Traccia i riferimenti incrociati verso URN o altri nodi.|Intercettazione inline dei tag `<ref>` e `<rref>` ed estrazione dell'attributo `href`.|
+|**Arco**|`:MODIFIES`|Relazione di evoluzione normativa. Trasporta il testo della novella e l'attributo classificato (es. `SUBSTITUTION`, `REPEAL`).|Intercettazione dei tag `<mod>` e `<quotedStructure>`. La classificazione deriva dal pattern matching (Regex) sul testo testuale italiano dell'istruzione.|
+|**Arco**|`:HAS_TOPIC`|Relazione di arricchimento semantico. Collega la norma testuale a un argomento del dizionario TESEO, trasportando lo `score` di confidenza.|Algoritmo Aho-Corasick (con Word-Boundary control) nel Transformer Layer, in caso di esatta corrispondenza tra il testo pulito del nodo e le label di TESEO.|

@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "c5f216e9-2eab-4bcf-9b43-26b39e085bab",
+		"name": "NORMATTIVA OPENDATA PROD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40895413"
+	},
+	"item": [
+		{
+			"name": "ESTENSIONI",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/tipologiche/estensioni",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"tipologiche",
+						"estensioni"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COLLECTION PREDEFINITE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/collections/collection-predefinite",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"collections",
+						"collection-predefinite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RICERCHE PREDEFINITE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca/predefinita",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca",
+						"predefinita"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CLASSE PROVVEDIMENTO",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/tipologiche/classe-provvedimento",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"tipologiche",
+						"classe-provvedimento"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DENOMINAZIONE ATTO",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/tipologiche/denominazione-atto",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"tipologiche",
+						"denominazione-atto"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RICERCA SEMPLICE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Origin",
+						"value": "https://qas.dati.normattiva.it"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"testoRicerca\":\"provvedimento\",\"orderType\":\"recente\",\"paginazione\":{\"paginaCorrente\":1,\"numeroElementiPerPagina\":10}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca/semplice",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca",
+						"semplice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RICERCA AVANZATA",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Origin",
+						"value": "https://qas.dati.normattiva.it"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					},
+					{
+						"key": "Cookie",
+						"value": "NCC=!WpXWouoqkcbuPgC0tAJPIFZKDwO94yW95ONgdeQ30UhMq0ZZ0Z6hXx8fahtFFVyGKacWUzZG+3xoDQ=="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"denominazioneAtto\":\"DECRETO\",\"orderType\":\"recente\",\"titoloRicerca\":\"legge\",\"testoRicerca\":\"ministro\",\"dataInizioEmanazione\":\"2023-01-01\",\"dataFineEmanazione\":\"2023-12-31\",\"dataInizioPubProvvedimento\":\"2023-01-01\",\"dataFinePubProvvedimento\":\"2023-12-31\",\"vigenza\":\"2025-01-09\",\"classeProvvedimento\":\"2\",\r\n    \"paginazione\":{\"paginaCorrente\":\"1\",\"numeroElementiPerPagina\":\"10\"}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca/avanzata",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca",
+						"avanzata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RICERCA SEMPLICE CON FACETMAP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Origin",
+						"value": "https://qas.dati.normattiva.it"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"testoRicerca\":\"legge\",\r\n   \"orderType\":\"recente\",\r\n   \"paginazione\":{\r\n      \"paginaCorrente\":1,\r\n      \"numeroElementiPerPagina\":10\r\n   },\r\n   \"filtriMap\":{\r\n      \"codice_tipo_provvedimento\":\"DCT\",\r\n      \"anno_provvedimento\":2022\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca/semplice",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca",
+						"semplice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RICERCA AVANZATA CON FACETMAP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"denominazioneAtto\":\"DECRETO\",\r\n   \"orderType\":\"recente\",\r\n   \"titoloRicerca\":\"legge\",\r\n   \"testoRicerca\":\"ministro\",\r\n   \"dataInizioEmanazione\":\"2023-01-01\",\r\n   \"dataFineEmanazione\":\"2023-12-31\",\r\n   \"dataInizioPubProvvedimento\":\"2023-01-01\",\r\n   \"dataFinePubProvvedimento\":\"2023-12-31\",\r\n   \"vigenza\":\"2025-01-09\",\r\n   \"classeProvvedimento\":\"2\",\r\n   \"paginazione\":{\r\n      \"paginaCorrente\":1,\r\n      \"numeroElementiPerPagina\":10\r\n   },\r\n   \"filtriMap\":{\r\n      \"codice_tipo_provvedimento\":\"DCT\",\r\n      \"anno_provvedimento\":2023\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca/avanzata",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca",
+						"avanzata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "INSERIMENTO RICHIESTA EXPORT (RICERCA SEMPLICE)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Origin",
+						"value": "https://qas.dati.normattiva.it"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"formato\":\"AKN\",\r\n   \"tipoRicerca\":\"S\",\r\n   \"modalita\":\"C\",\r\n   \"email\":\"xxxxxx@ipzs.it\",\r\n   \"parametriRicerca\":{\r\n      \"filtriMap\":{\r\n         \"codice_tipo_provvedimento\":\"DCS\"\r\n      },\r\n      \"testoRicerca\":\"covid\",\r\n      \"vigenza\":\"2025-06-16\"\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca-asincrona/nuova-ricerca",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca-asincrona",
+						"nuova-ricerca"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "INSERIMENTO RICHIESTA EXPORT (RICERCA AVANZATA)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"formato\":\"AKN\",\r\n   \"tipoRicerca\":\"A\",\r\n   \"modalita\":\"C\",\r\n   \"email\":\"fakename@fakedomain.com\",\r\n   \"parametriRicerca\":{\r\n      \"filtriMap\":{\r\n         \"codice_tipo_provvedimento\":\"PLE\"\r\n      },\r\n   \"denominazioneAtto\":\"LEGGE\",\r\n   \"orderType\":\"recente\",\r\n   \"titoloRicerca\":\"persone anziane\",\r\n   \"testoRicerca\":\"ministro\",\r\n   \"dataInizioEmanazione\":\"2023-01-01\",\r\n   \"dataFineEmanazione\":\"2023-12-31\",\r\n   \"dataInizioPubProvvedimento\":\"2023-01-01\",\r\n   \"dataFinePubProvvedimento\":\"2023-12-31\",\r\n   \"vigenza\":\"2025-01-09\",\r\n   \"classeProvvedimento\":\"2\"\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca-asincrona/nuova-ricerca",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca-asincrona",
+						"nuova-ricerca"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CONFERMA RICHIESTA",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\":\"9228cdcb-16be-4191-887c-72eead7e30ac\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca-asincrona/conferma-ricerca",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca-asincrona",
+						"conferma-ricerca"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DOWNLOAD RICERCA (CHECK STATUS)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca-asincrona/check-status/155cebac-2d86-4c99-92cc-c1bd82f72052",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca-asincrona",
+						"check-status",
+						"155cebac-2d86-4c99-92cc-c1bd82f72052"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DOWNLOAD COLLEZIONE PRECONFEZIONATA",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/collections/download/collection-preconfezionata?nome=Codici&formato=AKN&formatoRichiesta=O",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"collections",
+						"download",
+						"collection-preconfezionata"
+					],
+					"query": [
+						{
+							"key": "nome",
+							"value": "Codici"
+						},
+						{
+							"key": "formato",
+							"value": "AKN"
+						},
+						{
+							"key": "formatoRichiesta",
+							"value": "O"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RICERCA ATTI AGGIORNATI",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dataInizioAggiornamento\": \"2024-04-27T11:43:51.827Z\",\r\n  \"dataFineAggiornamento\": \"2024-04-29T11:43:51.827Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/ricerca/aggiornati",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"ricerca",
+						"aggiornati"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DETTAGLIO ATTO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Origin",
+						"value": "https://qas.dati.normattiva.it"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"dataGU\": \"1988-09-12\",\"codiceRedazionale\": \"088G0458\",\"idArticolo\": 13,\"sottoArticolo\": 2,\"sottoArticolo1\": 0,\"dataVigenza\": \"2025-02-27\",\"idGruppo\": 6,\"progressivo\": 0,\"versione\": 0}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1/atto/dettaglio-atto",
+					"protocol": "https",
+					"host": [
+						"api",
+						"normattiva",
+						"it"
+					],
+					"path": [
+						"t",
+						"normattiva.api",
+						"bff-opendata",
+						"v1",
+						"api",
+						"v1",
+						"atto",
+						"dettaglio-atto"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
