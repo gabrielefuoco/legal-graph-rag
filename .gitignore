@@ -46,3 +46,7 @@ neo4j/plugins/
 openspec/
 documentazione/
 AGENTS.md
+
+# Pytest & Tests
+tests/
+pytest.ini
