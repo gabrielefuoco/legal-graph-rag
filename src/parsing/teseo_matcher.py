@@ -45,26 +45,31 @@ class TESEOMatcher:
 
         count = 0
         for s, p, o in g.triples((None, SKOS.prefLabel, None)):
-            if isinstance(o, Literal) and o.language == 'it':
-                concept_id = str(s)
-                label = self.normalize_text(str(o))
-                if label:
-                    self.label_to_id[label] = concept_id
-                    self.matcher.add_word(label, (label, concept_id))
-                    count += 1
+            if isinstance(o, Literal):
+                # Accept if Italian or if no language is specified (common in some RDF exports)
+                if o.language == 'it' or not o.language:
+                    concept_id = str(s)
+                    label = self.normalize_text(str(o))
+                    if label:
+                        self.label_to_id[label] = concept_id
+                        self.matcher.add_word(label, (label, concept_id))
+                        count += 1
 
         # Also load altLabels if available
         for s, p, o in g.triples((None, SKOS.altLabel, None)):
-             if isinstance(o, Literal) and o.language == 'it':
-                concept_id = str(s)
-                label = self.normalize_text(str(o))
-                if label and label not in self.label_to_id:
-                    self.label_to_id[label] = concept_id
-                    self.matcher.add_word(label, (label, concept_id))
-                    count += 1
+             if isinstance(o, Literal):
+                if o.language == 'it' or not o.language:
+                    concept_id = str(s)
+                    label = self.normalize_text(str(o))
+                    if label and label not in self.label_to_id:
+                        self.label_to_id[label] = concept_id
+                        self.matcher.add_word(label, (label, concept_id))
+                        count += 1
 
+        # finalize automaton
+        self.matcher.make_automaton()
+        
         if count > 0:
-            self.matcher.make_automaton()
             logger.info(f"TESEO Matcher initialized with {count} labels.")
         else:
             logger.warning("No labels found in TESEO ontology.")

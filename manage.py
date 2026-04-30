@@ -81,12 +81,38 @@ def main():
     enrich_parser.add_argument("--input", type=str, required=True, help="Path to input JSONL file (DocumentDTOs)")
     enrich_parser.add_argument("--teseo-rdf", type=str, required=True, help="Path to TESEO RDF file")
 
+    # Parse Raw command
+    parse_parser = subparsers.add_parser("parse-raw", help="Parse raw XML files into DocumentDTO JSONL.")
+    parse_parser.add_argument("--dir", type=str, required=True, help="Directory containing XML files")
+    parse_parser.add_argument("--output", type=str, required=True, help="Output JSONL file path")
+    parse_parser.add_argument("--limit", type=int, default=None, help="Limit number of files to parse")
+
     args = parser.parse_args()
 
     if args.command == "ingest":
         asyncio.run(run_pipeline(start_date=args.start_date, limit=args.limit))
     elif args.command == "enrich-and-load":
         asyncio.run(enrich_and_load_pipeline(input_jsonl=args.input, teseo_rdf=args.teseo_rdf))
+    elif args.command == "parse-raw":
+        from src.parsing.parser import AknParser
+        from pathlib import Path
+        
+        parser_inst = AknParser()
+        xml_files = list(Path(args.dir).rglob("*.xml"))
+        if args.limit:
+            xml_files = xml_files[:args.limit]
+            
+        logger.info(f"Parsing {len(xml_files)} files from {args.dir}...")
+        
+        os.makedirs(os.path.dirname(args.output), exist_ok=True)
+        with open(args.output, "w", encoding="utf-8") as f:
+            for xml_file in xml_files:
+                try:
+                    doc = parser_inst.parse_file(str(xml_file))
+                    f.write(doc.model_dump_json() + "\n")
+                except Exception as e:
+                    logger.error(f"Failed to parse {xml_file}: {e}")
+        logger.info(f"Done. Processed metadata saved to {args.output}")
     else:
         parser.print_help()
 

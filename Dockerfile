@@ -1,4 +1,9 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
+
+# Standard environment variables for Python in Docker
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
 
 WORKDIR /app
 
@@ -12,8 +17,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Keep the container running for development
-CMD ["tail", "-f", "/dev/null"]
+# Copy the rest of the application
+COPY . .
+
+# Default command to check environment
+CMD ["python", "manage.py", "--help"]

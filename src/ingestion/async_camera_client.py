@@ -2,6 +2,7 @@ import asyncio
 import logging
 import aiohttp
 from typing import List, Dict, Any
+from pathlib import Path
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -34,7 +35,10 @@ class AsyncCameraClient:
         
         async with aiohttp.ClientSession() as session:
             try:
-                headers = {"Accept": "application/sparql-results+json"}
+                headers = {
+                    "Accept": "application/sparql-results+json",
+                    "User-Agent": "Mozilla/5.0 (compatible; LegalGraphRAG/1.0)"
+                }
                 async with session.get(CAMERA_SPARQL_ENDPOINT, params={"query": query}, headers=headers) as response:
                     if response.status != 200:
                         logger.error(f"Camera SPARQL Query failed: {response.status}")

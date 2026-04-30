@@ -1,9 +1,9 @@
 """
-Namespace Manager for Akoma Ntoso XML parsing.
+Gestore dei Namespace per il parsing XML Akoma Ntoso.
 
-Handles the two namespace conventions used by Italian legal data sources:
-- Normattiva: default namespace (no prefix) — AKN 3.0
-- Senato: prefixed namespace (an:) — AKN 3.0 CSD03
+Gestisce le due convenzioni di namespace utilizzate dalle fonti di dati legali italiane:
+- Normattiva: namespace predefinito (nessun prefisso) — AKN 3.0
+- Senato: namespace con prefisso (an:) — AKN 3.0 CSD03
 """
 from lxml import etree
 from typing import Dict, Optional
