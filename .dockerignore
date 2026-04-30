@@ -1,0 +1,11 @@
+data/
+neo4j/
+__pycache__/
+*.pyc
+.git/
+.env
+.agent/
+*.json
+*.rdf
+*.xml
+*.jsonl

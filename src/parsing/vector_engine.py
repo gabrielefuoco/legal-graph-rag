@@ -25,7 +25,16 @@ class VectorEngine:
         As specified in Fase 4.2.
         """
         text = node.text_vector or node.text_display or ""
-        return f"Contesto: {hierarchy_context}\n\nTesto: {text}"
+        payload = f"Contesto: {hierarchy_context}\n\nTesto: {text}"
+        
+        # Hard truncate to avoid "input length exceeds context length" API errors
+        # Default Ollama num_ctx is 2048 tokens. Capping at 3500 chars (approx 1000 tokens)
+        max_chars = 3500
+        if len(payload) > max_chars:
+            logger.warning(f"Truncating payload for node {node.id} to avoid exceeding model context limit.")
+            payload = payload[:max_chars]
+            
+        return payload
 
     async def compute_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
         """

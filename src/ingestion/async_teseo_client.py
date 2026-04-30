@@ -35,7 +35,11 @@ class AsyncTeseoClient:
         logger.info("Querying TESEO endpoint...")
         async with aiohttp.ClientSession() as session:
             try:
-                async with session.get(self.SPARQL_ENDPOINT, params={'query': query, 'format': 'application/rdf+xml'}) as response:
+                headers = {
+                    "Accept": "application/rdf+xml",
+                    "User-Agent": "Mozilla/5.0 (compatible; LegalGraphRAG/1.0)"
+                }
+                async with session.get(self.SPARQL_ENDPOINT, params={'query': query, 'format': 'application/rdf+xml'}, headers=headers) as response:
                     if response.status != 200:
                         logger.error(f"Failed to query TESEO: {response.status}")
                         return

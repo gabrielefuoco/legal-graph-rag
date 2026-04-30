@@ -96,7 +96,7 @@ class AsyncNeo4jLoader:
             e.embedding = row.embedding,
             e.updated_at = datetime()
         
-        # Link Expression to Work
+        // Link Expression to Work
         MERGE (e)-[:PART_OF]->(w)
         """
         await tx.run(query, batch=batch)
@@ -114,26 +114,50 @@ class AsyncNeo4jLoader:
         ON MATCH SET
             u.updated_at = datetime()
         
-        # Link Structural Unit to Work
+        // Link Structural Unit to Work
         MERGE (u)-[:PART_OF]->(w)
         """
         await tx.run(query, batch=batch)
 
     async def _load_structural_edges(self, tx, batch: list[dict]):
         """Batch load internal structural edges (PART_OF, NEXT)."""
-        # We use a broad match label (u) to catch either Expression or StructuralUnit
+        # We use a broad match with UNION to ensure index seeks instead of label-less full DB scans
         alt_query_part_of = """
         UNWIND $batch AS row
         WITH row WHERE row.type = 'PART_OF'
-        MATCH (s {id: row.source_id})
-        MATCH (t {id: row.target_id})
+        CALL {
+            WITH row MATCH (s:Expression {id: row.source_id}) RETURN s
+            UNION
+            WITH row MATCH (s:StructuralUnit {id: row.source_id}) RETURN s
+            UNION
+            WITH row MATCH (s:Work {id: row.source_id}) RETURN s
+        }
+        CALL {
+            WITH row MATCH (t:Expression {id: row.target_id}) RETURN t
+            UNION
+            WITH row MATCH (t:StructuralUnit {id: row.target_id}) RETURN t
+            UNION
+            WITH row MATCH (t:Work {id: row.target_id}) RETURN t
+        }
         MERGE (s)-[:PART_OF]->(t)
         """
         alt_query_next = """
         UNWIND $batch AS row
         WITH row WHERE row.type = 'NEXT'
-        MATCH (s {id: row.source_id})
-        MATCH (t {id: row.target_id})
+        CALL {
+            WITH row MATCH (s:Expression {id: row.source_id}) RETURN s
+            UNION
+            WITH row MATCH (s:StructuralUnit {id: row.source_id}) RETURN s
+            UNION
+            WITH row MATCH (s:Work {id: row.source_id}) RETURN s
+        }
+        CALL {
+            WITH row MATCH (t:Expression {id: row.target_id}) RETURN t
+            UNION
+            WITH row MATCH (t:StructuralUnit {id: row.target_id}) RETURN t
+            UNION
+            WITH row MATCH (t:Work {id: row.target_id}) RETURN t
+        }
         MERGE (s)-[:NEXT]->(t)
         """
         await tx.run(alt_query_part_of, batch=batch)
@@ -155,6 +179,9 @@ class AsyncNeo4jLoader:
         Orchestrate the loading of a complete document batch.
         Uses a single transaction to ensure consistency.
         """
+        import time
+        start_time = time.time()
+        
         # We split nodes by type for specific query logic
         works = [n for n in nodes_batch if n.get('type') == 'WORK']
         expressions = [n for n in nodes_batch if n.get('type') == 'EXPRESSION']
@@ -165,20 +192,33 @@ class AsyncNeo4jLoader:
         semantic_edges = [e for e in edges_batch if e.get('type') == 'HAS_TOPIC']
 
         async def _execute_all(tx):
-            if works:
-                await self._load_works(tx, works)
-            if expressions:
-                await self._load_expressions(tx, expressions)
-            if structural:
-                await self._load_structural_units(tx, structural)
-            if structural_edges:
-                await self._load_structural_edges(tx, structural_edges)
-            if semantic_edges:
-                await self._load_semantic_edges(tx, semantic_edges)
-
-        async with self.driver.session() as session:
             try:
-                await session.execute_write(_execute_all)
+                if works:
+                    logger.debug(f"Loading {len(works)} WORKS")
+                    await self._load_works(tx, works)
+                if expressions:
+                    logger.debug(f"Loading {len(expressions)} EXPRESSIONS")
+                    await self._load_expressions(tx, expressions)
+                if structural:
+                    logger.debug(f"Loading {len(structural)} STRUCTURAL UNITS")
+                    await self._load_structural_units(tx, structural)
+                if structural_edges:
+                    logger.debug(f"Loading {len(structural_edges)} STRUCTURAL EDGES")
+                    await self._load_structural_edges(tx, structural_edges)
+                if semantic_edges:
+                    logger.debug(f"Loading {len(semantic_edges)} SEMANTIC EDGES")
+                    await self._load_semantic_edges(tx, semantic_edges)
             except Exception as e:
-                logger.error(f"Failed to load batch into Neo4j: {e}")
+                logger.error(f"Error during transaction execution: {e}")
                 raise
+
+        try:
+            async with self.driver.session() as session:
+                await session.execute_write(_execute_all)
+                elapsed = time.time() - start_time
+                logger.info(f"Successfully loaded batch in {elapsed:.2f}s "
+                            f"(Nodes: {len(nodes_batch)}, Edges: {len(edges_batch)})")
+        except Exception as e:
+            elapsed = time.time() - start_time
+            logger.error(f"Failed to load batch into Neo4j after {elapsed:.2f}s. Error: {e}")
+            raise

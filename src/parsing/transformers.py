@@ -23,7 +23,7 @@ from src.ingestion.neo4j_loader import AsyncNeo4jLoader
 logger = logging.getLogger(__name__)
 
 # BATCH_SIZE for Neo4j and Embedding inference
-BATCH_SIZE = 128
+BATCH_SIZE = 50
 
 
 # ---------------------------------------------------------------------------

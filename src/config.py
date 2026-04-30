@@ -13,10 +13,10 @@ class Settings(BaseSettings):
     NEO4J_USERNAME: str = "neo4j"
     NEO4J_PASSWORD: str = "password"
 
-    # LLM & Embedding (Qwen3)
+    # LLM & Embedding
     QWEN3_ENDPOINT: str = "http://localhost:11434"
-    EMBEDDING_MODEL_NAME: str = "qwen3-embedding:0.6b"
-    EMBEDDING_DIMENSIONS: int = 1024
+    EMBEDDING_MODEL_NAME: str = "nomic-embed-text"
+    EMBEDDING_DIMENSIONS: int = 768
 
 # Singleton instance for the application
 settings = Settings()

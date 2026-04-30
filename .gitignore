@@ -50,3 +50,7 @@ AGENTS.md
 # Pytest & Tests
 tests/
 pytest.ini
+*.txt
+
+# Ollama
+ollama/

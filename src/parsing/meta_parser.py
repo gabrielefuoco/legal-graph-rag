@@ -70,6 +70,12 @@ def parse_meta(root: etree._Element, ns_map: dict) -> FRBRMetadata:
     # --- Extract dates ---
     date_promulgation = _extract_date(frbr_work, ns_map)
     vigenza_start, vigenza_end = _extract_vigenza(meta_el, ns_map)
+    
+    # Generate a deterministic fallback ID to prevent collision on invalid documents
+    if urn == "urn:unknown":
+        import hashlib
+        seed = f"{title}_{date_promulgation}".encode("utf-8")
+        urn = f"urn:fallback:{hashlib.sha256(seed).hexdigest()[:16]}"
 
     # --- Extract doc number ---
     doc_number = _extract_attrib(frbr_work, ns_map, "FRBRnumber", "value", "")
@@ -416,6 +422,11 @@ def _parse_meta_nir(doc_element: etree._Element, meta_el: etree._Element, ns_map
         num_doc = find(ns_map, intestazione, "numDoc")
         if num_doc is not None:
             doc_number = "".join(num_doc.itertext()).strip()
+
+    if urn == "urn:unknown":
+        import hashlib
+        seed = f"{title}_{promulgation_date}".encode("utf-8")
+        urn = f"urn:fallback:{hashlib.sha256(seed).hexdigest()[:16]}"
 
     return FRBRMetadata(
         urn=urn,
