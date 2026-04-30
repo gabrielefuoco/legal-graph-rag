@@ -1,6 +1,6 @@
 import logging
 from typing import List
-from langchain_community.embeddings import OllamaEmbeddings # Adjust based on actual deployment
+from langchain_ollama import OllamaEmbeddings
 from src.parsing.models import GraphNodeDTO
 from src.config import settings
 

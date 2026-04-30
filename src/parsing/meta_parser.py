@@ -388,13 +388,31 @@ def _parse_meta_nir(doc_element: etree._Element, meta_el: etree._Element, ns_map
     """Specialized parser for NIR 2.2 metadata."""
     descrittori = find(ns_map, meta_el, "descrittori")
     
-    # 1. URN
+    # 1. URN Extraction
     urn = "urn:unknown"
     if descrittori is not None:
         urn_el = find(ns_map, descrittori, "urn")
         if urn_el is not None:
             urn = urn_el.get("valore", "urn:unknown")
             if urn == "urn:": urn = "urn:unknown"
+    
+    # Robustness: try searching in identification/FRBRWork even for NIR (sometimes mixed)
+    if urn == "urn:unknown":
+        ident = find(ns_map, meta_el, "identification")
+        if ident is not None:
+            work = find(ns_map, ident, "FRBRWork")
+            if work is not None:
+                # Try FRBRalias name="urn"
+                for alias in work:
+                    if local_name(alias) == "FRBRalias" and alias.get("name") in ("urn", "urn:nir"):
+                        urn = alias.get("value", "urn:unknown")
+                        break
+                # Try FRBRthis
+                if urn == "urn:unknown":
+                    frbr_this = find(ns_map, work, "FRBRthis")
+                    if frbr_this is not None:
+                        val = frbr_this.get("value")
+                        if val: urn = _uri_to_urn(val)
 
     # 2. Dates
     promulgation_date = date.min
