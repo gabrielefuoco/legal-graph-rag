@@ -29,6 +29,7 @@ class EdgeType(str, Enum):
     CITES = "CITES"
     MODIFIES = "MODIFIES"
     HAS_TOPIC = "HAS_TOPIC"
+    INTERPRETS = "INTERPRETS"
 
 
 class ModificationType(str, Enum):

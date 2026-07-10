@@ -8,7 +8,6 @@ ENV PYTHONPATH=/app
 WORKDIR /app
 
 # Install system dependencies
-# gcc and python3-dev are often needed for lxml and other C-extensions
 RUN apt-get update && apt-get install -y \
     gcc \
     python3-dev \
@@ -19,10 +18,14 @@ RUN apt-get update && apt-get install -y \
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
 # Copy the rest of the application
 COPY . .
+
+# Expose Streamlit port
+EXPOSE 8501
 
 # Default command to check environment
 CMD ["python", "manage.py", "--help"]

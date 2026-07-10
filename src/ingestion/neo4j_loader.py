@@ -62,6 +62,69 @@ class AsyncNeo4jLoader:
                     logger.error(f"Error executing schema query: {query}. Error: {e}")
                     raise
 
+    async def load_teseo_ontology(self, rdf_path: str):
+        """Loads TESEO concepts and BROADER relations from RDF."""
+        from rdflib import Graph, URIRef, Literal
+        from rdflib.namespace import SKOS
+        
+        logger.info(f"Loading TESEO ontology to Neo4j from {rdf_path}...")
+        g = Graph()
+        try:
+            g.parse(rdf_path, format="xml")
+        except Exception as e:
+            logger.error(f"Failed to parse RDF for Neo4j: {e}")
+            raise
+
+        nodes_batch = []
+        edges_batch = []
+        
+        import re
+        def norm(t):
+            t = t.lower()
+            t = re.sub(r'[^\w\s]', '', t)
+            return re.sub(r'\s+', ' ', t).strip()
+
+        # Load nodes with prefLabel
+        for s, p, o in g.triples((None, SKOS.prefLabel, None)):
+            if isinstance(o, Literal) and (o.language == 'it' or not o.language):
+                nodes_batch.append({
+                    "id": str(s),
+                    "prefLabel": str(o),
+                    "normalizedLabel": norm(str(o))
+                })
+                
+        # Load BROADER edges
+        for s, p, o in g.triples((None, SKOS.broader, None)):
+            edges_batch.append({
+                "source_id": str(s),
+                "target_id": str(o)
+            })
+
+        async def _execute_teseo(tx):
+            nodes_query = """
+            UNWIND $batch AS row
+            MERGE (t:TESEO_Concept {id: row.id})
+            SET t.prefLabel = row.prefLabel,
+                t.normalizedLabel = row.normalizedLabel
+            """
+            await tx.run(nodes_query, batch=nodes_batch)
+            
+            edges_query = """
+            UNWIND $batch AS row
+            MATCH (child:TESEO_Concept {id: row.source_id})
+            MATCH (parent:TESEO_Concept {id: row.target_id})
+            MERGE (child)-[:BROADER]->(parent)
+            """
+            await tx.run(edges_query, batch=edges_batch)
+
+        try:
+            async with self.driver.session() as session:
+                await session.execute_write(_execute_teseo)
+                logger.info(f"Loaded {len(nodes_batch)} TESEO concepts and {len(edges_batch)} BROADER relations.")
+        except Exception as e:
+            logger.error(f"Error loading TESEO ontology: {e}")
+            raise
+
     async def _load_works(self, tx, batch: list[dict]):
         """Batch load Work nodes."""
         query = """
@@ -116,6 +179,23 @@ class AsyncNeo4jLoader:
         
         // Link Structural Unit to Work
         MERGE (u)-[:PART_OF]->(w)
+        """
+        await tx.run(query, batch=batch)
+
+    async def _load_judgements(self, tx, batch: list[dict]):
+        """Batch load Judgement nodes."""
+        query = """
+        UNWIND $batch AS row
+        MERGE (j:Judgement {id: row.id})
+        ON CREATE SET
+            j.date = date(row.date),
+            j.description = row.description,
+            j.court = row.court,
+            j.judgement_type = row.judgement_type,
+            j.judgement_result = row.judgement_result,
+            j.created_at = datetime()
+        ON MATCH SET
+            j.updated_at = datetime()
         """
         await tx.run(query, batch=batch)
 
@@ -174,6 +254,42 @@ class AsyncNeo4jLoader:
         """
         await tx.run(query, batch=batch)
 
+    async def _load_interprets_edges(self, tx, batch: list[dict]):
+        """Batch load INTERPRETS edges."""
+        query = """
+        UNWIND $batch AS row
+        MATCH (j:Judgement {id: row.source_id})
+        CALL {
+            WITH row MATCH (w:Work {id: row.target_id}) RETURN w AS target
+            UNION
+            WITH row MATCH (e:Expression {id: row.target_id}) RETURN e AS target
+        }
+        MERGE (j)-[:INTERPRETS]->(target)
+        """
+        await tx.run(query, batch=batch)
+
+    async def _load_iter_legis(self, tx, batch: list[dict]):
+        """Batch load ITER_LEGIS nodes."""
+        query = """
+        UNWIND $batch AS row
+        MERGE (i:IterLegisStep {id: row.id})
+        SET i.date = row.date,
+            i.description = row.description,
+            i.step_type = row.step_type,
+            i.authority = row.authority
+        """
+        await tx.run(query, batch=batch)
+
+    async def _load_iter_edges(self, tx, batch: list[dict]):
+        """Batch load ITER_STEP edges."""
+        query = """
+        UNWIND $batch AS row
+        MATCH (i:IterLegisStep {id: row.source_id})
+        MATCH (w:Work {id: row.target_id})
+        MERGE (i)-[:ITER_STEP]->(w)
+        """
+        await tx.run(query, batch=batch)
+
     async def load_batch(self, nodes_batch: list[dict], edges_batch: list[dict]):
         """
         Orchestrate the loading of a complete document batch.
@@ -186,10 +302,14 @@ class AsyncNeo4jLoader:
         works = [n for n in nodes_batch if n.get('type') == 'WORK']
         expressions = [n for n in nodes_batch if n.get('type') == 'EXPRESSION']
         structural = [n for n in nodes_batch if n.get('type') == 'STRUCTURAL']
+        judgements = [n for n in nodes_batch if n.get('type') == 'JUDGEMENT']
+        iter_legis = [n for n in nodes_batch if n.get('type') == 'ITER_LEGIS']
         
         # We split edges by type
         structural_edges = [e for e in edges_batch if e.get('type') in ('PART_OF', 'NEXT')]
         semantic_edges = [e for e in edges_batch if e.get('type') == 'HAS_TOPIC']
+        interprets_edges = [e for e in edges_batch if e.get('type') == 'INTERPRETS']
+        iter_edges = [e for e in edges_batch if e.get('type') == 'ITER_STEP']
 
         async def _execute_all(tx):
             try:
@@ -208,6 +328,57 @@ class AsyncNeo4jLoader:
                 if semantic_edges:
                     logger.debug(f"Loading {len(semantic_edges)} SEMANTIC EDGES")
                     await self._load_semantic_edges(tx, semantic_edges)
+                if judgements:
+                    logger.debug(f"Loading {len(judgements)} JUDGEMENTS")
+                    await self._load_judgements(tx, judgements)
+                if interprets_edges:
+                    logger.debug(f"Loading {len(interprets_edges)} INTERPRETS EDGES")
+                    await self._load_interprets_edges(tx, interprets_edges)
+                if iter_legis:
+                    logger.debug(f"Loading {len(iter_legis)} ITER LEGIS")
+                    await self._load_iter_legis(tx, iter_legis)
+                if iter_edges:
+                    logger.debug(f"Loading {len(iter_edges)} ITER EDGES")
+                    await self._load_iter_edges(tx, iter_edges)
+            except Exception as e:
+                logger.error(f"Error during transaction execution: {e}")
+                raise
+        
+        # We split edges by type
+        structural_edges = [e for e in edges_batch if e.get('type') in ('PART_OF', 'NEXT')]
+        semantic_edges = [e for e in edges_batch if e.get('type') == 'HAS_TOPIC']
+        interprets_edges = [e for e in edges_batch if e.get('type') == 'INTERPRETS']
+        iter_edges = [e for e in edges_batch if e.get('type') == 'ITER_STEP']
+
+        async def _execute_all(tx):
+            try:
+                if works:
+                    logger.debug(f"Loading {len(works)} WORKS")
+                    await self._load_works(tx, works)
+                if expressions:
+                    logger.debug(f"Loading {len(expressions)} EXPRESSIONS")
+                    await self._load_expressions(tx, expressions)
+                if structural:
+                    logger.debug(f"Loading {len(structural)} STRUCTURAL UNITS")
+                    await self._load_structural_units(tx, structural)
+                if structural_edges:
+                    logger.debug(f"Loading {len(structural_edges)} STRUCTURAL EDGES")
+                    await self._load_structural_edges(tx, structural_edges)
+                if semantic_edges:
+                    logger.debug(f"Loading {len(semantic_edges)} SEMANTIC EDGES")
+                    await self._load_semantic_edges(tx, semantic_edges)
+                if judgements:
+                    logger.debug(f"Loading {len(judgements)} JUDGEMENTS")
+                    await self._load_judgements(tx, judgements)
+                if interprets_edges:
+                    logger.debug(f"Loading {len(interprets_edges)} INTERPRETS EDGES")
+                    await self._load_interprets_edges(tx, interprets_edges)
+                if iter_legis:
+                    logger.debug(f"Loading {len(iter_legis)} ITER LEGIS")
+                    await self._load_iter_legis(tx, iter_legis)
+                if iter_edges:
+                    logger.debug(f"Loading {len(iter_edges)} ITER EDGES")
+                    await self._load_iter_edges(tx, iter_edges)
             except Exception as e:
                 logger.error(f"Error during transaction execution: {e}")
                 raise

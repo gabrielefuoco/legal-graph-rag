@@ -28,6 +28,11 @@ def should_expand(state: RagState) -> str:
     hop_count = state.get("hop_count", 0)
     fused_chunks = state.get("fused_chunks") or []
 
+    # Salta il multi-hop se disabilitato
+    if not state.get("enable_multi_hop", True):
+        logger.info("Multi-hop disabilitato tramite flag (enable_multi_hop=False). Skip espansione.")
+        return "__end__"
+
     if hop_count >= settings.MAX_CITATION_HOPS:
         logger.info(f"Multi-hop: raggiunto limite ({hop_count}/{settings.MAX_CITATION_HOPS}), terminazione.")
         # Copia i chunk fusi nei final_chunks prima di terminare

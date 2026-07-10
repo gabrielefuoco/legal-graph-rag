@@ -1,71 +1,112 @@
-# Legal GraphRAG
+# ⚖️ Legal GraphRAG
 
-**Legal GraphRAG** è un sistema di *Retrieval-Augmented Generation* per il dominio legale italiano che combina Knowledge Graph e Vector Search. Il progetto mira a superare i limiti dei sistemi RAG tradizionali integrando la struttura gerarchica delle norme (Akoma Ntoso) e la semantica del Thesaurus TESEO del Senato.
+**Legal GraphRAG** è un framework avanzato di *Retrieval-Augmented Generation* specializzato nel dominio legislativo italiano. Il sistema combina la potenza dei **Knowledge Graph** con la flessibilità della **Vector Search**, sfruttando la struttura gerarchica delle norme (Akoma Ntoso) e l'ontologia semantica del **Thesaurus TESEO** del Senato.
 
-## 🏗️ Architettura
+![Status](https://img.shields.io/badge/Status-Phase_6_Complete-success)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Neo4j](https://img.shields.io/badge/Database-Neo4j-008CC1)
+![LLM](https://img.shields.io/badge/LLM-Qwen3%20(Ollama)-orange)
 
-Il sistema adotta un approccio **Hybrid Knowledge Graph + Vector Search**, senza separazione tra database relazionale e vettoriale.
+---
 
-*   **Database:** [Neo4j](https://neo4j.com/) (Graph + Vector Index)
-*   **Orchestration:** LangGraph (Gestione flussi ciclici e multi-hop)
-*   **LLM:** Qwen3:4b (Fine-tuned per reasoning legale e output JSON)
-*   **Ingestion:** Pipeline Asincrona Multi-Sorgente (Senato, Camera, EUR-Lex, Normattiva, Corte Cost, TESEO)
-*   **Parsing:** Modulo Deterministico + Semantic Chunking (Context Injection)
-*   **Semantica:** Integrazione Thesaurus TESEO (SKOS)
+## 🌟 Caratteristiche Principali
+
+- **🔍 Retrieval Ibrido Multi-Canale**: Fusione di risultati tramite **Reciprocal Rank Fusion (RRF)** da tre sorgenti:
+    - **Vector Search**: Embedding semantici per catturare il significato latente.
+    - **BM25 (Full-Text)**: Match preciso di parole chiave e riferimenti normativi.
+    - **Graph Traversal**: Navigazione delle relazioni semantiche fornite dal Thesaurus TESEO.
+- **🏛️ Ingestione Multi-Sorgente Asincrona**: Pipeline ad alte prestazioni per il download da Senato, Camera, EUR-Lex, Normattiva, Corte Costituzionale e TESEO.
+- **📄 Parsing Akoma Ntoso**: Parser deterministico che mantiene la gerarchia strutturale (Libri, Titoli, Articoli, Commi) e inietta il contesto globale in ogni chunk.
+- **🧠 Semantica TESEO**: Integrazione profonda con il vocabolario controllato del Senato per l'identificazione automatica di concetti e argomenti.
+- **⚡ Performance Ottimizzate**: Supporto per accelerazione hardware GPU (Ollama) e gestione intelligente dei batch di ingestion.
+
+---
+
+## 🏗️ Architettura Tecnica
+
+Il sistema adotta un approccio **Native Graph-Vector Search** in Neo4j:
+
+- **Orchestration**: `LangGraph` per la gestione di flussi ciclici, analisi della query e ragionamento multi-hop.
+- **Models**: `Qwen3:4b` (via Ollama) ottimizzato per il reasoning legale e la generazione di output strutturato.
+- **Schema Grafo**: Modello ottimizzato basato su entità `WORK`, `EXPRESSION` e `CONCEPT` (TESEO).
+
+---
 
 ## 🚀 Per Iniziare
 
-### Prerequisiti
+### 1. Prerequisiti
+- Docker & Docker Compose
+- Python 3.10+
+- (Opzionale) NVIDIA GPU per accelerazione Ollama
 
-*   Docker & Docker Compose
-*   Python 3.10+
+### 2. Setup Infrastruttura
+```bash
+# Avvio dei servizi core (Neo4j e Ollama)
+docker compose up -d --build
+```
 
-### Setup Infrastruttura
+### 3. Ingestione Olistica e Caricamento (Holistic ETL)
+Abbiamo unificato l'ingestione, il parsing e l'inserimento a grafo in un unico potentissimo comando orientato al *topic*.
+Il comando scarica, parsa e collega: Normattiva, Senato (tramite Git Pull automatico dei Bulk Data e filtro SPARQL), Camera (Iter Legis) e Corte Costituzionale (Giurisprudenza).
 
-1.  **Avvio dei servizi (Neo4j e Python Environment):**
-    ```bash
-    docker compose up -d --build
-    ```
+```bash
+# Sostituisci "appalti" con il tema di ricerca desiderato per la Tesi
+python manage.py build-graph --topic "appalti"
+```
 
-2.  **Ingestione Dati (Pipeline Completa Asincrona):**
-    ```bash
-    # Esegue sequenzialmente (asincrono) il download da tutte le fonti
-    docker compose exec data-app python manage.py ingest
-    ```
-    
-    *Fonti supportate:* 
-    *   **Senato della Repubblica** (Scraping atti legislativi)
-    *   **Camera dei Deputati** (Open Data API)
-    *   **EUR-Lex** (SPARQL endpoint, Regolamenti/Direttive > 2024)
-    *   **Corte Costituzionale** (Sentenze)
-    *   **Normattiva** (API asincrone)
-    *   **TESEO** (Thesaurus SKOS)
+---
 
-3.  **Parsing Documenti (XML -> JSON Graph):**
-    ```bash
-    # Parsing intera directory
-    python src/parsing/parser.py --input data/raw/ --output all_docs.json
-    ```
+## 🔍 Interazione con il Sistema
 
-4.  **Enrichment & Neo4j Load (Phase 3):**
-    ```bash
-    # Arricchisce i DocumentDTO con embedding (Qwen3) e topics (TESEO), poi carica in Neo4j
-    python manage.py enrich-and-load --input all_docs.json --teseo-rdf data/teseo.rdf
-    ```
+### CLI (Command Line Interface)
+È possibile interrogare il sistema direttamente dal terminale con output formattato e pulito:
+```bash
+python manage.py retrieve --query "incentivi per la transizione energetica" --verbose
+```
+*Opzioni disponibili:*
+- `--top-k`: Risultati estratti per canale.
+- `--final-k`: Risultati mostrati dopo la fusione RRF.
+- `--verbose`: Mostra i concetti TESEO identificati e i punteggi dei canali.
+- `--full-text`: Visualizza l'intera espressione normativa.
+
+### 🧪 Interactive Testing Sandbox
+Per un'esperienza di test più visuale e dettagliata, utilizza il notebook interattivo:
+- [`interactive_rag.ipynb`](file:///c:/Users/gabri/APP/Universit%C3%A0/Tesi/interactive_rag.ipynb)
+
+Il notebook offre visualizzazioni Markdown, debug della fase di query analysis e confronto diretto tra i canali di ricerca.
+
+---
 
 ## 📂 Struttura del Progetto
 
-*   `src/ingestion`: Client asincroni (`aiohttp`) per Senato, Camera, EUR-Lex, Normattiva, Corte Costituzionale.
-*   `src/parsing`: Parser Akoma Ntoso, Semantic Chunking e Context Injection.
-*   `src/graph`: (WIP) Moduli per l'ingestion in Neo4j.
-*   `data/`: Dati grezzi (XML, RDF) e processati.
-*   `documentazione/`: Documentazione tecnica e di progetto.
+```text
+├── src/
+│   ├── ingestion/    # Client asincroni per le varie fonti legislative
+│   ├── parsing/      # Parser Akoma Ntoso e trasformatori di dati
+│   ├── rag/          # Engine di retrieval, fusion e query analyzer
+│   ├── graph/        # Logica di interazione con Neo4j
+│   └── utils/        # Utility comuni e configurazione
+├── data/             # Cache dati grezzi e processati
+├── tests/            # Suite di test unitari e di integrazione
+└── manage.py         # Punto di ingresso unico per la gestione del sistema
+```
 
-## 📍 Stato del Progetto
+---
 
-Attualmente il progetto ha completato la **Fase 3 (Integrazione Neo4j & Arricchimento Semantico)**. Il sistema è in grado di:
-*   Estrarre entità semantiche dal Thesaurus TESEO.
-*   Generare embedding vettoriali per i chunk di testo (EXPRESSIONS) tramite Qwen3.
-*   Persistere il grafo arricchito su Neo4j con schema ottimizzato (Constraints & Indices).
+## 📍 Roadmap e Stato del Progetto
+
+Il progetto è suddiviso in 12 fasi strutturate. Attualmente ci troviamo all'inizio della **Fase 7**.
+
+- [x] **Fase 1-4**: Ingestione, Parsing Akoma Ntoso e Integrazione Vector+Graph in Neo4j.
+- [x] **Fase 5**: Ottimizzazione Hardware e Hybrid RAG.
+- [x] **Fase 6**: Ottimizzazione Pipeline RAG (Vigenza, Merging, Reciprocal Rank Fusion).
+- [ ] **Fase 7**: Studio di Ablazione (GraphRAG vs Naive RAG) e configurazione Reranker.
+- [ ] **Fase 8A**: Sviluppo LegalGenerator (Grounded Generation) e Prompt Engineering.
+- [ ] **Fase 8B**: Integrazione Generatore nel grafo LangGraph.
+- [ ] **Fase 8C**: Implementazione Memoria Conversazionale (Multi-turn).
+- [ ] **Fase 9**: Loop Agentico (Retrieval Grader e Query Rewriter per autocorrezione).
+- [ ] **Fase 10**: Sviluppo UI Interattiva (Streamlit) per test interattivi e visivi.
+- [ ] **Fase 11**: Valutazione Quantitativa tramite framework LLM-as-a-judge (RAGAS).
+- [ ] **Fase 12**: Deploy finale e containerizzazione completa dell'ecosistema (Docker Compose).
 
 

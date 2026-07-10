@@ -384,6 +384,36 @@ def _extract_vigenza(meta_el: etree._Element, ns_map: dict) -> tuple[Optional[da
     dates.sort()
     return dates[0], dates[-1] if dates[-1] != dates[0] else None
 
+def _build_synthetic_urn(doc_type: str, title: str, promulgation_date: date, doc_number: str) -> Optional[str]:
+    """Attempts to synthesize a valid NIR URN when the XML is missing it."""
+    if promulgation_date == date.min or not doc_number:
+        return None
+        
+    type_map = {
+        "legge": "legge",
+        "decretolegge": "decreto.legge",
+        "decretolegislativo": "decreto.legislativo",
+        "costituzione": "costituzione",
+        "decreto": "decreto",
+    }
+    
+    dt_lower = doc_type.lower()
+    urn_doc_type = type_map.get(dt_lower)
+    
+    if not urn_doc_type:
+        title_lower = title.lower()
+        if "decreto del presidente della repubblica" in title_lower:
+            urn_doc_type = "decreto.del.presidente.della.repubblica"
+        elif "decreto del presidente del consiglio" in title_lower:
+            urn_doc_type = "decreto.del.presidente.del.consiglio.dei.ministri"
+        elif "decreto ministeriale" in title_lower:
+            urn_doc_type = "decreto.ministeriale"
+        else:
+            urn_doc_type = dt_lower
+            
+    date_str = promulgation_date.isoformat()
+    return f"urn:nir:stato:{urn_doc_type}:{date_str};{doc_number}"
+
 def _parse_meta_nir(doc_element: etree._Element, meta_el: etree._Element, ns_map: dict, doc_type: str) -> FRBRMetadata:
     """Specialized parser for NIR 2.2 metadata."""
     descrittori = find(ns_map, meta_el, "descrittori")
@@ -442,9 +472,15 @@ def _parse_meta_nir(doc_element: etree._Element, meta_el: etree._Element, ns_map
             doc_number = "".join(num_doc.itertext()).strip()
 
     if urn == "urn:unknown":
-        import hashlib
-        seed = f"{title}_{promulgation_date}".encode("utf-8")
-        urn = f"urn:fallback:{hashlib.sha256(seed).hexdigest()[:16]}"
+        synthetic_urn = _build_synthetic_urn(doc_type, title, promulgation_date, doc_number)
+        if synthetic_urn:
+            urn = synthetic_urn
+            logger.info(f"Generated synthetic URN: {urn}")
+        else:
+            import hashlib
+            seed = f"{title}_{promulgation_date}_{doc_number}".encode("utf-8")
+            urn = f"urn:fallback:{hashlib.sha256(seed).hexdigest()[:16]}"
+            logger.warning(f"Could not generate synthetic URN, using fallback: {urn}")
 
     return FRBRMetadata(
         urn=urn,

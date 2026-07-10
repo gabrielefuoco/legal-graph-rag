@@ -20,6 +20,47 @@ class AsyncSenatoScraper:
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
+    async def fetch_ids_by_topic(self, topic: str, limit: int = 500) -> List[str]:
+        """
+        Uses SPARQL to find Senato Bill IDs (DDL) related to a specific topic.
+        Returns a list of clean IDs (e.g., '1234' from 'http://dati.senato.it/osr/Ddl/1234')
+        to be matched with the Bulk Data XML files.
+        """
+        topic_lower = topic.lower().replace('"', '')
+        query = f"""
+        SELECT DISTINCT ?ddl ?numero
+        WHERE {{
+            ?ddl a <http://dati.senato.it/osr/Ddl> .
+            ?ddl <http://dati.senato.it/osr/titolo> ?titolo .
+            ?ddl <http://dati.senato.it/osr/numero> ?numero .
+            FILTER(CONTAINS(TOLOWER(STR(?titolo)), "{topic_lower}"))
+        }}
+        LIMIT {limit}
+        """
+        async with aiohttp.ClientSession() as session:
+            try:
+                headers = {
+                    "Accept": "application/sparql-results+json",
+                    "User-Agent": "Mozilla/5.0 (compatible; LegalGraphRAG/1.0)"
+                }
+                async with session.get(SENATO_SPARQL_ENDPOINT, params={"query": query}, headers=headers) as response:
+                    if response.status != 200:
+                        logger.error(f"Senato SPARQL Query failed: {response.status}")
+                        return []
+                    
+                    data = await response.json()
+                    results = []
+                    for binding in data.get("results", {}).get("bindings", []):
+                        num = binding.get("numero", {}).get("value")
+                        if num:
+                            results.append(num)
+                    
+                    logger.info(f"Senato Scraper found {len(results)} IDs for topic '{topic}'.")
+                    return results
+            except Exception as e:
+                logger.error(f"Error fetching Senato IDs by topic: {e}")
+                return []
+
     async def fetch_ddl_metadata(self, limit: int = 100) -> List[Dict[str, str]]:
         """
         Fetches metadata for recent DDLs (Disegni di Legge) via SPARQL.

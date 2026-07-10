@@ -37,6 +37,7 @@ class AnalyzedQuery:
     teseo_concept_ids: list[str] = field(default_factory=list) # TESEO concept IDs trovati
     expanded_labels: list[str] = field(default_factory=list)   # Label narrower/broader espanse
     expanded_query_text: str = ""                              # Query arricchita per BM25
+    reranker_instruction: str = ""                             # Istruzione task-aware per il reranker
 
 
 # ---------------------------------------------------------------------------
@@ -54,9 +55,15 @@ class RagState(TypedDict):
 
     # --- Input ---
     query: str
+    iterations: int                          # Numero di iterazioni del loop agentico
+    rewritten_queries: list[str]             # Storico delle query riformulate
     reference_date: str | None               # ISO format (YYYY-MM-DD), opzionale
     top_k: int                               # Numero di risultati estratti per canale
     final_k: int                             # Numero di risultati finali dopo RRF e filtering
+    enable_graph_search: bool                # Abilita la ricerca semantica basata su TESEO
+    enable_multi_hop: bool                   # Abilita l'espansione multi-hop delle citazioni
+    skip_generation: bool                    # Flag per saltare il nodo di generazione finale
+    chat_history: list[dict[str, str]] | None # Storico conversazione per multi-turn
 
     # --- Step 1: Query Analysis ---
     analyzed_query: AnalyzedQuery | None
@@ -74,6 +81,14 @@ class RagState(TypedDict):
     hop_count: int
     final_chunks: list[RetrievedChunk]
 
+    # --- Step 5: Generation ---
+    generation: str | None
+
     # --- Dipendenze iniettate (private) ---
     _driver: Any      # AsyncDriver (Neo4j)
     _analyzer: Any    # QueryAnalyzer
+    _reranker: Any    # Reranker
+    _llm: Any         # LegalGenerator
+    _grader: Any      # RetrievalGrader
+    _rewriter: Any    # QueryRewriter
+

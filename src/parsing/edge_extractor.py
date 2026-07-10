@@ -226,14 +226,31 @@ _REPEAL_PATTERN = re.compile(
 
 def _classify_modification(mod_el: etree._Element) -> ModificationType:
     """
-    Classify the type of normative modification from the text of a <mod> element.
-
-    Uses regex pattern matching on Italian legal keywords:
-    - "sostituito" → SUBSTITUTION
-    - "inserito" / "aggiunto" → INSERTION
-    - "abrogato" / "soppresso" → REPEAL
-    - fallback → AMENDMENT
+    Classify the type of normative modification.
+    Prioritizes AKN structural attributes, then NIR <azione> tags, then falls back to regex.
     """
+    # 1. Check AKN 'type' attribute
+    mod_type_attr = mod_el.get("type", "").lower()
+    if "repeal" in mod_type_attr or "abrogation" in mod_type_attr:
+        return ModificationType.REPEAL
+    if "substitution" in mod_type_attr or "replacement" in mod_type_attr:
+        return ModificationType.SUBSTITUTION
+    if "insertion" in mod_type_attr or "addition" in mod_type_attr:
+        return ModificationType.INSERTION
+
+    # 2. Check inner <azione> or <action> tags (NIR standard)
+    for child in mod_el.iter():
+        ln = local_name(child)
+        if ln in ("azione", "action"):
+            action_type = child.get("tipo", child.get("type", "")).lower()
+            if "sostituzione" in action_type or "substitution" in action_type:
+                return ModificationType.SUBSTITUTION
+            if "abrogazione" in action_type or "repeal" in action_type:
+                return ModificationType.REPEAL
+            if "inserimento" in action_type or "insertion" in action_type:
+                return ModificationType.INSERTION
+
+    # 3. Fallback to Regex on text
     text = "".join(mod_el.itertext()).strip()
 
     if _REPEAL_PATTERN.search(text):

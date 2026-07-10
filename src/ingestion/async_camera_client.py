@@ -15,12 +15,20 @@ class AsyncCameraClient:
     Fetches Iter Legis steps (presentations, votes, assignments).
     """
 
-    async def fetch_iter_legis(self, legislature: int = 19, limit: int = 100) -> List[Dict[str, Any]]:
+    def __init__(self, output_dir: str = "data/raw/camera"):
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+    async def fetch_iter_legis(self, legislature: int = 19, limit: int = 100, keyword: str = None) -> List[Dict[str, Any]]:
         """
         Fetches Iter Legis events for a specific legislature.
+        Optionally filters by a keyword in the title.
         """
-        # Query to get Acts (Atto) and their events (Stato/Passaggio)
-        # Simplified query for demonstration - focused on Act presentation
+        keyword_filter = ""
+        if keyword:
+            keyword_lower = keyword.lower().replace('"', '')
+            keyword_filter = f'FILTER(CONTAINS(TOLOWER(STR(?titolo)), "{keyword_lower}"))'
+
         query = f"""
         SELECT DISTINCT ?atto ?numero ?titolo ?data ?tipo
         WHERE {{
@@ -29,6 +37,7 @@ class AsyncCameraClient:
             ?atto <http://purl.org/dc/elements/1.1/title> ?titolo .
             ?atto <http://purl.org/dc/elements/1.1/date> ?data .
             ?atto <http://purl.org/dc/elements/1.1/identifier> ?numero .
+            {keyword_filter}
         }}
         LIMIT {limit}
         """
@@ -67,21 +76,18 @@ class AsyncCameraClient:
         import json
         filepath = self.output_dir / filename
         
-        # Append mode to support multiple runs/pagination
-        with open(filepath, "a", encoding="utf-8") as f:
+        # Override file to avoid appending forever in the same topic run
+        with open(filepath, "w", encoding="utf-8") as f:
             for item in results:
                 f.write(json.dumps(item, ensure_ascii=False) + "\n")
         
         logger.info(f"Saved {len(results)} records to {filepath}")
         return str(filepath)
 
-    async def run(self):
+    async def run(self, keyword: str = None):
         """Main execution."""
-        logger.info("Starting Async Camera Client...")
-        self.output_dir = Path("data/raw/camera") # Ensure default is set
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        
-        results = await self.fetch_iter_legis(limit=20)
+        logger.info(f"Starting Async Camera Client (Topic: {keyword})...")
+        results = await self.fetch_iter_legis(limit=20, keyword=keyword)
         
         if results:
             await self.save_metadata(results)
@@ -93,4 +99,4 @@ class AsyncCameraClient:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     client = AsyncCameraClient()
-    asyncio.run(client.run())
+    asyncio.run(client.run(keyword="appalti"))

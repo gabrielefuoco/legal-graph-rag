@@ -15,17 +15,28 @@ class Settings(BaseSettings):
 
     # LLM & Embedding
     QWEN3_ENDPOINT: str = "http://localhost:11434"
-    EMBEDDING_MODEL_NAME: str = "nomic-embed-text"
-    EMBEDDING_DIMENSIONS: int = 768
+    EMBEDDING_MODEL_NAME: str = "qwen3-embedding:0.6b"
+    EMBEDDING_DIMENSIONS: int = 768  # Da verificare se cambia con il nuovo modello
+    GENERATIVE_MODEL_NAME: str = "qwen3.5:4b"
 
     # RAG Retrieval
     TESEO_RDF_PATH: str = "data/external/teseo_sample.rdf"
-    RAG_TOP_K: int = 10
-    RRF_WEIGHT_VECTOR: float = 0.8
-    RRF_WEIGHT_BM25: float = 1.5
-    RRF_WEIGHT_GRAPH: float = 1.0
+    RAG_TOP_K: int = 15
+    RRF_WEIGHT_VECTOR: float = 1.0
+    RRF_WEIGHT_BM25: float = 1.0
+    RRF_WEIGHT_GRAPH: float = 1.2
     RRF_K: int = 60
     MAX_CITATION_HOPS: int = 1
+    RAG_MIN_SCORE: float = 0.01
+    RAG_VECTOR_MIN_SCORE: float = 0.3
+    MAX_AGENTIC_ITERATIONS: int = 5
+
+    # Reranker
+    RERANKER_MODEL_NAME: str = "Qwen/Qwen3-Reranker-0.6B"
+    RERANK_TOP_K: int = 20  # Quanti chunk passare al reranker dopo la fusion
+    RERANK_MIN_SCORE: float = 0.05 # Soglia minima di pertinenza semantica
+
+
 
 # Singleton instance for the application
 settings = Settings()

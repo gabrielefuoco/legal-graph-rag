@@ -91,6 +91,47 @@ def _reciprocal_rank_fusion(
     return fused
 
 
+def _deduplicate_by_text(chunks: list[RetrievedChunk], overlap_threshold: float = 0.8) -> list[RetrievedChunk]:
+    """
+    Rimuove chunk il cui testo è un sottoinsieme significativo di un altro chunk.
+    Mantiene il chunk con lo score più alto.
+    """
+    if len(chunks) <= 1:
+        return chunks
+    
+    # Ordina per score decrescente così i chunk migliori vengono mantenuti
+    sorted_chunks = sorted(chunks, key=lambda c: c.score, reverse=True)
+    kept = []
+    
+    for candidate in sorted_chunks:
+        is_duplicate = False
+        candidate_words = set(candidate.text.lower().split())
+        
+        if not candidate_words:
+            continue
+            
+        for existing in kept:
+            existing_words = set(existing.text.lower().split())
+            if not existing_words:
+                continue
+            
+            # Calcola overlap bidirezionale
+            intersection = candidate_words & existing_words
+            smaller_set = min(len(candidate_words), len(existing_words))
+            
+            if smaller_set > 0 and len(intersection) / smaller_set >= overlap_threshold:
+                is_duplicate = True
+                break
+        
+        if not is_duplicate:
+            kept.append(candidate)
+    
+    if len(kept) < len(chunks):
+        logger.info(f"Dedup: rimossi {len(chunks) - len(kept)} chunk duplicati")
+    
+    return kept
+
+
 def _mark_abrogated_chunks(
     chunks: list[RetrievedChunk],
     reference_date: date,
@@ -113,9 +154,9 @@ def _mark_abrogated_chunks(
 
 def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
     """
-    Fonde i chunk restituiti che appartengono allo stesso Atto (Work).
-    Usa `work_title` dai metadati (o `work_urn`) per raggrupparli.
-    Mantiene lo score massimo del gruppo e concatena i testi (in ordine di `structural_context`).
+    Fonde i chunk restituiti che appartengono allo stesso Atto (Work)
+    e sono strutturalmente adiacenti.
+    Mantiene lo score massimo del gruppo e concatena i testi.
     """
     if not chunks:
         return []
@@ -131,43 +172,68 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
         if len(group) == 1:
             merged_chunks.append(group[0])
             continue
-            
-        # Ordiniamo per structural_context (es. "articolo - Art. 1" prima di "articolo - Art. 2")
+        
+        # Ordiniamo per structural_context
         group_sorted = sorted(group, key=lambda x: x.structural_context or "")
         
-        base_chunk = group_sorted[0]
-        max_score = max(c.score for c in group_sorted)
+        # Suddividi in sotto-gruppi adiacenti
+        # Due chunk sono "adiacenti" se differiscono solo nell'ultimo segmento del breadcrumb
+        sub_groups = []
+        current_sub = [group_sorted[0]]
         
-        # Concateniamo i testi con un separatore chiaro
-        texts_to_join = []
-        for c in group_sorted:
-            if c.structural_context:
-                texts_to_join.append(f"--- {c.structural_context} ---\n{c.text}")
-            else:
-                texts_to_join.append(c.text)
-                
-        merged_text = "\n\n".join(texts_to_join)
-        
-        # Raccogliamo tutte le fonti
-        all_sources = set()
-        for c in group_sorted:
-            all_sources.update(c.source.split("+"))
+        for i in range(1, len(group_sorted)):
+            prev_ctx = current_sub[-1].structural_context or ""
+            curr_ctx = group_sorted[i].structural_context or ""
             
-        # Creiamo un nuovo chunk fuso
-        merged_chunk = RetrievedChunk(
-            text=merged_text,
-            expression_id="merged_" + base_chunk.expression_id,
-            work_urn=base_chunk.work_urn,
-            structural_context="MULTIPLE_CHUNKS",
-            score=max_score,
-            source="+".join(sorted(all_sources)),
-            vigenza_start=base_chunk.vigenza_start,
-            vigenza_end=base_chunk.vigenza_end,
-            metadata=base_chunk.metadata.copy()
-        )
-        merged_chunks.append(merged_chunk)
+            # Consideriamo adiacenti se condividono lo stesso prefisso (stessa sezione)
+            prev_parts = prev_ctx.rsplit(" > ", 1)
+            curr_parts = curr_ctx.rsplit(" > ", 1)
+            
+            same_parent = (len(prev_parts) > 1 and len(curr_parts) > 1 
+                          and prev_parts[0] == curr_parts[0])
+            
+            if same_parent:
+                current_sub.append(group_sorted[i])
+            else:
+                sub_groups.append(current_sub)
+                current_sub = [group_sorted[i]]
+        sub_groups.append(current_sub)
         
-    # Riordiniamo la lista finale per score discendente
+        # Merge solo i sotto-gruppi con più di un chunk
+        for sub in sub_groups:
+            if len(sub) == 1:
+                merged_chunks.append(sub[0])
+                continue
+            
+            base_chunk = sub[0]
+            max_score = max(c.score for c in sub)
+            
+            texts_to_join = []
+            for c in sub:
+                if c.structural_context:
+                    texts_to_join.append(f"--- {c.structural_context} ---\n{c.text}")
+                else:
+                    texts_to_join.append(c.text)
+                    
+            merged_text = "\n\n".join(texts_to_join)
+            
+            all_sources = set()
+            for c in sub:
+                all_sources.update(c.source.split("+"))
+            
+            merged_chunk = RetrievedChunk(
+                text=merged_text,
+                expression_id="merged_" + base_chunk.expression_id,
+                work_urn=base_chunk.work_urn,
+                structural_context="MULTIPLE_CHUNKS",
+                score=max_score,
+                source="+".join(sorted(all_sources)),
+                vigenza_start=base_chunk.vigenza_start,
+                vigenza_end=base_chunk.vigenza_end,
+                metadata=base_chunk.metadata.copy()
+            )
+            merged_chunks.append(merged_chunk)
+        
     merged_chunks.sort(key=lambda x: x.score, reverse=True)
     return merged_chunks
 
@@ -197,11 +263,22 @@ def fuse_and_filter(state: RagState) -> dict:
         f"{len(graph_results)} graph → {len(fused)} chunk unici"
     )
 
-    # Cutoff (Top-K finale)
-    final_k = state.get("final_k", 5)
-    fused = fused[:final_k]
+    # Score-based cutoff: rimuovi chunk con score troppo basso
+    min_score = settings.RAG_MIN_SCORE
+    before_cutoff = len(fused)
+    fused = [c for c in fused if c.score >= min_score]
+    if len(fused) < before_cutoff:
+        logger.info(f"Score cutoff (>= {min_score}): rimossi {before_cutoff - len(fused)} chunk sotto soglia")
+
+    # Positional cutoff (Pre-Rerank): prendiamo abbastanza chunk per il reranking
+    rerank_top_k = settings.RERANK_TOP_K
+    fused = fused[:rerank_top_k]
     
-    logger.info(f"Cutoff applicato: estratti i top {final_k} chunk finali")
+    logger.info(f"Fusion cutoff: estratti i top {rerank_top_k} chunk per il reranker")
+
+
+    # Deduplicazione per overlap testuale
+    fused = _deduplicate_by_text(fused)
 
     # Marcatura temporale per norme abrogate
     ref_date_str = state.get("reference_date")
@@ -214,7 +291,7 @@ def fuse_and_filter(state: RagState) -> dict:
             
     fused = _mark_abrogated_chunks(fused, ref_date)
     
-    # Merging dei chunk dello stesso Atto
+    # Merging dei chunk dello stesso Atto (solo se strutturalmente adiacenti)
     fused = _merge_chunks(fused)
 
     return {
