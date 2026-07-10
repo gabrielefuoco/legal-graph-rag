@@ -2,7 +2,6 @@
 
 **Legal GraphRAG** è un framework avanzato di *Retrieval-Augmented Generation* specializzato nel dominio legislativo italiano. Il sistema combina la potenza dei **Knowledge Graph** con la flessibilità della **Vector Search**, sfruttando la struttura gerarchica delle norme (Akoma Ntoso) e l'ontologia semantica del **Thesaurus TESEO** del Senato.
 
-![Status](https://img.shields.io/badge/Status-Phase_6_Complete-success)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Neo4j](https://img.shields.io/badge/Database-Neo4j-008CC1)
 ![LLM](https://img.shields.io/badge/LLM-Qwen3%20(Ollama)-orange)
@@ -90,23 +89,3 @@ Il notebook offre visualizzazioni Markdown, debug della fase di query analysis e
 ├── tests/            # Suite di test unitari e di integrazione
 └── manage.py         # Punto di ingresso unico per la gestione del sistema
 ```
-
----
-
-## 📍 Roadmap e Stato del Progetto
-
-Il progetto è suddiviso in 12 fasi strutturate. Attualmente ci troviamo all'inizio della **Fase 7**.
-
-- [x] **Fase 1-4**: Ingestione, Parsing Akoma Ntoso e Integrazione Vector+Graph in Neo4j.
-- [x] **Fase 5**: Ottimizzazione Hardware e Hybrid RAG.
-- [x] **Fase 6**: Ottimizzazione Pipeline RAG (Vigenza, Merging, Reciprocal Rank Fusion).
-- [ ] **Fase 7**: Studio di Ablazione (GraphRAG vs Naive RAG) e configurazione Reranker.
-- [ ] **Fase 8A**: Sviluppo LegalGenerator (Grounded Generation) e Prompt Engineering.
-- [ ] **Fase 8B**: Integrazione Generatore nel grafo LangGraph.
-- [ ] **Fase 8C**: Implementazione Memoria Conversazionale (Multi-turn).
-- [ ] **Fase 9**: Loop Agentico (Retrieval Grader e Query Rewriter per autocorrezione).
-- [ ] **Fase 10**: Sviluppo UI Interattiva (Streamlit) per test interattivi e visivi.
-- [ ] **Fase 11**: Valutazione Quantitativa tramite framework LLM-as-a-judge (RAGAS).
-- [ ] **Fase 12**: Deploy finale e containerizzazione completa dell'ecosistema (Docker Compose).
-
-
