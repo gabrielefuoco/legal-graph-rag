@@ -1,0 +1,44 @@
+/* 
+   Minimalist CSS for Legal GraphRAG 
+   Provides basic visual distinctions for source channels
+*/
+
+.badge-vector {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.badge-bm25 {
+    background-color: #14532d;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.badge-graph {
+    background-color: #4c1d95;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.badge-hop {
+    background-color: #9a3412;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.badge-rerank {
+    background-color: #3f3f46;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}

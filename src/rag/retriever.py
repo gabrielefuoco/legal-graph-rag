@@ -8,6 +8,7 @@ Tre nodi LangGraph indipendenti che eseguono retrieval su canali diversi:
 """
 import logging
 from datetime import date
+from typing import Optional
 
 from neo4j import AsyncDriver
 
@@ -28,6 +29,31 @@ def _parse_date(value) -> date | None:
         return date(value.year, value.month, value.day)
     except Exception:
         return None
+
+
+def _build_breadcrumb(record) -> str:
+    """Costruisce un breadcrumb strutturale dal record Cypher.
+    
+    Esempio output: 'Legge 25 gen 1904 > Titolo II > Art. 38'
+    """
+    parts = []
+    work_title = record.get("work_title")
+    if work_title:
+        # Abbrevia titoli lunghi
+        if len(work_title) > 60:
+            work_title = work_title[:57] + "..."
+        parts.append(work_title)
+    
+    # Breadcrumb path restituito dalla query Cypher
+    breadcrumb_path = record.get("breadcrumb_path")
+    if breadcrumb_path:
+        parts.extend(breadcrumb_path)
+    
+    structural_tag = record.get("structural_tag")
+    if structural_tag and structural_tag not in parts:
+        parts.append(structural_tag)
+    
+    return " > ".join(parts) if parts else "articolo"
 
 
 def _record_to_chunk(record, source: str) -> RetrievedChunk:
@@ -53,11 +79,14 @@ def _record_to_chunk(record, source: str) -> RetrievedChunk:
     if record.get("work_title"):
         metadata["work_title"] = record.get("work_title")
 
+    # Costruisci breadcrumb strutturale
+    breadcrumb = _build_breadcrumb(record)
+
     return RetrievedChunk(
         text=record.get("text") or "",
         expression_id=expression_id,
         work_urn=work_urn or "urn:unknown",
-        structural_context=record.get("structural_tag") or "articolo",
+        structural_context=breadcrumb,
         score=float(record.get("score") or 0.0),
         source=source,
         vigenza_start=_parse_date(record.get("vigenza_start")),
@@ -86,6 +115,7 @@ async def vector_search(state: RagState) -> dict:
         return {"vector_results": []}
 
     chunks = []
+    min_score = settings.RAG_VECTOR_MIN_SCORE
 
     try:
         async with driver.session() as session:
@@ -93,8 +123,13 @@ async def vector_search(state: RagState) -> dict:
                 """
                 CALL db.index.vector.queryNodes('expression_embedding_vector', $top_k, $query_vector)
                 YIELD node AS e, score
+                WHERE score >= $min_score
                 OPTIONAL MATCH (e)-[:PART_OF*1..2]->(w:Work)
                 OPTIONAL MATCH (e)-[:PART_OF]->(u:StructuralUnit)
+                // Breadcrumb: risali la catena PART_OF per il contesto strutturale
+                OPTIONAL MATCH path = (e)-[:PART_OF*1..4]->(w)
+                WITH e, w, u, score,
+                     [n IN nodes(path) WHERE n:StructuralUnit | n.tag_name] AS breadcrumb_path
                 RETURN e.text_display AS text,
                        e.id AS expression_id,
                        w.urn AS work_urn,
@@ -102,17 +137,19 @@ async def vector_search(state: RagState) -> dict:
                        u.tag_name AS structural_tag,
                        e.vigenza_start AS vigenza_start,
                        e.vigenza_end AS vigenza_end,
+                       breadcrumb_path,
                        score
                 """,
                 top_k=top_k,
                 query_vector=query_embedding,
+                min_score=min_score,
             )
             async for record in result:
                 chunks.append(_record_to_chunk(record, source="vector"))
     except Exception as e:
         logger.error(f"Errore nella Vector Search: {e}")
 
-    logger.info(f"Vector Search: {len(chunks)} risultati")
+    logger.info(f"Vector Search: {len(chunks)} risultati (soglia >= {min_score})")
     return {"vector_results": chunks}
 
 
@@ -157,6 +194,10 @@ async def bm25_search(state: RagState) -> dict:
                 YIELD node AS e, score
                 OPTIONAL MATCH (e)-[:PART_OF*1..2]->(w:Work)
                 OPTIONAL MATCH (e)-[:PART_OF]->(u:StructuralUnit)
+                // Breadcrumb: risali la catena PART_OF per il contesto strutturale
+                OPTIONAL MATCH path = (e)-[:PART_OF*1..4]->(w)
+                WITH e, w, u, score,
+                     [n IN nodes(path) WHERE n:StructuralUnit | n.tag_name] AS breadcrumb_path
                 RETURN e.text_display AS text,
                        e.id AS expression_id,
                        w.urn AS work_urn,
@@ -164,6 +205,7 @@ async def bm25_search(state: RagState) -> dict:
                        u.tag_name AS structural_tag,
                        e.vigenza_start AS vigenza_start,
                        e.vigenza_end AS vigenza_end,
+                       breadcrumb_path,
                        score
                 LIMIT $top_k
                 """,
@@ -208,6 +250,11 @@ async def graph_search(state: RagState) -> dict:
     analyzed = state.get("analyzed_query")
     top_k = settings.RAG_TOP_K
 
+    # Salta il canale Grafo se la ricerca sul grafo è disabilitata
+    if not state.get("enable_graph_search", True):
+        logger.info("Ricerca su grafo disabilitata tramite flag (enable_graph_search=False). Skip graph_search.")
+        return {"graph_results": []}
+
     if not analyzed or not analyzed.teseo_concept_ids:
         logger.info("Nessun concetto TESEO trovato nella query, skip graph search.")
         return {"graph_results": []}
@@ -222,6 +269,12 @@ async def graph_search(state: RagState) -> dict:
                 WHERE t.id IN $teseo_ids
                 OPTIONAL MATCH (e)-[:PART_OF*1..2]->(w:Work)
                 OPTIONAL MATCH (e)-[:PART_OF]->(u:StructuralUnit)
+                // Breadcrumb strutturale
+                OPTIONAL MATCH path = (e)-[:PART_OF*1..4]->(w)
+                WITH e, w, u,
+                     MAX(r.score) AS score,
+                     COLLECT(DISTINCT t.id) AS matched_concepts,
+                     [n IN nodes(path) WHERE n:StructuralUnit | n.tag_name] AS breadcrumb_path
                 RETURN e.text_display AS text,
                        e.id AS expression_id,
                        w.urn AS work_urn,
@@ -229,8 +282,9 @@ async def graph_search(state: RagState) -> dict:
                        u.tag_name AS structural_tag,
                        e.vigenza_start AS vigenza_start,
                        e.vigenza_end AS vigenza_end,
-                       MAX(r.score) AS score,
-                       COLLECT(t.id) AS matched_concepts
+                       breadcrumb_path,
+                       score,
+                       matched_concepts
                 ORDER BY score DESC
                 LIMIT $top_k
                 """,

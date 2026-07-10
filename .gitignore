@@ -36,6 +36,8 @@ neo4j/data/
 neo4j/logs/
 neo4j/import/
 neo4j/plugins/
+models_cache/
+scratch/
 
 # IDEs
 .vscode/
@@ -48,9 +50,8 @@ documentazione/
 AGENTS.md
 
 # Pytest & Tests
-tests/
 pytest.ini
-*.txt
+*.log
 
 # Ollama
 ollama/

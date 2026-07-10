@@ -27,19 +27,42 @@ class AsyncNormattivaClient:
         """
         url = f"{self.BASE_URL}/ricerca-asincrona/nuova-ricerca"
         
+        # Default email if none provided
+        if not email: email = "ingestion@example.com"
+        
+        # Map user-friendly keys to API keys if necessary
+        mapped_params = search_params.copy()
+        if "testo" in mapped_params:
+            mapped_params["testoRicerca"] = mapped_params.pop("testo")
+            if "testoContainsType" not in mapped_params:
+                mapped_params["testoContainsType"] = "ALL_WORDS"
+        
+        # Ensure mandatory boilerplate for RicercaAvanzataFilterDto
+        full_params = {
+            "filtriMap": {},
+            "orderType": "score",
+            "limitaAnniVigenza": False
+        }
+        full_params.update(mapped_params)
+
         payload = {
             "formato": fmt, 
-            "richiestaExport": "M", 
-            "modalita": "C", 
-            "tipoRicerca": "A", 
+            "richiestaExport": "M", # M for Multivigente
+            "modalita": "C",        # C for Classic
+            "tipoRicerca": "A",     # A for Advanced (FilterDto is for advanced)
             "email": email,
-            "parametriRicerca": search_params
+            "parametriRicerca": full_params
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain, */*"
         }
 
         async with aiohttp.ClientSession() as session:
             try:
                 logger.info(f"Initiating search with params: {search_params}")
-                async with session.post(url, json=payload) as response:
+                async with session.post(url, json=payload, headers=headers) as response:
                     response.raise_for_status()
                     text = await response.text()
                     token = text.strip().replace('"', '')
@@ -111,7 +134,7 @@ class AsyncNormattivaClient:
 
     async def _download_collection(self, session: aiohttp.ClientSession, token: str):
         """
-        Downloads the ZIP collection.
+        Downloads the ZIP collection and extracts it to the XML directory.
         """
         url = f"{self.BASE_URL}/collections/download/collection-asincrona/{token}"
         try:
@@ -125,8 +148,17 @@ class AsyncNormattivaClient:
                 with open(filepath, 'wb') as f:
                     f.write(content)
                     
-                logger.info(f"Downloaded: {filepath}")
-                return str(filepath)
+                logger.info(f"Downloaded ZIP: {filepath}")
+                
+                # Scompattamento automatico
+                import zipfile
+                xml_dir = self.output_dir / f"xml_{token}"
+                xml_dir.mkdir(exist_ok=True)
+                with zipfile.ZipFile(filepath, 'r') as zip_ref:
+                    zip_ref.extractall(xml_dir)
+                logger.info(f"Extracted to: {xml_dir}")
+                
+                return str(xml_dir)
         except Exception as e:
             logger.error(f"Error downloading collection: {e}")
             return None

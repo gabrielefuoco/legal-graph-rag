@@ -213,6 +213,9 @@ def _parse_cortecost_xml(filepath: Path) -> list[JudgementDTO]:
         if judgement:
             results.append(judgement)
 
+    if not results:
+        logger.debug(f"No valid judgements extracted from {filepath.name}")
+
     return results
 
 
@@ -302,10 +305,33 @@ async def process_batch(
     all_nodes = []
     all_edges = []
     
-    # collezioniamo i nodi EXPRESSION per l'arricchimento vettoriale
     expression_nodes: List[GraphNodeDTO] = []
     payloads: List[str] = []
     
+    # 1. Estraggo tutti i nodi EXPRESSION e costruisco i payload per l'intero batch
+    for doc in docs_batch:
+        for node in doc.nodes:
+            if node.type.value == "EXPRESSION":
+                expression_nodes.append(node)
+                payload = vector_engine.build_vector_payload(node, doc.frbr.title)
+                payloads.append(payload)
+
+    # 2. Inferenza Vettoriale in Batch (Unica chiamata API)
+    embeddings = []
+    if payloads:
+        logger.info(f"Computing embeddings for {len(payloads)} nodes in batch...")
+        try:
+            embeddings = await vector_engine.compute_embeddings_batch(payloads)
+        except Exception as e:
+            logger.error(f"Embedding failed for a batch. Nodes will be loaded without vectors. Error: {e}")
+
+    # Mappa veloce per lookup O(1)
+    expr_id_to_vector = {}
+    for i, node in enumerate(expression_nodes):
+        if embeddings and i < len(embeddings) and embeddings[i]:
+            expr_id_to_vector[node.id] = embeddings[i]
+
+    # 3. Costruzione della lista di nodi e archi con Arricchimento Semantico (Memory-fast)
     for doc in docs_batch:
         all_nodes.append({
             "type": "WORK",
@@ -315,54 +341,68 @@ async def process_batch(
             "source": doc.frbr.country  # Usiamo il paese come fonte per ora o "Normattiva"
         })
 
-        # 2. Estraggo i nodi EXPRESSION per l'arricchimento
         for node in doc.nodes:
             if node.type.value == "EXPRESSION":
-                expression_nodes.append(node)
-                # Costruisco il payload per l'arricchimento vettoriale
-                payload = vector_engine.build_vector_payload(node, doc.frbr.title)
-                payloads.append(payload)
-                
-                # 3. Arricchimento Semantico (TESEO) - eseguito in modo sincrono per nodo (veloce)
-                topics = teseo_matcher.extract_topics(node.text_display or "")
-                for topic in topics:
-                    all_edges.append({
-                        "type": EdgeType.HAS_TOPIC.value,
-                        "expression_id": node.id,
-                        "teseo_id": topic["teseo_id"],
-                        "score": topic["score"]
-                    })
+                node_emb = expr_id_to_vector.get(node.id)
+                if node_emb:
+                    # In-memory semantic scoring senza bloccare il thread su HTTP
+                    topics = teseo_matcher.extract_topics_with_embedding(node.text_display or "", node_emb)
+                    for topic in topics:
+                        all_edges.append({
+                            "type": EdgeType.HAS_TOPIC.value,
+                            "expression_id": node.id,
+                            "teseo_id": topic["teseo_id"],
+                            "score": topic["score"]
+                        })
             
-            # Aggiungo il nodo alla lista di persistenza (dopo il potenziale arricchimento)
+            # Aggiungo il nodo alla lista di persistenza
             node_dict = node.model_dump()
             node_dict["work_urn"] = doc.frbr.urn # Injection per le query di linking
             node_dict["vigenza_start"] = doc.frbr.vigenza_start
             node_dict["vigenza_end"] = doc.frbr.vigenza_end
+            if node.id in expr_id_to_vector:
+                node_dict["embedding"] = expr_id_to_vector[node.id]
             all_nodes.append(node_dict)
 
-        # 4. Aggiungo gli archi strutturali esistenti
+        # Aggiungo gli archi strutturali esistenti
         for edge in doc.edges:
             all_edges.append(edge.model_dump())
 
-    # 5. Inferenza Vettoriale in Batch (Parallel)
-    if expression_nodes:
-        logger.info(f"Computing embeddings for {len(expression_nodes)} nodes...")
-        try:
-            embeddings = await vector_engine.compute_embeddings_batch(payloads)
-            
-            # Inietto gli embeddings nei dizionari all_nodes
-            expr_id_to_vector = {
-                expression_nodes[i].id: embeddings[i] 
-                for i in range(len(expression_nodes))
-            }
-            
-            for n_dict in all_nodes:
-                if n_dict.get("id") in expr_id_to_vector:
-                    n_dict["embedding"] = expr_id_to_vector[n_dict["id"]]
-        except Exception as e:
-            logger.error(f"Embedding failed for a batch. Nodes will be loaded without vectors. Error: {e}")
+        # Aggiungo i nodi Giurisprudenza e gli archi INTERPRETS
+        for judgement in doc.judgements:
+            all_nodes.append({
+                "type": "JUDGEMENT",
+                "id": judgement.id,
+                "date": judgement.date,
+                "description": judgement.description,
+                "court": judgement.court,
+                "judgement_type": judgement.judgement_type,
+                "judgement_result": judgement.judgement_result
+            })
+            for target_urn in judgement.affected_urns:
+                all_edges.append({
+                    "type": EdgeType.INTERPRETS.value,
+                    "source_id": judgement.id,
+                    "target_id": target_urn
+                })
+                
+        # Aggiungo i nodi Iter Legis e gli archi ITER_STEP
+        for step in doc.iter_legis:
+            all_nodes.append({
+                "type": "ITER_LEGIS",
+                "id": step.id,
+                "date": step.date,
+                "description": step.description,
+                "step_type": step.step_type,
+                "authority": step.authority
+            })
+            all_edges.append({
+                "type": "ITER_STEP",
+                "source_id": step.id,
+                "target_id": step.related_work_urn
+            })
 
-    # 6. Persistence to Neo4j
+    # 4. Persistence to Neo4j
     logger.info(f"Loading batch of {len(docs_batch)} docs to Neo4j ({len(all_nodes)} nodes, {len(all_edges)} edges)...")
     await neo4j_loader.load_batch(all_nodes, all_edges)
 
@@ -377,6 +417,13 @@ async def enrich_and_load_pipeline(input_jsonl: str, teseo_rdf: str):
     neo4j_loader = AsyncNeo4jLoader()
     
     await neo4j_loader.setup_schema()
+    
+    # NEW: Ensure TESEO labels and broader relations are loaded into Neo4j
+    if teseo_rdf and Path(teseo_rdf).exists():
+        await neo4j_loader.load_teseo_ontology(teseo_rdf)
+        
+    # Precompute TESEO label embeddings for fast in-memory matching
+    await teseo_matcher.precompute_embeddings(vector_engine)
     
     try:
         current_batch = []
