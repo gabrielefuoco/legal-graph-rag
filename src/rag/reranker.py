@@ -18,8 +18,6 @@ class Reranker:
 
     def __init__(self, model_name: str = None):
         model_name = model_name or settings.RERANKER_MODEL_NAME
-        
-        # Rilevamento automatico del device (GPU/CPU)
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # Supporto per Mac M1/M2/M3
         if device == "cpu" and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():

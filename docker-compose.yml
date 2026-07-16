@@ -22,6 +22,8 @@ services:
     pull_policy: always
     ports:
       - "11434:11434"
+    environment:
+      - OLLAMA_KV_CACHE_TYPE=q8_0
     volumes:
       - ./ollama/data:/root/.ollama
       - ./ollama/entrypoint.sh:/entrypoint.sh:ro

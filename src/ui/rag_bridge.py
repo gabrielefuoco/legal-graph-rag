@@ -42,7 +42,7 @@ async def query_rag_with_trace(supervisor: SupervisorAgent, query: str, config: 
                 async for msg, metadata in graph.astream(
                     {"messages": messages}, 
                     stream_mode="messages",
-                    config={"recursion_limit": 15}
+                    config={"recursion_limit": 50}
                 ):
                     node = metadata.get("langgraph_node")
                     # Rimosso il log per evitare flood del terminale per ogni singolo token
