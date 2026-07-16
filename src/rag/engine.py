@@ -186,6 +186,20 @@ class RagEngine:
         builder = _build_graph()
         self.graph = builder.compile()
         logger.info("RagEngine inizializzato: grafo LangGraph compilato.")
+        self._warmed_up = False
+
+    async def _warmup(self):
+        """Esegue un embedding dummy per forzare il caricamento del modello Ollama in VRAM."""
+        if self._warmed_up:
+            return
+        logger.info("[WARMUP] Avvio warmup del modello di embedding...")
+        try:
+            await self.analyzer.vector_engine.compute_embeddings_batch(["warmup"])
+            logger.info("[WARMUP] Modello di embedding caricato in VRAM.")
+        except Exception as e:
+            logger.warning(f"[WARMUP] Fallito: {e}")
+        finally:
+            self._warmed_up = True
 
     async def retrieve(
         self,
@@ -200,6 +214,9 @@ class RagEngine:
         """
         Esegue il retrieval ibrido e la generazione per una data query.
         """
+        if not self._warmed_up:
+            await self._warmup()
+
         # Stato iniziale
         initial_state: RagState = {
             "query": query,
@@ -231,7 +248,11 @@ class RagEngine:
         }
 
         # Esecuzione del grafo
+        import time
+        start = time.perf_counter()
         result = await self.graph.ainvoke(initial_state)
+        elapsed = time.perf_counter() - start
+        logger.info(f"[PIPELINE] Esecuzione completa in {elapsed:.1f}s | Iterazioni: {result.get('iterations', 0)}")
 
         # Ritorna i chunk e l'answer tramite RAGResult
         final = result.get("final_chunks") or result.get("fused_chunks") or []
@@ -247,12 +268,16 @@ class RagEngine:
         enable_graph_search: bool = True,
         enable_multi_hop: bool = True,
         chat_history: list[dict[str, str]] | None = None,
-        skip_generation: bool = False
+        skip_generation: bool = False,
+        status_callback=None
     ) -> tuple[list[RetrievedChunk], dict, str | None]:
         """
         Esegue il retrieval ibrido e ritorna i chunk, la traccia XAI e opzionalmente la generazione.
         Se skip_generation=True, bypassa il nodo 'generate' per permettere lo streaming esterno.
         """
+        if not self._warmed_up:
+            await self._warmup()
+
         initial_state: RagState = {
             "query": query,
             "reference_date": reference_date,
@@ -281,8 +306,19 @@ class RagEngine:
             "_rewriter": self.rewriter,
         }
 
-        # Esecuzione del grafo. Se skip_generation=True, si fermerà prima della generazione.
-        result = await self.graph.ainvoke(initial_state)
+        # Esecuzione del grafo con streaming degli eventi
+        import time
+        start = time.perf_counter()
+        
+        result = dict(initial_state)
+        async for output in self.graph.astream(initial_state):
+            for node_name, state_update in output.items():
+                if status_callback:
+                    status_callback(node_name, state_update)
+                result.update(state_update)
+                
+        elapsed = time.perf_counter() - start
+        logger.info(f"[PIPELINE] Esecuzione completa in {elapsed:.1f}s | Iterazioni: {result.get('iterations', 0)}")
         
         final_chunks = result.get("final_chunks") or result.get("fused_chunks") or []
         generation = result.get("generation")
@@ -294,6 +330,7 @@ class RagEngine:
             "analyzed_query": result.get("analyzed_query"),
             "enable_graph_search": result.get("enable_graph_search"),
             "enable_multi_hop": result.get("enable_multi_hop"),
+            # The node retrieve_all returns the lists, we should check their lengths
             "vector_results_count": len(result.get("vector_results") or []),
             "bm25_results_count": len(result.get("bm25_results") or []),
             "graph_results_count": len(result.get("graph_results") or []),

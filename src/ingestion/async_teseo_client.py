@@ -46,7 +46,7 @@ class AsyncTeseoClient:
 
                     content = await response.read()
                     
-                    filepath = self.output_dir / "teseo_sample.rdf"
+                    filepath = self.output_dir / "teseo_full.ttl"
                     with open(filepath, 'wb') as f:
                         f.write(content)
                     

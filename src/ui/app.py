@@ -2,10 +2,15 @@ import os
 import streamlit as st
 import asyncio
 import nest_asyncio
+import logging
+
+from src.logging_config import setup_logging
+setup_logging()
 
 nest_asyncio.apply()
 
 from src.rag.engine import RagEngine
+from src.rag.supervisor import SupervisorAgent
 from src.ui.components import render_retrieved_docs, render_graph_trace, render_agentic_log
 from src.ui.rag_bridge import query_rag_with_trace, run_async
 
@@ -21,10 +26,13 @@ except FileNotFoundError:
 
 @st.cache_resource
 def get_engine():
-    """Inizializza l'engine RAG una sola volta."""
     return RagEngine()
 
+def get_supervisor(_engine):
+    return SupervisorAgent(_engine)
+
 engine = get_engine()
+supervisor = get_supervisor(engine)
 
 # --- SIDEBAR: Pannello di Ablazione ---
 with st.sidebar:
@@ -36,7 +44,7 @@ with st.sidebar:
     
     st.markdown("---")
     top_k = st.slider("Top-K Retrieval (per canale)", 1, 30, 15)
-    final_k = st.slider("Final-K (Post-Rerank)", 1, 10, 5)
+    final_k = st.slider("Final-K (Post-Rerank)", 1, 20, 10)
     
     st.markdown("---")
     if st.button("🗑 Reset Conversazione"):
@@ -86,16 +94,93 @@ if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze dell
 
     # Ottenimento risposta
     with st.chat_message("assistant"):
-        with st.spinner("Analisi e recupero informazioni..."):
-            # Costruisci lo storico per l'LLM: prendi gli ultimi 4 turni
-            chat_history = [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages[:-1][-4:]]
+        status = st.status("⚖️ Pipeline RAG in corso...", expanded=True)
+        
+        def status_callback(node_name: str, state_update: dict):
+            import logging
+            logging.getLogger(__name__).info(f"STATUS CALLBACK: {node_name}")
+            node_map = {
+                "supervisor_thinking": "Supervisore in fase di analisi...",
+                "supervisor_tool_rag": "Il Supervisore sta interrogando il database...",
+                "supervisor_generating_rag": "Il Supervisore sintetizza i risultati della ricerca...",
+                "supervisor_generating_chat": "Il Supervisore formula la risposta conversazionale...",
+                "contextualize_query": "Comprensione contesto multi-turno...",
+                "analyze_query": "Analisi semantica e arricchimento TESEO...",
+                "retrieve_all": "Interrogazione canali (Vector, BM25, Graph)...",
+                "fuse_and_filter": "Fusione dei risultati e filtraggio temporale...",
+                "rerank": "Reranking semantico dei documenti...",
+                "expand_citations": "Recupero delle citazioni multi-hop...",
+                "grade_documents": "Valutazione della pertinenza (Grading)...",
+                "rewrite_query": "Riformulazione della query (Self-Reflection)..."
+            }
+            label = node_map.get(node_name, f"Esecuzione nodo: {node_name}...")
+            status.update(label=label)
             
-            # Esecuzione async (Streamlit is sync, we use run_async)
-            coro = query_rag_with_trace(engine, prompt, config, chat_history)
-            final_chunks, trace, sync_generator = run_async(coro)
+            # Generazione dei dettagli intelligenti basati sul nodo
+            details = ""
+            if node_name == "supervisor_tool_rag":
+                q = state_update.get("query", "")
+                details = f"Query inviata a GraphRAG: '{q}'"
+            elif node_name == "analyze_query":
+                query = state_update.get("query", "")
+                details = f"Query analizzata: '{query}'"
+            elif node_name == "retrieve_all":
+                v = len(state_update.get("vector_results", []))
+                b = len(state_update.get("bm25_results", []))
+                g = len(state_update.get("graph_results", []))
+                details = f"Trovati {v} (Vector), {b} (BM25), {g} (Graph) risultati preliminari."
+            elif node_name == "fuse_and_filter":
+                f = len(state_update.get("fused_chunks", []))
+                details = f"Fusi e de-duplicati in {f} documenti unici."
+            elif node_name == "rerank":
+                r = len(state_update.get("final_chunks", []))
+                details = f"Selezionati i migliori {r} documenti."
+            elif node_name == "expand_citations":
+                h = state_update.get("hop_count", 0)
+                details = f"Eseguito hop citazionale #{h}."
+            elif node_name == "grade_documents":
+                docs = state_update.get("final_chunks", [])
+                details = f"{len(docs)} documenti ritenuti pertinenti dall'LLM."
+            elif node_name == "rewrite_query":
+                iter = state_update.get("iterations", 1)
+                new_q = state_update.get("query", "")
+                details = f"Iterazione {iter}: Query riscritta in '{new_q}'"
+            
+            if details:
+                status.write(f"🔹 **{node_map.get(node_name, node_name).split('...')[0]}**: {details}")
+            else:
+                status.write(f"🔹 {label}")
 
-        # Ora eseguiamo lo stream della risposta visualmente
+        # Costruisci lo storico per l'LLM con Sliding Window intelligente basata sui token
+        # Stimiamo ~3 caratteri per token in italiano. Soglia massima: 12.000 token (su 32K).
+        MAX_HISTORY_TOKENS = 12000
+        chat_history = []
+        current_tokens = 0
+        
+        # Iteriamo a ritroso, saltando l'ultimo messaggio (che è il prompt attuale, già gestito)
+        for m in reversed(st.session_state.messages[:-1]):
+            # Stima token (lunghezza testo / 3)
+            msg_tokens = len(m["content"]) // 3
+            if current_tokens + msg_tokens > MAX_HISTORY_TOKENS:
+                break
+            
+            # Inseriamo in testa alla lista per mantenere l'ordine cronologico
+            chat_history.insert(0, {"role": m["role"], "content": m["content"]})
+            current_tokens += msg_tokens
+        
+        # Esecuzione async (Streamlit is sync, we use run_async)
+        coro = query_rag_with_trace(supervisor, prompt, config, chat_history, status_callback)
+        sync_generator = run_async(coro)
+        
+        # Ora eseguiamo lo stream della risposta visualmente. Durante questo stream, la pipeline e l'agente lavorano, e status_callback viene invocato!
         full_response = st.write_stream(sync_generator)
+        
+        # RECUPERIAMO i chunk e trace estratti dall'engine SOLO DOPO l'esecuzione del generatore
+        final_chunks = getattr(supervisor.engine, "_temp_chunks", [])
+        trace = getattr(supervisor.engine, "_temp_trace", {})
+
+        # Alla fine, chiudiamo lo status
+        status.update(label="✅ Ricerca e Generazione completate.", state="complete", expanded=False)
 
         # Mostriamo subito gli expander per la nuova risposta
         render_retrieved_docs(final_chunks)

@@ -18,6 +18,8 @@ class LegalGenerator:
             base_url=settings.QWEN3_ENDPOINT,
             model=settings.GENERATIVE_MODEL_NAME,
             temperature=0.0,  # Massima precisione per il dominio legale
+            num_ctx=4096,
+            reasoning=False,
         )
 
     def _format_context(self, chunks: List[RetrievedChunk]) -> str:
@@ -33,8 +35,8 @@ class LegalGenerator:
             
         return "\n\n".join(context_parts)
 
-    def _build_messages(self, query: str, chunks: List[RetrievedChunk]) -> list:
-        """Costruisce la lista di messaggi (System + Human) per il LLM."""
+    def _build_messages(self, query: str, chunks: List[RetrievedChunk], chat_history: list = None) -> list:
+        """Costruisce la lista di messaggi (System + History + Human) per il LLM."""
         context = self._format_context(chunks)
         
         system_prompt = (
@@ -50,39 +52,64 @@ class LegalGenerator:
             f"CONTESTO UFFICIALE DA UTILIZZARE:\n{context}"
         )
         
-        from langchain_core.messages import SystemMessage, HumanMessage
-        return [
-            SystemMessage(content=system_prompt),
-            HumanMessage(content=f"Domanda: {query}")
-        ]
+        from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+        
+        messages = [SystemMessage(content=system_prompt)]
+        
+        if chat_history:
+            for msg in chat_history:
+                if msg.get("role") == "user":
+                    messages.append(HumanMessage(content=msg["content"]))
+                elif msg.get("role") == "assistant":
+                    messages.append(AIMessage(content=msg["content"]))
+                    
+        messages.append(HumanMessage(content=f"Domanda: {query}"))
+        return messages
 
     async def generate(self, state: RagState) -> dict:
         """
         Nodo LangGraph per la generazione della risposta.
         """
+        from src.rag.think_filter import strip_thinking_tags
         query = state["query"]
         chunks = state.get("final_chunks") or state.get("fused_chunks") or []
+        chat_history = state.get("chat_history") or []
         
-        messages = self._build_messages(query, chunks)
+        messages = self._build_messages(query, chunks, chat_history)
         
         try:
             logger.info(f"Generazione risposta per query: {query}")
             response = await self.llm.ainvoke(messages)
-            return {"generation": response.content}
+            content = strip_thinking_tags(response.content)
+            return {"generation": content}
         except Exception as e:
             logger.error(f"Errore durante la generazione della risposta: {e}")
             return {"generation": "Si è verificato un errore tecnico durante la generazione della risposta."}
 
-    async def generate_stream(self, query: str, chunks: List[RetrievedChunk]):
+    async def generate_stream(self, query: str, chunks: List[RetrievedChunk], chat_history: list = None):
         """
         Generatore asincrono per lo streaming della risposta.
         """
-        messages = self._build_messages(query, chunks)
+        from src.rag.think_filter import filter_think_stream
+        import time
+        messages = self._build_messages(query, chunks, chat_history)
         
         try:
-            logger.info(f"Generazione risposta in streaming per query: {query}")
-            async for chunk in self.llm.astream(messages):
-                yield chunk.content
+            logger.info(f"[5/6] GENERATE — Avvio streaming con {len(chunks)} chunk di contesto")
+            start = time.perf_counter()
+            token_count = 0
+            
+            raw_stream = self.llm.astream(messages)
+            async def content_stream():
+                async for chunk in raw_stream:
+                    yield chunk.content
+                    
+            async for token in filter_think_stream(content_stream()):
+                token_count += 1
+                yield token
+                
+            elapsed = time.perf_counter() - start
+            logger.info(f"[5/6] GENERATE — Completato in {elapsed:.1f}s | ~{token_count} token generati")
         except Exception as e:
             logger.error(f"Errore durante lo streaming della risposta: {e}")
             yield "Si è verificato un errore tecnico durante lo streaming della risposta."

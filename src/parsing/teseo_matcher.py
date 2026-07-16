@@ -18,6 +18,7 @@ class TESEOMatcher:
         self.label_to_id = {}
         self.label_embeddings = {}
         self.label_norms = {}
+        self.last_query_embedding = None
         if rdf_path:
             self.load_ontology(rdf_path)
 
@@ -40,7 +41,8 @@ class TESEOMatcher:
         g = Graph()
         logger.info(f"Loading TESEO ontology from {filepath}...")
         try:
-            g.parse(filepath, format="xml") # TESEO is usually RDF/XML
+            fmt = "turtle" if filepath.endswith(".ttl") else "xml"
+            g.parse(filepath, format=fmt)
         except Exception as e:
             logger.error(f"Failed to parse RDF: {e}")
             raise
@@ -87,6 +89,21 @@ class TESEOMatcher:
             
         logger.info(f"Precomputing embeddings for {len(labels)} TESEO labels...")
         import numpy as np
+        import pickle
+        import os
+        
+        cache_file = "data/external/teseo_embeddings.pkl"
+        if os.path.exists(cache_file):
+            logger.info(f"Loading TESEO label embeddings from cache: {cache_file}")
+            try:
+                with open(cache_file, "rb") as f:
+                    cache_data = pickle.load(f)
+                    self.label_embeddings = cache_data.get("label_embeddings", {})
+                    self.label_norms = cache_data.get("label_norms", {})
+                logger.info(f"TESEO label embeddings cached successfully ({len(self.label_embeddings)} loaded).")
+                return
+            except Exception as e:
+                logger.error(f"Failed to load cache: {e}. Recomputing...")
         
         batch_size = 500
         for i in range(0, len(labels), batch_size):
@@ -99,7 +116,15 @@ class TESEOMatcher:
             except Exception as e:
                 logger.error(f"Failed to precompute embeddings for a batch of TESEO labels: {e}")
                 
-        logger.info(f"TESEO label embeddings cached successfully ({len(self.label_embeddings)} loaded).")
+        try:
+            with open(cache_file, "wb") as f:
+                pickle.dump({
+                    "label_embeddings": self.label_embeddings,
+                    "label_norms": self.label_norms
+                }, f)
+            logger.info(f"TESEO label embeddings saved to cache ({len(self.label_embeddings)} loaded).")
+        except Exception as e:
+            logger.error(f"Failed to save cache: {e}")
 
     def extract_topics_with_embedding(self, text: str, text_embedding: list) -> List[Dict]:
         """
@@ -187,6 +212,7 @@ class TESEOMatcher:
             import numpy as np
             texts_to_embed = [text] + [m["label"] for m in matches]
             embeddings = await vector_engine.compute_embeddings_batch(texts_to_embed)
+            self.last_query_embedding = embeddings[0]
             
             text_emb = np.array(embeddings[0])
             norm_text_emb = np.linalg.norm(text_emb)

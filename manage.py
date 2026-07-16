@@ -12,7 +12,8 @@ from src.ingestion.async_corte_cost_client import AsyncCorteCostClient
 
 from src.parsing.transformers import enrich_and_load_pipeline
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+from src.logging_config import setup_logging
+setup_logging()
 logger = logging.getLogger(__name__)
 
 async def run_pipeline(start_date: str = None, limit: int = 100):
@@ -72,12 +73,14 @@ async def run_parse_and_load(raw_dir: str, output_jsonl: str, teseo_rdf: str, li
         await enrich_and_load_pipeline(input_jsonl=output_jsonl, teseo_rdf=teseo_rdf)
 
 async def run_topic_pipeline(topic: str):
+    from pathlib import Path
     logger.info(f"Starting Holistic Topic-Based Pipeline for topic: '{topic}'")
     
     base_raw = Path("data/raw")
     senato_repo = base_raw / "senato" / "AkomaNtosoBulkData"
     normattiva_dir = base_raw / "normattiva"
     cortecost_dir = base_raw / "cortecost"
+    camera_dir = base_raw / "camera"
     
     logger.info("--- PHASE 1: Fetch & Update ---")
     
@@ -114,11 +117,10 @@ async def run_topic_pipeline(topic: str):
     
     logger.info("--- PHASE 2 & 3: Parse & Unify & Load ---")
     output_jsonl = "data/processed/knowledge_graph.jsonl"
-    teseo_rdf = "data/external/teseo_sample.rdf"
+    teseo_rdf = "data/external/teseo_full.ttl"
     
     from src.parsing.parser import AknParser
     from src.parsing.transformers import transform_cortecost_to_judgements, transform_camera_to_iter_legis
-    from pathlib import Path
     import os
     
     parser_inst = AknParser()
@@ -203,6 +205,8 @@ async def run_retrieve(query: str, reference_date: str = None, top_k: int = 10, 
         for i, c in enumerate(chunks, 1):
             print(f"[{i}] {c.score:.4f} | {c.source} | {c.metadata.get('work_title', 'N/A')}")
             if verbose: print(f"Text: {c.text[:200]}...")
+        if hasattr(chunks, "answer") and chunks.answer:
+            print(f"\n--- Risposta Generata ---\n{chunks.answer}\n")
     finally:
         await engine.close()
 

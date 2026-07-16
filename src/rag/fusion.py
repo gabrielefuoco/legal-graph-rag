@@ -241,11 +241,9 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
 def fuse_and_filter(state: RagState) -> dict:
     """
     Nodo LangGraph: fonde i risultati dei 3 canali con RRF e applica il filtro temporale.
-
-    Legge: state["vector_results"], state["bm25_results"], state["graph_results"],
-           state["reference_date"]
-    Scrive: state["fused_chunks"], state["hop_count"]
     """
+    import time
+    start = time.perf_counter()
     vector_results = state.get("vector_results") or []
     bm25_results = state.get("bm25_results") or []
     graph_results = state.get("graph_results") or []
@@ -258,11 +256,6 @@ def fuse_and_filter(state: RagState) -> dict:
     ]
     fused = _reciprocal_rank_fusion(channels, k=settings.RRF_K)
 
-    logger.info(
-        f"RRF Fusion: {len(vector_results)} vector + {len(bm25_results)} bm25 + "
-        f"{len(graph_results)} graph → {len(fused)} chunk unici"
-    )
-
     # Score-based cutoff: rimuovi chunk con score troppo basso
     min_score = settings.RAG_MIN_SCORE
     before_cutoff = len(fused)
@@ -274,7 +267,11 @@ def fuse_and_filter(state: RagState) -> dict:
     rerank_top_k = settings.RERANK_TOP_K
     fused = fused[:rerank_top_k]
     
-    logger.info(f"Fusion cutoff: estratti i top {rerank_top_k} chunk per il reranker")
+    elapsed = time.perf_counter() - start
+    logger.info(
+        f"[3/6] FUSION — V:{len(vector_results)} + B:{len(bm25_results)} + G:{len(graph_results)} "
+        f"→ {before_cutoff} unici → {len(fused)} per reranker | {elapsed:.2f}s"
+    )
 
 
     # Deduplicazione per overlap testuale
