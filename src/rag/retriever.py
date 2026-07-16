@@ -106,6 +106,8 @@ async def vector_search(state: RagState) -> dict:
     Legge: state["query_embedding"]
     Scrive: state["vector_results"]
     """
+    import time
+    start = time.perf_counter()
     driver: AsyncDriver = state["_driver"]
     query_embedding = state.get("query_embedding")
     top_k = settings.RAG_TOP_K
@@ -149,7 +151,8 @@ async def vector_search(state: RagState) -> dict:
     except Exception as e:
         logger.error(f"Errore nella Vector Search: {e}")
 
-    logger.info(f"Vector Search: {len(chunks)} risultati (soglia >= {min_score})")
+    elapsed = time.perf_counter() - start
+    logger.info(f"  └─ Vector: {len(chunks)} risultati in {elapsed:.2f}s (soglia ≥ {min_score})")
     return {"vector_results": chunks}
 
 
@@ -167,6 +170,8 @@ async def bm25_search(state: RagState) -> dict:
     Legge: state["analyzed_query"]
     Scrive: state["bm25_results"]
     """
+    import time
+    start = time.perf_counter()
     driver: AsyncDriver = state["_driver"]
     analyzed = state.get("analyzed_query")
     top_k = settings.RAG_TOP_K
@@ -217,7 +222,8 @@ async def bm25_search(state: RagState) -> dict:
     except Exception as e:
         logger.error(f"Errore nella BM25 Search: {e}")
 
-    logger.info(f"BM25 Search: {len(chunks)} risultati")
+    elapsed = time.perf_counter() - start
+    logger.info(f"  └─ BM25: {len(chunks)} risultati in {elapsed:.2f}s")
     return {"bm25_results": chunks}
 
 
@@ -246,6 +252,8 @@ async def graph_search(state: RagState) -> dict:
     Legge: state["analyzed_query"]
     Scrive: state["graph_results"]
     """
+    import time
+    start = time.perf_counter()
     driver: AsyncDriver = state["_driver"]
     analyzed = state.get("analyzed_query")
     top_k = settings.RAG_TOP_K
@@ -259,6 +267,7 @@ async def graph_search(state: RagState) -> dict:
         logger.info("Nessun concetto TESEO trovato nella query, skip graph search.")
         return {"graph_results": []}
 
+    logger.info(f"  └─ Graph: cercando {len(analyzed.teseo_concept_ids)} concetti TESEO: {analyzed.teseo_concept_ids[:5]}")
     chunks = []
 
     try:
@@ -301,5 +310,6 @@ async def graph_search(state: RagState) -> dict:
     except Exception as e:
         logger.error(f"Errore nella Graph Search: {e}")
 
-    logger.info(f"Graph Search: {len(chunks)} risultati")
+    elapsed = time.perf_counter() - start
+    logger.info(f"  └─ Graph: {len(chunks)} risultati in {elapsed:.2f}s")
     return {"graph_results": chunks}

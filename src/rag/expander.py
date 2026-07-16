@@ -136,6 +136,5 @@ async def expand_citations(state: RagState) -> dict:
 
     return {
         "fused_chunks": all_chunks,
-        "final_chunks": all_chunks,
         "hop_count": hop_count + 1,
     }

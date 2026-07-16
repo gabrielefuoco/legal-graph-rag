@@ -16,11 +16,11 @@ class Settings(BaseSettings):
     # LLM & Embedding
     QWEN3_ENDPOINT: str = "http://localhost:11434"
     EMBEDDING_MODEL_NAME: str = "qwen3-embedding:0.6b"
-    EMBEDDING_DIMENSIONS: int = 768  # Da verificare se cambia con il nuovo modello
+    EMBEDDING_DIMENSIONS: int = 1024  # Aggiornato per il nuovo modello
     GENERATIVE_MODEL_NAME: str = "qwen3.5:4b"
 
     # RAG Retrieval
-    TESEO_RDF_PATH: str = "data/external/teseo_sample.rdf"
+    TESEO_RDF_PATH: str = "data/external/teseo_full.ttl"
     RAG_TOP_K: int = 15
     RRF_WEIGHT_VECTOR: float = 1.0
     RRF_WEIGHT_BM25: float = 1.0

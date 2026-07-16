@@ -69,8 +69,9 @@ class AsyncNeo4jLoader:
         
         logger.info(f"Loading TESEO ontology to Neo4j from {rdf_path}...")
         g = Graph()
+        fmt = "turtle" if rdf_path.endswith(".ttl") else "xml"
         try:
-            g.parse(rdf_path, format="xml")
+            g.parse(rdf_path, format=fmt)
         except Exception as e:
             logger.error(f"Failed to parse RDF for Neo4j: {e}")
             raise

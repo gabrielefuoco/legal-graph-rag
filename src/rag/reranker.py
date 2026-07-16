@@ -41,6 +41,8 @@ class Reranker:
         """
         if not self.model or not chunks:
             return chunks
+        from copy import copy
+        chunks = [copy(c) for c in chunks]
 
         # Se presente un'istruzione, formattiamo la query per il modello instruction-aware
         if instruction:
@@ -82,6 +84,8 @@ async def rerank_node(state: RagState) -> dict:
     """
     Nodo LangGraph: applica il reranking e pulisce i risultati finali.
     """
+    import time
+    start = time.perf_counter()
     query = state["query"]
     fused_chunks = state.get("fused_chunks", [])
     reranker: Reranker = state.get("_reranker")
@@ -98,9 +102,15 @@ async def rerank_node(state: RagState) -> dict:
     final_chunks = reranker.rerank(query, fused_chunks, instruction=instruction)
     
     # Taglio al final_k (es. top 5 dei migliori sopra soglia)
-    final_k = state.get("final_k", 5)
+    final_k = state.get("final_k", 10)
     final_chunks = final_chunks[:final_k]
     
+    elapsed = time.perf_counter() - start
+    top_score = final_chunks[0].score if final_chunks else 0
+    logger.info(
+        f"[4/6] RERANK — {len(fused_chunks)} → {len(final_chunks)} chunk | "
+        f"Top: {top_score:.4f} | {elapsed:.2f}s"
+    )
     return {
         "final_chunks": final_chunks,
     }

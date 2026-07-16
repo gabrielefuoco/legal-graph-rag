@@ -113,8 +113,6 @@ class QueryAnalyzer:
             logger.debug(f"Resolve TESEO by label fallito: {e}")
 
         return found_ids
-
-
 async def analyze_query(state: RagState) -> dict:
     """
     Nodo LangGraph: analizza la query e produce AnalyzedQuery + embedding.
@@ -122,6 +120,8 @@ async def analyze_query(state: RagState) -> dict:
     Legge: state["query"]
     Scrive: state["analyzed_query"], state["query_embedding"]
     """
+    import time
+    start = time.perf_counter()
     query = state["query"]
     analyzer: QueryAnalyzer = state["_analyzer"]  # Iniettato dall'engine
     enable_graph_search = state.get("enable_graph_search", True)
@@ -180,13 +180,26 @@ async def analyze_query(state: RagState) -> dict:
         reranker_instruction=reranker_instruction,
     )
 
-    # 4. Calcolo embedding della query
-    try:
-        embeddings = await analyzer.vector_engine.compute_embeddings_batch([query])
-        query_embedding = embeddings[0]
-    except Exception as e:
-        logger.error(f"Errore nel calcolo embedding della query: {e}")
-        query_embedding = None
+    # 4. Calcolo embedding della query (riutilizza se già calcolato in extract_topics)
+    query_embedding = None
+    if hasattr(analyzer.teseo_matcher, 'last_query_embedding') and analyzer.teseo_matcher.last_query_embedding is not None:
+        query_embedding = analyzer.teseo_matcher.last_query_embedding
+        logger.debug("Riutilizzato embedding dalla fase TESEO")
+    else:
+        try:
+            embeddings = await analyzer.vector_engine.compute_embeddings_batch([query])
+            query_embedding = embeddings[0]
+        except Exception as e:
+            logger.error(f"Errore nel calcolo embedding della query: {e}")
+            query_embedding = None
+
+    elapsed = time.perf_counter() - start
+    logger.info(
+        f"[1/6] ANALYZE_QUERY — Completato in {elapsed:.1f}s | "
+        f"TESEO: {len(all_concept_ids)} concetti | "
+        f"Labels: {all_labels} | "
+        f"Embedding: {'✓' if query_embedding else '✗'}"
+    )
 
     return {
         "analyzed_query": analyzed,
@@ -243,9 +256,15 @@ async def contextualize_query(state: RagState) -> dict:
     ]
 
     try:
+        from src.rag.think_filter import strip_thinking_tags
         logger.info(f"Riformulazione query con chat history di lunghezza {len(chat_history)}")
         response = await llm.ainvoke(messages)
-        standalone_query = response.content.strip()
+        standalone_query = strip_thinking_tags(response.content).strip()
+        
+        if not standalone_query or len(standalone_query) < 5:
+            logger.warning(f"Query contestualizzata vuota o troppo corta, mantengo l'originale: '{query}'")
+            return {"query": query}
+            
         logger.info(f"Query originaria: '{query}' -> Query riscritta standalone: '{standalone_query}'")
         return {"query": standalone_query}
     except Exception as e:

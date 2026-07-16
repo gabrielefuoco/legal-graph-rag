@@ -1,7 +1,8 @@
 import logging
 import asyncio
-from typing import AsyncGenerator
-from src.rag.engine import RagEngine
+from langchain_core.messages import HumanMessage, AIMessage
+
+from src.rag.supervisor import SupervisorAgent
 
 logger = logging.getLogger(__name__)
 
@@ -14,56 +15,84 @@ def run_async(coro):
         asyncio.set_event_loop(loop)
     return loop.run_until_complete(coro)
 
-async def query_rag_with_trace(engine: RagEngine, query: str, config: dict, chat_history: list) -> tuple:
+async def query_rag_with_trace(supervisor: SupervisorAgent, query: str, config: dict, chat_history: list, status_callback=None) -> tuple:
     """
-    Esegue il retrieval RAG saltando il nodo di generazione interno del grafo.
-    Restituisce i chunk finali, i metadati della traccia e un generatore per lo streaming
-    testuale diretto dall'LLM.
+    Esegue il Supervisor Agent natively via astream_events.
+    Ritorna dei reference (liste/dizionari) che verranno popolati durante lo streaming.
     """
     try:
-        # Usa il nuovo metodo che espone la traccia, chiedendo di saltare la generazione
-        final_chunks, trace, _ = await engine.retrieve_with_trace(
-            query=query,
-            reference_date=None,
-            top_k=config.get("top_k", 15),
-            final_k=config.get("final_k", 5),
-            enable_graph_search=config.get("enable_graph_search", True),
-            enable_multi_hop=config.get("enable_multi_hop", True),
-            chat_history=chat_history,
-            skip_generation=True
-        )
-
-        # Fallback se nessun documento è stato trovato dopo tutti i tentativi
-        if not final_chunks and trace.get("iterations", 0) >= 5: # MAX_AGENTIC_ITERATIONS
-            def fallback_gen():
-                yield "Non dispongo di informazioni sufficienti per rispondere a questa domanda."
-            return final_chunks, trace, fallback_gen()
-
-        # Generazione reale token-by-token
-        # Passiamo la query finale riscritta (se presente in trace) o quella originale
-        stream_query = trace.get("query", query)
+        messages = []
+        for msg in chat_history:
+            if msg["role"] == "user":
+                messages.append(HumanMessage(content=msg["content"]))
+            elif msg["role"] == "assistant":
+                messages.append(AIMessage(content=msg["content"]))
         
-        # Iniziamo la stream usando il LegalGenerator
-        async_gen = engine.generator.generate_stream(stream_query, final_chunks)
+        messages.append(HumanMessage(content=query))
         
-        # Converte il generatore asincrono in un generatore sincrono compatibile con st.write_stream
+        graph = supervisor.get_graph(status_callback)
+
+        out_chunks = []
+        out_trace = {}
+
+        async def async_gen():
+            logger.info("Avvio astream_events del Supervisor")
+            try:
+                # Usiamo stream_mode='messages' per isolare solo i messaggi del Supervisor
+                async for msg, metadata in graph.astream(
+                    {"messages": messages}, 
+                    stream_mode="messages",
+                    config={"recursion_limit": 15}
+                ):
+                    node = metadata.get("langgraph_node")
+                    # Rimosso il log per evitare flood del terminale per ogni singolo token
+                    # logger.info(f"LangGraph Stream Event - Node: {node}, Type: {type(msg)}")
+                    
+                    # Intercettiamo i token in output ESCLUSIVAMENTE dal nodo 'agent' (il Supervisor)
+                    if node == "agent":
+                        if msg.content and isinstance(msg.content, str):
+                            # Se msg ha tool_call_chunks, non stamparlo per evitare log JSON sporchi
+                            if hasattr(msg, "tool_call_chunks") and msg.tool_call_chunks:
+                                pass
+                            else:
+                                yield msg.content
+                    
+                    # Hack: aggiorniamo costantemente out_chunks e out_trace
+                    if hasattr(supervisor.engine, "_temp_chunks") and supervisor.engine._temp_chunks:
+                        out_chunks.clear()
+                        out_chunks.extend(supervisor.engine._temp_chunks)
+                    if hasattr(supervisor.engine, "_temp_trace") and supervisor.engine._temp_trace:
+                        out_trace.update(supervisor.engine._temp_trace)
+            except Exception as e:
+                logger.error(f"Errore durante astream: {e}")
+                yield f"Errore: {str(e)}"
+            
         def sync_gen():
             try:
                 loop = asyncio.get_event_loop()
             except RuntimeError:
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-            while True:
-                try:
-                    chunk = loop.run_until_complete(async_gen.__anext__())
-                    yield chunk
-                except StopAsyncIteration:
-                    break
+            
+            # Prepariamo l'iteratore
+            agen = async_gen()
+            try:
+                while True:
+                    try:
+                        chunk = loop.run_until_complete(agen.__anext__())
+                        if chunk:
+                            yield chunk
+                    except StopAsyncIteration:
+                        break
+            except Exception as e:
+                logger.error(f"Errore durante sync_gen: {e}")
+                yield f"Errore tecnico: {str(e)}"
 
-        return final_chunks, trace, sync_gen()
+        return sync_gen()
 
     except Exception as e:
         logger.error(f"Errore: {e}")
+        err_msg = str(e)
         def sync_err_gen():
-            yield f"Errore tecnico: {str(e)}"
+            yield f"Errore tecnico: {err_msg}"
         return [], {}, sync_err_gen()

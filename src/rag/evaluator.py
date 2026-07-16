@@ -4,11 +4,20 @@ from typing import List, Dict, Any
 
 from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
+from pydantic import BaseModel, Field
 
 from src.config import settings
 from src.rag.models import RagState, RetrievedChunk
 
 logger = logging.getLogger(__name__)
+
+class GraderOutput(BaseModel):
+    reasoning: str = Field(
+        description="Breve ragionamento per spiegare quali documenti sono utili o vanno scartati e perché."
+    )
+    relevant_chunks: List[int] = Field(
+        description="Lista dei numeri identificativi dei documenti pertinenti. Lista vuota se nessuno è pertinente."
+    )
 
 class RetrievalGrader:
     """
@@ -20,30 +29,51 @@ class RetrievalGrader:
             base_url=settings.QWEN3_ENDPOINT,
             model=settings.GENERATIVE_MODEL_NAME,
             temperature=0.0,
+            num_ctx=4096,
+            reasoning=False,
         )
+        self.structured_llm = self.llm.with_structured_output(GraderOutput)
         self.system_prompt = (
-            "Sei un valutatore di pertinenza (Grader). Il tuo compito è valutare "
-            "se un determinato documento contiene informazioni utili e pertinenti "
-            "per rispondere a una specifica domanda.\n"
-            "Rispondi ESCLUSIVAMENTE con la parola 'yes' se il documento è utile, "
-            "o con la parola 'no' se il documento è inutile o fuori contesto.\n"
-            "Non aggiungere nessun'altra parola o spiegazione."
+            "Sei un valutatore di pertinenza (Grader) per un dominio legale. "
+            "Il tuo compito è valutare rigorosamente quali dei documenti forniti sono utili per rispondere alla domanda dell'utente.\n\n"
+            "CRITERI DI INCLUSIONE (Considera un documento PERTINENTE se soddisfa almeno UNA di queste condizioni):\n"
+            "1. Risponde direttamente o parzialmente alla domanda.\n"
+            "2. Fornisce la definizione di un termine o istituto giuridico citato nella domanda.\n"
+            "3. Contiene una deroga, un'eccezione o una modifica normativa a quanto richiesto.\n"
+            "4. Definisce l'ambito di applicazione della norma in questione.\n\n"
+            "CRITERI DI ESCLUSIONE (SCARTA il documento se):\n"
+            "1. Contiene parole chiave simili ma si riferisce a un contesto o istituto giuridico palesemente diverso.\n"
+            "2. È un frammento procedurale marginale che non aggiunge valore sostanziale.\n\n"
+            "Nel dubbio, sii permissivo e considera il documento PERTINENTE per non perdere informazioni vitali.\n"
+            "Analizza prima il contesto e formula un breve ragionamento, poi restituisci l'elenco degli ID pertinenti."
         )
 
-    async def grade_chunk(self, query: str, chunk: RetrievedChunk) -> bool:
-        user_message = f"Domanda: {query}\n\nDocumento: {chunk.text}"
+    async def grade_chunks_batch(self, query: str, chunks: List[RetrievedChunk]) -> List[bool]:
+        docs_text = ""
+        for i, chunk in enumerate(chunks, 1):
+            truncated_text = chunk.text[:1500] + "..." if len(chunk.text) > 1500 else chunk.text
+            docs_text += f"Documento {i}:\n{truncated_text}\n\n"
+            
+        user_message = f"Domanda: {query}\n\n{docs_text}"
         messages = [
             SystemMessage(content=self.system_prompt),
             HumanMessage(content=user_message)
         ]
+        
         try:
-            response = await self.llm.ainvoke(messages)
-            content = response.content.strip().lower()
-            return "yes" in content
+            response: GraderOutput = await self.structured_llm.ainvoke(messages)
+            relevant = response.relevant_chunks if response.relevant_chunks else []
+            logger.info(f"[GRADE] Output strutturato LLM: documenti pertinenti {relevant}")
+            
+            results = []
+            for i in range(1, len(chunks) + 1):
+                results.append(i in relevant)
+            return results
+            
         except Exception as e:
-            logger.error(f"Errore durante il grading del chunk: {e}")
-            # Fallback: se l'LLM fallisce, consideriamo il documento utile per non perderlo
-            return True 
+            logger.error(f"Errore durante il grading batch strutturato dei chunk: {e}")
+            # Fallback: keep all documents
+            return [True] * len(chunks)
 
 class QueryRewriter:
     """
@@ -55,6 +85,7 @@ class QueryRewriter:
             base_url=settings.QWEN3_ENDPOINT,
             model=settings.GENERATIVE_MODEL_NAME,
             temperature=0.3, # Leggera variabilità per favorire la riformulazione
+            reasoning=False,
         )
         self.system_prompt = (
             "Sei un esperto legale e un ottimizzatore di query di ricerca. "
@@ -78,8 +109,9 @@ class QueryRewriter:
             HumanMessage(content=user_message)
         ]
         try:
+            from src.rag.think_filter import strip_thinking_tags
             response = await self.llm.ainvoke(messages)
-            return response.content.strip()
+            return strip_thinking_tags(response.content).strip()
         except Exception as e:
             logger.error(f"Errore durante il rewriting della query: {e}")
             return query
@@ -87,6 +119,8 @@ class QueryRewriter:
 
 async def grade_documents_node(state: RagState) -> dict:
     """Nodo LangGraph per valutare i documenti (Chunk-by-Chunk)."""
+    import time
+    start = time.perf_counter()
     grader: RetrievalGrader = state.get("_grader")
     if not grader:
         grader = RetrievalGrader()
@@ -98,9 +132,8 @@ async def grade_documents_node(state: RagState) -> dict:
         logger.info("Nessun documento da valutare in grade_documents.")
         return {"final_chunks": []}
     
-    logger.info(f"Avvio grading di {len(chunks)} documenti per la query: '{query}'")
-    tasks = [grader.grade_chunk(query, chunk) for chunk in chunks]
-    results = await asyncio.gather(*tasks)
+    logger.info(f"[GRADE] Avvio batch grading di {len(chunks)} documenti...")
+    results = await grader.grade_chunks_batch(query, chunks)
     
     filtered_chunks = []
     for chunk, is_relevant in zip(chunks, results):
@@ -109,7 +142,8 @@ async def grade_documents_node(state: RagState) -> dict:
         else:
             logger.debug(f"Scartato chunk (URN: {chunk.work_urn}) in quanto valutato irrilevante.")
             
-    logger.info(f"Documenti pertinenti dopo grading: {len(filtered_chunks)} su {len(chunks)}")
+    elapsed = time.perf_counter() - start
+    logger.info(f"[GRADE] Completato in {elapsed:.1f}s — {len(filtered_chunks)}/{len(chunks)} pertinenti")
     return {"final_chunks": filtered_chunks}
 
 
@@ -126,6 +160,11 @@ async def rewrite_query_node(state: RagState) -> dict:
     logger.info(f"Iterazione {iterations}/{settings.MAX_AGENTIC_ITERATIONS}: Riscrittura della query '{current_query}'")
     
     new_query = await rewriter.rewrite(current_query, rewritten_history)
+    
+    if not new_query or len(new_query.strip()) < 5:
+        logger.warning(f"[REWRITE] Query riformulata vuota o troppo corta, mantengo l'originale: '{current_query}'")
+        new_query = current_query
+        
     logger.info(f"Query riformulata: '{new_query}'")
     
     new_history = list(rewritten_history)
