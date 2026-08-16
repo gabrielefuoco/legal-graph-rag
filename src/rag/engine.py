@@ -22,6 +22,7 @@ from src.rag.fusion import fuse_and_filter
 from src.rag.reranker import Reranker, rerank_node
 from src.rag.expander import should_expand, expand_citations
 from src.rag.generator import LegalGenerator, generation_node
+from src.rag.topology_expander import topological_expand_node
 from src.rag.evaluator import (
     RetrievalGrader,
     QueryRewriter,
@@ -56,9 +57,7 @@ def post_grading_router(state: RagState) -> str:
     chunks = state.get("final_chunks")
     
     if chunks:
-        if state.get("skip_generation"):
-            return "__end__"
-        return "generate"
+        return "topological_expand"
     
     iterations = state.get("iterations", 0)
     if iterations < settings.MAX_AGENTIC_ITERATIONS:
@@ -67,6 +66,11 @@ def post_grading_router(state: RagState) -> str:
     if state.get("skip_generation"):
         return "__end__"
     return "fallback_generation"
+
+def post_expansion_router(state: RagState) -> str:
+    if state.get("skip_generation"):
+        return "__end__"
+    return "generate"
 
 
 async def retrieve_all(state: RagState) -> dict:
@@ -115,6 +119,7 @@ def _build_graph() -> StateGraph:
     builder.add_node("rerank", rerank_node)
     builder.add_node("expand_citations", expand_citations)
     builder.add_node("grade_documents", grade_documents_node)
+    builder.add_node("topological_expand", topological_expand_node)
     builder.add_node("rewrite_query", rewrite_query_node)
     builder.add_node("generate", generation_node)
     builder.add_node("fallback_generation", fallback_generation)
@@ -142,9 +147,19 @@ def _build_graph() -> StateGraph:
         "grade_documents",
         post_grading_router,
         {
-            "generate": "generate",
+            "topological_expand": "topological_expand",
             "rewrite_query": "rewrite_query",
             "fallback_generation": "fallback_generation",
+            "__end__": END,
+        }
+    )
+    
+    # Routing post-espansione
+    builder.add_conditional_edges(
+        "topological_expand",
+        post_expansion_router,
+        {
+            "generate": "generate",
             "__end__": END,
         }
     )
@@ -166,16 +181,11 @@ class RagEngine:
 
     def __init__(self):
         # Dipendenze
-        self.driver = AsyncGraphDatabase.driver(
-            settings.NEO4J_URI,
-            auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD),
-        )
         self.vector_engine = VectorEngine()
         self.teseo_matcher = TESEOMatcher(settings.TESEO_RDF_PATH)
         self.analyzer = QueryAnalyzer(
             teseo_matcher=self.teseo_matcher,
             vector_engine=self.vector_engine,
-            driver=self.driver,
         )
         self.reranker = Reranker()
         self.generator = LegalGenerator()
@@ -196,6 +206,9 @@ class RagEngine:
         try:
             await self.analyzer.vector_engine.compute_embeddings_batch(["warmup"])
             logger.info("[WARMUP] Modello di embedding caricato in VRAM.")
+            
+            # Inizializza la matrice per il matching semantico di TESEO
+            await self.teseo_matcher.precompute_embeddings(self.vector_engine)
         except Exception as e:
             logger.warning(f"[WARMUP] Fallito: {e}")
         finally:
@@ -209,6 +222,10 @@ class RagEngine:
         final_k: int = 5,
         enable_graph_search: bool = True,
         enable_multi_hop: bool = True,
+        max_citation_hops: int = 1,
+        enable_topological_expansion: bool = True,
+        topo_max_chars: int | None = None,
+        generator_num_ctx: int | None = None,
         chat_history: list[dict[str, str]] | None = None,
     ) -> RAGResult:
         """
@@ -216,6 +233,9 @@ class RagEngine:
         """
         if not self._warmed_up:
             await self._warmup()
+            
+        _topo_max_chars = topo_max_chars if topo_max_chars is not None else settings.TOPOLOGICAL_MAX_CHARS
+        _generator_num_ctx = generator_num_ctx if generator_num_ctx is not None else settings.GENERATOR_NUM_CTX
 
         # Stato iniziale
         initial_state: RagState = {
@@ -225,6 +245,10 @@ class RagEngine:
             "final_k": final_k,
             "enable_graph_search": enable_graph_search,
             "enable_multi_hop": enable_multi_hop,
+            "max_citation_hops": max_citation_hops,
+            "enable_topological_expansion": enable_topological_expansion,
+            "topo_max_chars": _topo_max_chars,
+            "generator_num_ctx": _generator_num_ctx,
             "skip_generation": False,
             "chat_history": chat_history or [],
             "iterations": 0,
@@ -237,9 +261,9 @@ class RagEngine:
             "fused_chunks": [],
             "hop_count": 0,
             "final_chunks": [],
+            "expanded_chunks": [],
             "generation": None,
             # Dipendenze iniettate
-            "_driver": self.driver,
             "_analyzer": self.analyzer,
             "_reranker": self.reranker,
             "_llm": self.generator,
@@ -247,15 +271,22 @@ class RagEngine:
             "_rewriter": self.rewriter,
         }
 
-        # Esecuzione del grafo
+        # Esecuzione del grafo (con driver temporaneo legata al loop corrente)
         import time
         start = time.perf_counter()
-        result = await self.graph.ainvoke(initial_state)
+        
+        async with AsyncGraphDatabase.driver(
+            settings.NEO4J_URI,
+            auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD),
+        ) as driver:
+            initial_state["_driver"] = driver
+            result = await self.graph.ainvoke(initial_state)
+            
         elapsed = time.perf_counter() - start
         logger.info(f"[PIPELINE] Esecuzione completa in {elapsed:.1f}s | Iterazioni: {result.get('iterations', 0)}")
 
         # Ritorna i chunk e l'answer tramite RAGResult
-        final = result.get("final_chunks") or result.get("fused_chunks") or []
+        final = result.get("expanded_chunks") or result.get("final_chunks") or result.get("fused_chunks") or []
         generation = result.get("generation")
         return RAGResult(final, answer=generation)
 
@@ -267,6 +298,10 @@ class RagEngine:
         final_k: int = 5,
         enable_graph_search: bool = True,
         enable_multi_hop: bool = True,
+        max_citation_hops: int = 1,
+        enable_topological_expansion: bool = True,
+        topo_max_chars: int | None = None,
+        generator_num_ctx: int | None = None,
         chat_history: list[dict[str, str]] | None = None,
         skip_generation: bool = False,
         status_callback=None
@@ -277,6 +312,9 @@ class RagEngine:
         """
         if not self._warmed_up:
             await self._warmup()
+            
+        _topo_max_chars = topo_max_chars if topo_max_chars is not None else settings.TOPOLOGICAL_MAX_CHARS
+        _generator_num_ctx = generator_num_ctx if generator_num_ctx is not None else settings.GENERATOR_NUM_CTX
 
         initial_state: RagState = {
             "query": query,
@@ -285,6 +323,10 @@ class RagEngine:
             "final_k": final_k,
             "enable_graph_search": enable_graph_search,
             "enable_multi_hop": enable_multi_hop,
+            "max_citation_hops": max_citation_hops,
+            "enable_topological_expansion": enable_topological_expansion,
+            "topo_max_chars": _topo_max_chars,
+            "generator_num_ctx": _generator_num_ctx,
             "skip_generation": skip_generation,
             "chat_history": chat_history or [],
             "iterations": 0,
@@ -298,7 +340,6 @@ class RagEngine:
             "hop_count": 0,
             "final_chunks": [],
             "generation": None,
-            "_driver": self.driver,
             "_analyzer": self.analyzer,
             "_reranker": self.reranker,
             "_llm": self.generator,
@@ -311,16 +352,22 @@ class RagEngine:
         start = time.perf_counter()
         
         result = dict(initial_state)
-        async for output in self.graph.astream(initial_state):
-            for node_name, state_update in output.items():
-                if status_callback:
-                    status_callback(node_name, state_update)
-                result.update(state_update)
+        
+        async with AsyncGraphDatabase.driver(
+            settings.NEO4J_URI,
+            auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD),
+        ) as driver:
+            initial_state["_driver"] = driver
+            async for output in self.graph.astream(initial_state):
+                for node_name, state_update in output.items():
+                    if status_callback:
+                        status_callback(node_name, state_update)
+                    result.update(state_update)
                 
         elapsed = time.perf_counter() - start
         logger.info(f"[PIPELINE] Esecuzione completa in {elapsed:.1f}s | Iterazioni: {result.get('iterations', 0)}")
         
-        final_chunks = result.get("final_chunks") or result.get("fused_chunks") or []
+        final_chunks = result.get("expanded_chunks") or result.get("final_chunks") or result.get("fused_chunks") or []
         generation = result.get("generation")
         
         trace = {
@@ -340,6 +387,5 @@ class RagEngine:
         return final_chunks, trace, generation
 
     async def close(self):
-        """Chiude le risorse (driver Neo4j)."""
-        await self.driver.close()
+        """Chiude le risorse."""
         logger.info("RagEngine chiuso.")

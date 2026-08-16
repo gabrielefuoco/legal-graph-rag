@@ -27,12 +27,11 @@ class QueryAnalyzer:
     dal thesaurus del Senato e il VectorEngine per calcolare l'embedding.
     """
 
-    def __init__(self, teseo_matcher: TESEOMatcher, vector_engine: VectorEngine, driver: AsyncDriver):
+    def __init__(self, teseo_matcher: TESEOMatcher, vector_engine: VectorEngine):
         self.teseo_matcher = teseo_matcher
         self.vector_engine = vector_engine
-        self.driver = driver
 
-    async def _expand_teseo_concepts(self, concept_ids: List[str]) -> tuple[List[str], List[str]]:
+    async def _expand_teseo_concepts(self, driver: AsyncDriver, concept_ids: List[str]) -> tuple[List[str], List[str]]:
         """
         Naviga le relazioni BROADER/NARROWER nel grafo Neo4j
         per espandere i concetti TESEO trovati.
@@ -47,7 +46,7 @@ class QueryAnalyzer:
         expanded_labels = []
 
         try:
-            async with self.driver.session() as session:
+            async with driver.session() as session:
                 # Cerca i figli (narrower) dei concetti trovati
                 result = await session.run(
                     """
@@ -69,7 +68,7 @@ class QueryAnalyzer:
         # con prefLabel simili ai concetti trovati (espansione per label)
         if not expanded_ids and concept_ids:
             try:
-                async with self.driver.session() as session:
+                async with driver.session() as session:
                     # Recupera le prefLabel dei concetti trovati
                     result = await session.run(
                         """
@@ -87,7 +86,7 @@ class QueryAnalyzer:
 
         return expanded_ids, expanded_labels
 
-    async def _resolve_teseo_by_label(self, labels: List[str]) -> List[str]:
+    async def _resolve_teseo_by_label(self, driver: AsyncDriver, labels: List[str]) -> List[str]:
         """
         Cerca concetti TESEO per prefLabel (case-insensitive).
         Utile quando l'utente scrive parole che corrispondono a un concetto
@@ -98,7 +97,7 @@ class QueryAnalyzer:
 
         found_ids = []
         try:
-            async with self.driver.session() as session:
+            async with driver.session() as session:
                 result = await session.run(
                     """
                     MATCH (t:TESEO_Concept)
@@ -143,14 +142,14 @@ async def analyze_query(state: RagState) -> dict:
             # Estrai parole significative dalla query (> 3 caratteri)
             query_words = [w for w in query.lower().split() if len(w) > 3]
             if query_words:
-                db_ids = await analyzer._resolve_teseo_by_label(query_words)
+                db_ids = await analyzer._resolve_teseo_by_label(state["_driver"], query_words)
                 if db_ids:
                     concept_ids = db_ids
                     matched_labels = query_words
                     logger.info(f"TESEO fallback (DB lookup): {len(db_ids)} concetti trovati")
 
         # 2. Espansione BROADER/NARROWER
-        expanded_ids, expanded_labels = await analyzer._expand_teseo_concepts(concept_ids)
+        expanded_ids, expanded_labels = await analyzer._expand_teseo_concepts(state["_driver"], concept_ids)
         all_concept_ids = list(set(concept_ids + expanded_ids))
 
         if expanded_ids:

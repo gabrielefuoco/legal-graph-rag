@@ -39,12 +39,17 @@ with st.sidebar:
     st.title("⚙️ Configurazioni")
     st.markdown("Usa questi controlli per lo **Studio di Ablazione**.")
     
-    enable_graph = st.toggle("Attiva Graph Search (TESEO)", value=True)
-    enable_multihop = st.toggle("Attiva Multi-hop Citazionale", value=True)
+    enable_graphrag = st.toggle("Attiva GraphRAG (Completo)", value=True, help="Disabilita per passare a un RAG vettoriale/BM25 di base.")
+    
+    with st.expander("🛠 Scaling Hardware (VRAM)", expanded=False):
+        topo_max_chars = st.slider("Max Caratteri Espansione", 2000, 30000, 6000, step=1000)
+        generator_num_ctx = st.slider("Context RAG (Generator)", 2048, 32768, 4096, step=1024)
+        supervisor_num_ctx = st.slider("Context Supervisore", 4096, 32768, 16384, step=1024)
     
     st.markdown("---")
     top_k = st.slider("Top-K Retrieval (per canale)", 1, 30, 15)
     final_k = st.slider("Final-K (Post-Rerank)", 1, 20, 10)
+    max_citation_hops = st.slider("Salti Multi-Hop (Citazioni)", 1, 5, 1)
     
     st.markdown("---")
     if st.button("🗑 Reset Conversazione"):
@@ -88,8 +93,13 @@ if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze dell
     config = {
         "top_k": top_k,
         "final_k": final_k,
-        "enable_graph_search": enable_graph,
-        "enable_multi_hop": enable_multihop
+        "enable_graph_search": enable_graphrag,
+        "enable_multi_hop": enable_graphrag,
+        "max_citation_hops": max_citation_hops,
+        "enable_topological_expansion": enable_graphrag,
+        "topo_max_chars": topo_max_chars,
+        "generator_num_ctx": generator_num_ctx,
+        "supervisor_num_ctx": supervisor_num_ctx
     }
 
     # Ottenimento risposta
@@ -122,8 +132,9 @@ if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze dell
                 q = state_update.get("query", "")
                 details = f"Query inviata a GraphRAG: '{q}'"
             elif node_name == "analyze_query":
-                query = state_update.get("query", "")
-                details = f"Query analizzata: '{query}'"
+                analyzed = state_update.get("analyzed_query")
+                query_text = analyzed.original_query if analyzed else ""
+                details = f"Query analizzata: '{query_text}'"
             elif node_name == "retrieve_all":
                 v = len(state_update.get("vector_results", []))
                 b = len(state_update.get("bm25_results", []))

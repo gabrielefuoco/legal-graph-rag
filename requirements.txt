@@ -19,3 +19,8 @@ jupyterlab>=4.0.0
 nest-asyncio>=1.5.8
 streamlit>=1.40.0
 sentence-transformers>=3.0.0
+numpy>=1.26.0
+
+# NOTA: PyTorch viene installato come dipendenza di sentence-transformers,
+# ma in versione CPU. Per la versione CUDA (necessaria per il reranker su GPU), eseguire:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121

@@ -30,7 +30,7 @@ async def query_rag_with_trace(supervisor: SupervisorAgent, query: str, config: 
         
         messages.append(HumanMessage(content=query))
         
-        graph = supervisor.get_graph(status_callback)
+        graph = supervisor.get_graph(status_callback, config)
 
         out_chunks = []
         out_trace = {}

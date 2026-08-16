@@ -27,6 +27,8 @@ class RetrievedChunk:
     vigenza_start: date | None = None
     vigenza_end: date | None = None
     metadata: dict[str, Any] = field(default_factory=dict)  # Metadati aggiuntivi (es. motivi retrieval)
+    expansion_trace: dict | None = None          # Traccia degli archi attraversati (XAI)
+    expanded_text: str | None = None             # Testo espanso (originale + contesto topologico)
 
 
 @dataclass
@@ -62,6 +64,10 @@ class RagState(TypedDict):
     final_k: int                             # Numero di risultati finali dopo RRF e filtering
     enable_graph_search: bool                # Abilita la ricerca semantica basata su TESEO
     enable_multi_hop: bool                   # Abilita l'espansione multi-hop delle citazioni
+    max_citation_hops: int                   # Numero massimo di salti citazionali
+    enable_topological_expansion: bool       # Abilita l'espansione topologica
+    topo_max_chars: int                      # Caratteri massimi per l'espansione topologica
+    generator_num_ctx: int                   # Context window dell'LLM (Generator)
     skip_generation: bool                    # Flag per saltare il nodo di generazione finale
     chat_history: list[dict[str, str]] | None # Storico conversazione per multi-turn
 
@@ -76,10 +82,12 @@ class RagState(TypedDict):
 
     # --- Step 3: Fusion ---
     fused_chunks: list[RetrievedChunk]
+    vector_anchor_id: str | None
 
     # --- Step 4: Multi-hop ---
     hop_count: int
     final_chunks: list[RetrievedChunk]
+    expanded_chunks: list[RetrievedChunk]    # Chunk arricchiti dall'espansione topologica
 
     # --- Step 5: Generation ---
     generation: str | None

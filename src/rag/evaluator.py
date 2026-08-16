@@ -29,7 +29,7 @@ class RetrievalGrader:
             base_url=settings.QWEN3_ENDPOINT,
             model=settings.GENERATIVE_MODEL_NAME,
             temperature=0.0,
-            num_ctx=4096,
+            num_ctx=settings.SUPERVISOR_NUM_CTX,
             reasoning=False,
         )
         self.structured_llm = self.llm.with_structured_output(GraderOutput)
@@ -64,6 +64,7 @@ class RetrievalGrader:
             response: GraderOutput = await self.structured_llm.ainvoke(messages)
             relevant = response.relevant_chunks if response.relevant_chunks else []
             logger.info(f"[GRADE] Output strutturato LLM: documenti pertinenti {relevant}")
+            logger.info(f"👨‍⚖️ Evaluator reasoning: {response.reasoning}")
             
             results = []
             for i in range(1, len(chunks) + 1):
@@ -136,12 +137,25 @@ async def grade_documents_node(state: RagState) -> dict:
     results = await grader.grade_chunks_batch(query, chunks)
     
     filtered_chunks = []
+    vector_anchor_id = state.get("vector_anchor_id")
+    anchor_found = False
+    
     for chunk, is_relevant in zip(chunks, results):
         if is_relevant:
             filtered_chunks.append(chunk)
+            if vector_anchor_id and chunk.expression_id == vector_anchor_id:
+                anchor_found = True
         else:
             logger.debug(f"Scartato chunk (URN: {chunk.work_urn}) in quanto valutato irrilevante.")
             
+    # SAFETY NET POST-GRADING
+    if vector_anchor_id and not anchor_found:
+        for chunk in chunks:
+            if chunk.expression_id == vector_anchor_id:
+                logger.warning(f"🛡️ SAFETY NET (Evaluator): L'Evaluator ha scartato l'anchor vettoriale ({vector_anchor_id}). Reinserito forzatamente.")
+                filtered_chunks.append(chunk)
+                break
+                
     elapsed = time.perf_counter() - start
     logger.info(f"[GRADE] Completato in {elapsed:.1f}s — {len(filtered_chunks)}/{len(chunks)} pertinenti")
     return {"final_chunks": filtered_chunks}

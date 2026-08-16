@@ -1,7 +1,6 @@
 import logging
 from typing import TypedDict, Annotated, Any
 from langgraph.prebuilt import create_react_agent, InjectedState
-from langgraph.types import Command
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
 from langchain_core.messages import BaseMessage, HumanMessage
@@ -22,66 +21,7 @@ class SupervisorState(TypedDict):
 
 # Nota: per poter passare variabili esterne (come engine e status_callback) a un @tool,
 # possiamo usare una closure factory function che restituisce il tool compilato.
-def build_search_tool(engine: RagEngine, status_callback=None):
-    
-    @tool
-    async def search_legal_database(query: str, state: Annotated[dict, InjectedState]) -> Command:
-        """
-        Usa questo tool ESCLUSIVAMENTE per cercare leggi, sentenze o concetti nel database giuridico italiano.
-        Passa una query string chiara e ricca di parole chiave (es. "limiti subappalto codice contratti").
-        """
-        if status_callback:
-            status_callback("supervisor_tool_rag", {"query": query})
-            
-        logger.info(f"Avvio Tool RAG con query: {query}")
-        
-        # Recupera lo storico messaggi
-        chat_history = []
-        for m in state.get("messages", []):
-            role = "user" if isinstance(m, HumanMessage) else "assistant"
-            chat_history.append({"role": role, "content": m.content})
-            
-        chunks, trace, _ = await engine.retrieve_with_trace(
-            query=query,
-            enable_graph_search=True,
-            enable_multi_hop=True,
-            chat_history=chat_history,
-            skip_generation=True,
-            status_callback=status_callback
-        )
-        
-        # Formattiamo i risultati testuali da restituire al modello per il grounding
-        if not chunks:
-            rag_output = "Nessuna informazione pertinente trovata nel database giuridico."
-        else:
-            context_parts = []
-            for i, chunk in enumerate(chunks, 1):
-                source = f"Fonte: {chunk.structural_context}" if chunk.structural_context else ""
-                urn = f" URN: {chunk.work_urn}" if chunk.work_urn else ""
-                context_parts.append(f"[{i}] {source}{urn}\nTesto: {chunk.text}")
-            rag_output = "RISULTATI TROVATI NEL DATABASE:\n" + "\n\n".join(context_parts)
-            
-        # In aggiornamento di langgraph 1.x, i tool restituiscono dati al modello (il return value),
-        # ma possono usare 'Command(update={...})' per iniettare variabili nello stato globale contemporaneamente!
-        return Command(
-            update={
-                "_last_chunks": chunks, 
-                "_last_trace": trace
-            },
-            # Return_value non deve essere nei parametri di update, Command ha costruttore speciale in langgraph >=0.2?
-            # Aspetta: se restituiamo semplicemente il testo, langgraph aggiorna i messages. 
-            # In langgraph 1.2.9, la sintassi corretta per un tool che aggiorna lo stato è:
-            # return Command(update={"var": value}) MA come si passa il testo per il tool call?
-            # Secondo la doc, un Tool in langgraph NON deve usare Command per il testo del ToolMessage.
-            # E' meglio se aggiorniamo semplicemente un dizionario globale o passiamo il return text.
-            # In realtà possiamo restituire un tuple o usare il context. 
-            # Per semplicità, e per essere robusti, aggiorniamo l'engine e restituiamo la stringa.
-            # Oppure usiamo un return Dict per il tool, ma il modello si aspetta una stringa.
-        )
-        # BUG POTENZIALE SOPRA: se restituisco Command(), il LLM potrebbe vedere il repr() del Command.
-        # Riscriviamo il tool per restiture solo testo, ed iniettiamo nello stato globalmente.
-        # MA non possiamo aggiornare lo stato nativo senza Command() o senza che la reducer lo faccia.
-        pass
+def build_search_tool(engine: RagEngine, status_callback=None, config: dict = None):
 
     # Implementazione robusta del tool senza Command()
     @tool
@@ -102,8 +42,12 @@ def build_search_tool(engine: RagEngine, status_callback=None):
             
         chunks, trace, _ = await engine.retrieve_with_trace(
             query=query,
-            enable_graph_search=True,
-            enable_multi_hop=True,
+            enable_graph_search=config.get("enable_graph_search", True) if config else True,
+            enable_multi_hop=config.get("enable_multi_hop", True) if config else True,
+            max_citation_hops=config.get("max_citation_hops", 1) if config else 1,
+            enable_topological_expansion=config.get("enable_topological_expansion", True) if config else True,
+            topo_max_chars=config.get("topo_max_chars", settings.TOPOLOGICAL_MAX_CHARS) if config else None,
+            generator_num_ctx=config.get("generator_num_ctx", settings.GENERATOR_NUM_CTX) if config else None,
             chat_history=chat_history,
             skip_generation=True,
             status_callback=status_callback
@@ -111,6 +55,8 @@ def build_search_tool(engine: RagEngine, status_callback=None):
         
         # Hack per iniettare i chunk nello stato senza usare Command che potrebbe rompere l'LLM:
         # Useremo l'oggetto 'engine' come transport layer temporaneo!
+        # ponytail: attributi temporanei su engine, ok single-user seriale (Streamlit);
+        # upgrade path: state_schema=SupervisorState + Command(update={"messages":[ToolMessage], ...}).
         engine._temp_chunks = chunks
         engine._temp_trace = trace
         
@@ -121,7 +67,8 @@ def build_search_tool(engine: RagEngine, status_callback=None):
         for i, chunk in enumerate(chunks, 1):
             source = f"Fonte: {chunk.structural_context}" if chunk.structural_context else ""
             urn = f" URN: {chunk.work_urn}" if chunk.work_urn else ""
-            context_parts.append(f"[{i}] {source}{urn}\nTesto: {chunk.text}")
+            chunk_text = getattr(chunk, 'expanded_text', None) or chunk.text
+            context_parts.append(f"[{i}] {source}{urn}\nTesto: {chunk_text}")
             
         return "DOCUMENTI TROVATI:\n" + "\n\n".join(context_parts)
         
@@ -132,12 +79,15 @@ class SupervisorAgent:
     def __init__(self, engine: RagEngine):
         self.engine = engine
         
-    def get_graph(self, status_callback=None):
+    def get_graph(self, status_callback=None, config: dict = None):
+        # Estrai il context limit dal config, se presente
+        num_ctx = config.get("supervisor_num_ctx", settings.SUPERVISOR_NUM_CTX) if config else settings.SUPERVISOR_NUM_CTX
+        
         llm = ChatOllama(
             base_url=settings.QWEN3_ENDPOINT,
             model=settings.GENERATIVE_MODEL_NAME,
             temperature=0.0,
-            num_ctx=16384,
+            num_ctx=num_ctx,
             reasoning=False,
         )
         
@@ -155,7 +105,7 @@ class SupervisorAgent:
             "3. Cita sempre le fonti (es. [D.Lgs. 36/2023, Art. 119]) alla fine delle affermazioni, basandoti sui dati del tool."
         )
 
-        tool = build_search_tool(self.engine, status_callback)
+        tool = build_search_tool(self.engine, status_callback, config)
         
         agent_graph = create_react_agent(
             model=llm,

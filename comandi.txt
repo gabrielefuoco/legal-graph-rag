@@ -1,0 +1,8 @@
+docker compose up -d
+
+docker compose run --rm streamlit python scripts/evaluate_ablation.py --queries 3 11 --output test_collaudo.csv
+
+docker compose run --rm streamlit python scripts/evaluate_ablation.py --output ablation_results_final.csv
+
+
+http://localhost:8501/

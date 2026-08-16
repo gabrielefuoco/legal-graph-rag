@@ -291,6 +291,9 @@ def fuse_and_filter(state: RagState) -> dict:
     # Merging dei chunk dello stesso Atto (solo se strutturalmente adiacenti)
     fused = _merge_chunks(fused)
 
+    vector_anchor_id = vector_results[0].expression_id if vector_results else None
+
     return {
         "fused_chunks": fused,
+        "vector_anchor_id": vector_anchor_id,
     }

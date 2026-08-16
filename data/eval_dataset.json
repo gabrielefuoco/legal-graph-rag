@@ -1,0 +1,92 @@
+[
+    {
+        "query": "Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?",
+        "expected_ids": ["28af4c124478aa6c"],
+        "expected_keywords": ["imprese industriali", "settore siderurgico", "carico e scarico"],
+        "golden_answer": "Sì, possono continuare ad avvalersi del personale alle proprie dipendenze, senza limitazione, sino alla scadenza delle rispettive concessioni."
+    },
+    {
+        "query": "Da quanti membri è composta la Commissione e da chi vengono scelti?",
+        "expected_ids": ["912c11f0d9f65b29"],
+        "expected_keywords": ["venticinque senatori", "venticinque deputati", "Presidente del Senato"],
+        "golden_answer": "La Commissione è composta da venticinque senatori e venticinque deputati, scelti rispettivamente dal Presidente del Senato e dal Presidente della Camera dei deputati in proporzione ai gruppi parlamentari."
+    },
+    {
+        "query": "Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?",
+        "expected_ids": ["bcd59da0a4c08afd"],
+        "expected_keywords": ["gruppi multinazionali", "1 miliardo di euro", "50 milioni di euro"],
+        "golden_answer": "I gruppi multinazionali devono avere ricavi consolidati superiori a 1 miliardo di euro annui e aver effettuato cessioni di beni o servizi nel territorio dello Stato per un ammontare superiore a 50 milioni di euro annui."
+    },
+    {
+        "query": "Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?",
+        "expected_ids": ["a00c93e42c7b6b07"],
+        "expected_keywords": ["novanta giorni", "regioni", "crisi sismica"],
+        "golden_answer": "Le regioni devono predisporre il programma di interventi entro novanta giorni dalla data di entrata in vigore del decreto."
+    },
+    {
+        "query": "Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?",
+        "expected_ids": ["a66955746ad290d4"],
+        "expected_keywords": ["imprese turistico-balneari", "stabilimento balneare", "demanio marittimo"],
+        "golden_answer": "Si intendono le attività classificate nel D.L. 400/1993 svolte su beni del demanio marittimo, nonché le attività di stabilimento balneare incluse quelle le cui strutture si trovano su beni diversi dal demanio marittimo."
+    },
+    {
+        "query": "Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?",
+        "expected_ids": ["cf5d71b3e86065e8"],
+        "expected_keywords": ["progetto definitivo", "relazione geologica", "tipi litologici"],
+        "golden_answer": "Deve comprendere l'identificazione delle formazioni presenti nel sito, lo studio dei tipi litologici, della struttura e dei caratteri fisici del sottosuolo, basandosi su specifiche indagini geologiche."
+    },
+    {
+        "query": "Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?",
+        "expected_ids": ["0716f769edf8fd91"],
+        "expected_keywords": ["corso di formazione basico", "brevetto di pilota", "quattro mesi"],
+        "golden_answer": "Il corso di formazione basico per il rilascio del brevetto ha una durata non inferiore a quattro mesi."
+    },
+    {
+        "query": "Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",
+        "expected_ids": ["e2eb5532bf2eca18"],
+        "expected_keywords": ["dati statistici", "eventi di nascita", "istituto nazionale di statistica"],
+        "golden_answer": "Le modalità tecniche sono determinate dall'Istituto nazionale di statistica, sentiti i Ministri della salute, dell'interno e il Garante."
+    },
+    {
+        "query": "A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?",
+        "expected_ids": ["9f575d2e5c54bbb6"],
+        "expected_keywords": ["imposta lorda", "36 per cento", "recupero del patrimonio edilizio"],
+        "golden_answer": "Dall'imposta lorda si detrae un importo pari al 36 per cento delle spese documentate per gli interventi di recupero del patrimonio edilizio."
+    },
+    {
+        "query": "Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?",
+        "expected_ids": ["f39be5237774c983"],
+        "expected_keywords": ["60 giorni", "Gazzetta Ufficiale", "entrata in vigore"],
+        "golden_answer": "La presente legge entra in vigore dopo 60 giorni dalla data della sua pubblicazione nella Gazzetta Ufficiale."
+    },
+    {
+        "query": "Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",
+        "expected_ids": ["ec9794a2f608ed8f"],
+        "expected_keywords": ["classifiche di segretezza", "nulla osta di sicurezza", "segretissimo"],
+        "golden_answer": "Le classifiche sono: segretissimo, segreto, riservatissimo, riservato. Per le prime tre (segretissimo, segreto, riservatissimo) è necessario il possesso del nulla osta di sicurezza (NOS)."
+    },
+    {
+        "query": "In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",
+        "expected_ids": ["c1d71e7f3b706bbb"],
+        "expected_keywords": ["codice Morse", "titoli di studio", "pratiche di primo soccorso"],
+        "golden_answer": "Si prescinde dal possesso della conoscenza del codice Morse, dai titoli di studio e dalle attestazioni e certificati relativi a pratiche di primo soccorso."
+    },
+    {
+        "query": "A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?",
+        "expected_ids": ["98ffe28ebf5c7c0e"],
+        "expected_keywords": ["416-bis", "pubblico ministero", "procuratore della Repubblica"],
+        "golden_answer": "Deve darne comunicazione al procuratore della Repubblica presso il tribunale del capoluogo del distretto ove dimora la persona."
+    },
+    {
+        "query": "Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",
+        "expected_ids": ["84c61f1d0a5a5e41"],
+        "expected_keywords": ["Ministeri competenti", "linee guida", "FAQ", "controlli"],
+        "golden_answer": "Pubblicano apposite linee guida o FAQ, tenendo conto della complessità della disciplina di riferimento, per agevolare e promuovere la comprensione e il rispetto sostanziale della normativa."
+    },
+    {
+        "query": "Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?",
+        "expected_ids": ["de1fbdca17014a10"],
+        "expected_keywords": ["handicap", "condizione di disabilità", "terminologia"],
+        "golden_answer": "La parola 'handicap', ovunque ricorre, è sostituita dalle parole 'condizione di disabilità'."
+    }
+]

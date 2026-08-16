@@ -269,6 +269,53 @@ class AsyncNeo4jLoader:
         """
         await tx.run(query, batch=batch)
 
+    async def _load_cites_edges(self, tx, batch: list[dict]):
+        """Batch load CITES edges."""
+        query = """
+        UNWIND $batch AS row
+        MATCH (s:Expression {id: row.source_id})
+        CALL {
+            WITH row MATCH (w:Work {id: row.target_id}) RETURN w AS target
+            UNION
+            WITH row MATCH (e:Expression {id: row.target_id}) RETURN e AS target
+            UNION
+            WITH row MATCH (u:StructuralUnit {id: row.target_id}) RETURN u AS target
+            UNION
+            // Creazione placeholder per citazioni esterne non presenti nel DB
+            WITH row 
+            WHERE NOT EXISTS { MATCH (n {id: row.target_id}) } AND row.target_id STARTS WITH 'urn:'
+            MERGE (w_ext:Work {id: row.target_id})
+            ON CREATE SET w_ext.urn = row.target_id, w_ext.title = "Documento Esterno"
+            RETURN w_ext AS target
+        }
+        MERGE (s)-[:CITES]->(target)
+        """
+        await tx.run(query, batch=batch)
+
+    async def _load_modifies_edges(self, tx, batch: list[dict]):
+        """Batch load MODIFIES edges."""
+        query = """
+        UNWIND $batch AS row
+        MATCH (s:Expression {id: row.source_id})
+        CALL {
+            WITH row MATCH (w:Work {id: row.target_id}) RETURN w AS target
+            UNION
+            WITH row MATCH (e:Expression {id: row.target_id}) RETURN e AS target
+            UNION
+            WITH row MATCH (u:StructuralUnit {id: row.target_id}) RETURN u AS target
+            UNION
+            WITH row 
+            WHERE NOT EXISTS { MATCH (n {id: row.target_id}) } AND row.target_id STARTS WITH 'urn:'
+            MERGE (w_ext:Work {id: row.target_id})
+            ON CREATE SET w_ext.urn = row.target_id, w_ext.title = "Documento Esterno"
+            RETURN w_ext AS target
+        }
+        MERGE (s)-[m:MODIFIES]->(target)
+        SET m.modification_type = row.modification_type,
+            m.quoted_text = row.quoted_text
+        """
+        await tx.run(query, batch=batch)
+
     async def _load_iter_legis(self, tx, batch: list[dict]):
         """Batch load ITER_LEGIS nodes."""
         query = """
@@ -311,6 +358,8 @@ class AsyncNeo4jLoader:
         semantic_edges = [e for e in edges_batch if e.get('type') == 'HAS_TOPIC']
         interprets_edges = [e for e in edges_batch if e.get('type') == 'INTERPRETS']
         iter_edges = [e for e in edges_batch if e.get('type') == 'ITER_STEP']
+        cites_edges = [e for e in edges_batch if e.get('type') == 'CITES']
+        modifies_edges = [e for e in edges_batch if e.get('type') == 'MODIFIES']
 
         async def _execute_all(tx):
             try:
@@ -341,45 +390,12 @@ class AsyncNeo4jLoader:
                 if iter_edges:
                     logger.debug(f"Loading {len(iter_edges)} ITER EDGES")
                     await self._load_iter_edges(tx, iter_edges)
-            except Exception as e:
-                logger.error(f"Error during transaction execution: {e}")
-                raise
-        
-        # We split edges by type
-        structural_edges = [e for e in edges_batch if e.get('type') in ('PART_OF', 'NEXT')]
-        semantic_edges = [e for e in edges_batch if e.get('type') == 'HAS_TOPIC']
-        interprets_edges = [e for e in edges_batch if e.get('type') == 'INTERPRETS']
-        iter_edges = [e for e in edges_batch if e.get('type') == 'ITER_STEP']
-
-        async def _execute_all(tx):
-            try:
-                if works:
-                    logger.debug(f"Loading {len(works)} WORKS")
-                    await self._load_works(tx, works)
-                if expressions:
-                    logger.debug(f"Loading {len(expressions)} EXPRESSIONS")
-                    await self._load_expressions(tx, expressions)
-                if structural:
-                    logger.debug(f"Loading {len(structural)} STRUCTURAL UNITS")
-                    await self._load_structural_units(tx, structural)
-                if structural_edges:
-                    logger.debug(f"Loading {len(structural_edges)} STRUCTURAL EDGES")
-                    await self._load_structural_edges(tx, structural_edges)
-                if semantic_edges:
-                    logger.debug(f"Loading {len(semantic_edges)} SEMANTIC EDGES")
-                    await self._load_semantic_edges(tx, semantic_edges)
-                if judgements:
-                    logger.debug(f"Loading {len(judgements)} JUDGEMENTS")
-                    await self._load_judgements(tx, judgements)
-                if interprets_edges:
-                    logger.debug(f"Loading {len(interprets_edges)} INTERPRETS EDGES")
-                    await self._load_interprets_edges(tx, interprets_edges)
-                if iter_legis:
-                    logger.debug(f"Loading {len(iter_legis)} ITER LEGIS")
-                    await self._load_iter_legis(tx, iter_legis)
-                if iter_edges:
-                    logger.debug(f"Loading {len(iter_edges)} ITER EDGES")
-                    await self._load_iter_edges(tx, iter_edges)
+                if cites_edges:
+                    logger.debug(f"Loading {len(cites_edges)} CITES EDGES")
+                    await self._load_cites_edges(tx, cites_edges)
+                if modifies_edges:
+                    logger.debug(f"Loading {len(modifies_edges)} MODIFIES EDGES")
+                    await self._load_modifies_edges(tx, modifies_edges)
             except Exception as e:
                 logger.error(f"Error during transaction execution: {e}")
                 raise
