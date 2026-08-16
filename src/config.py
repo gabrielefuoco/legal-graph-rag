@@ -34,7 +34,23 @@ class Settings(BaseSettings):
     # Reranker
     RERANKER_MODEL_NAME: str = "Qwen/Qwen3-Reranker-0.6B"
     RERANK_TOP_K: int = 20  # Quanti chunk passare al reranker dopo la fusion
-    RERANK_MIN_SCORE: float = 0.05 # Soglia minima di pertinenza semantica
+    RERANK_MIN_SCORE: float = 0.05 # Soglia minima di pertinenza (post-sigmoid)
+
+    # TESEO Matching
+    TESEO_DENSE_THRESHOLD: float = 0.45        # Soglia similarità coseno per Full Semantic Matching
+    TESEO_SPARSE_BOOST: float = 1.0            # Score assegnato ai match esatti Aho-Corasick
+    TESEO_MAX_CONCEPTS: int = 10               # Numero massimo di concetti TESEO restituiti per chunk/query
+
+    # Topological Expansion
+    TOPOLOGICAL_MAX_CHARS: int = 6000           # Limite massimo caratteri per super-chunk espanso
+    TOPOLOGICAL_EXPAND_NEXT: bool = True        # Espandi tramite archi :NEXT (±1 comma)
+    TOPOLOGICAL_EXPAND_PARENT: bool = True      # Espandi tramite arco :PART_OF (articolo padre)
+    TOPOLOGICAL_EXPAND_CITES: bool = True       # Espandi tramite archi :CITES/:MODIFIES
+
+    # Hardware-ready context window (modificabile al cambio hardware)
+    GENERATOR_NUM_CTX: int = 4096              # Context window del generatore
+    GENERATOR_STUFF_THRESHOLD: int = 8000      # Caratteri max per lo stuffing. Oltre, usa Map-Reduce.
+    SUPERVISOR_NUM_CTX: int = 16384            # Context window del supervisor
 
 
 

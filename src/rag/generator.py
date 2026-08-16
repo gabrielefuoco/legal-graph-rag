@@ -14,13 +14,7 @@ class LegalGenerator:
     """
 
     def __init__(self):
-        self.llm = ChatOllama(
-            base_url=settings.QWEN3_ENDPOINT,
-            model=settings.GENERATIVE_MODEL_NAME,
-            temperature=0.0,  # Massima precisione per il dominio legale
-            num_ctx=4096,
-            reasoning=False,
-        )
+        pass
 
     def _format_context(self, chunks: List[RetrievedChunk]) -> str:
         """Formatta i chunk in una stringa di contesto leggibile dall'LLM."""
@@ -31,7 +25,9 @@ class LegalGenerator:
         for i, chunk in enumerate(chunks, 1):
             source_info = f"Fonte: {chunk.structural_context}" if chunk.structural_context else ""
             urn_info = f" (URN: {chunk.work_urn})" if chunk.work_urn else ""
-            context_parts.append(f"[{i}] {source_info}{urn_info}\nTesto: {chunk.text}")
+            # Usa il testo espanso se presente, altrimenti il testo base
+            chunk_text = getattr(chunk, 'expanded_text', None) or chunk.text
+            context_parts.append(f"[{i}] {source_info}{urn_info}\nTesto: {chunk_text}")
             
         return "\n\n".join(context_parts)
 
@@ -66,20 +62,127 @@ class LegalGenerator:
         messages.append(HumanMessage(content=f"Domanda: {query}"))
         return messages
 
+    async def _map_extract(self, query: str, chunk: RetrievedChunk, num_ctx: int) -> str:
+        """Estrae le info rilevanti da un singolo chunk (Fase MAP).
+        Se il chunk è troppo grande per il contesto del modello, lo spezza in
+        finestre sovrapposte e processa ciascuna separatamente."""
+        chunk_text = getattr(chunk, 'expanded_text', None) or chunk.text
+        
+        # Stima dei chars che entrano nel contesto del modello
+        # (lasciando spazio per system prompt ~500 token e risposta ~500 token)
+        max_map_chars = (num_ctx - 1000) * 3  # ~9.000 chars per num_ctx=4096
+        
+        if len(chunk_text) > max_map_chars:
+            # Sliding window: finestre sovrapposte con 500 chars di overlap
+            overlap = 500
+            step = max_map_chars - overlap
+            windows = []
+            for i in range(0, len(chunk_text), step):
+                windows.append(chunk_text[i:i + max_map_chars])
+            
+            logger.info(f"  📑 Chunk {chunk.expression_id} troppo grande ({len(chunk_text)} chars). Split in {len(windows)} finestre da ~{max_map_chars} chars.")
+            
+            window_extracts = []
+            for j, window in enumerate(windows):
+                ext = await self._map_extract_window(query, window, chunk.structural_context, num_ctx)
+                if "NESSUNA_INFO" not in ext:
+                    window_extracts.append(ext)
+            
+            if window_extracts:
+                return "\n".join(window_extracts)
+            return "NESSUNA_INFO"
+        else:
+            return await self._map_extract_window(query, chunk_text, chunk.structural_context, num_ctx)
+
+    async def _map_extract_window(self, query: str, text: str, structural_context: str | None, num_ctx: int) -> str:
+        """Estrae le info rilevanti da una finestra di testo (sotto-fase MAP)."""
+        from langchain_ollama import ChatOllama
+        from langchain_core.messages import SystemMessage, HumanMessage
+        from src.rag.think_filter import strip_thinking_tags
+        
+        system_prompt = (
+            "Sei un assistente legale. Estrai dal seguente testo normativo SOLO le "
+            "informazioni direttamente rilevanti per rispondere alla domanda dell'utente.\n"
+            "Se il testo NON contiene informazioni utili per la domanda, "
+            "rispondi esattamente e solo con: NESSUNA_INFO\n\n"
+            f"Testo normativo (Fonte: {structural_context or 'Sconosciuta'}):\n"
+            f"{text}"
+        )
+        
+        messages = [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=f"Domanda: {query}")
+        ]
+        
+        llm = ChatOllama(
+            base_url=settings.QWEN3_ENDPOINT,
+            model=settings.GENERATIVE_MODEL_NAME,
+            temperature=0.0,
+            num_ctx=num_ctx,
+            reasoning=False,
+        )
+        
+        try:
+            resp = await llm.ainvoke(messages)
+            content = strip_thinking_tags(resp.content).strip()
+            return content
+        except Exception as e:
+            logger.error(f"Errore nella fase MAP window: {e}")
+            return "NESSUNA_INFO"
+
     async def generate(self, state: RagState) -> dict:
         """
         Nodo LangGraph per la generazione della risposta.
         """
         from src.rag.think_filter import strip_thinking_tags
+        from src.rag.models import RetrievedChunk
         query = state["query"]
-        chunks = state.get("final_chunks") or state.get("fused_chunks") or []
+        chunks = state.get("expanded_chunks") or state.get("final_chunks") or state.get("fused_chunks") or []
         chat_history = state.get("chat_history") or []
-        
-        messages = self._build_messages(query, chunks, chat_history)
         
         try:
             logger.info(f"Generazione risposta per query: {query}")
-            response = await self.llm.ainvoke(messages)
+            from langchain_ollama import ChatOllama
+            num_ctx = state.get("generator_num_ctx", settings.GENERATOR_NUM_CTX)
+            
+            total_chars = sum(len(getattr(c, 'expanded_text', None) or c.text) for c in chunks)
+            stuff_threshold = getattr(settings, 'GENERATOR_STUFF_THRESHOLD', 8000)
+            
+            if total_chars > stuff_threshold:
+                logger.info(f"Contesto troppo lungo ({total_chars} > {stuff_threshold} chars). Attivazione Map-Reduce.")
+                extracts = []
+                for chunk in chunks:
+                    ext = await self._map_extract(query, chunk, num_ctx)
+                    if "NESSUNA_INFO" not in ext:
+                        extracts.append((chunk, ext))
+                
+                if not extracts:
+                    logger.warning("Fase MAP non ha prodotto risultati. Fallback a stuffing base.")
+                    messages = self._build_messages(query, chunks, chat_history)
+                else:
+                    synthetic_chunks = [
+                        RetrievedChunk(
+                            text=ext,
+                            expression_id=c.expression_id,
+                            structural_context=c.structural_context,
+                            work_urn=c.work_urn
+                        ) for c, ext in extracts
+                    ]
+                    messages = self._build_messages(query, synthetic_chunks, chat_history)
+                    logger.info(f"📦 REDUCE: passo all'LLM {len(synthetic_chunks)} micro-estratti.")
+            else:
+                logger.info(f"📦 Prompt Pronto: Passo all'LLM {len(chunks)} documenti per un totale di {total_chars} caratteri (num_ctx: {num_ctx}).")
+                messages = self._build_messages(query, chunks, chat_history)
+            
+            llm = ChatOllama(
+                base_url=settings.QWEN3_ENDPOINT,
+                model=settings.GENERATIVE_MODEL_NAME,
+                temperature=0.0,
+                num_ctx=num_ctx,
+                reasoning=False,
+            )
+            
+            response = await llm.ainvoke(messages)
             content = strip_thinking_tags(response.content)
             return {"generation": content}
         except Exception as e:

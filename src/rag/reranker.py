@@ -26,7 +26,12 @@ class Reranker:
         logger.info(f"Caricamento Reranker ({model_name}) su device: {device}")
         
         try:
-            self.model = CrossEncoder(model_name, max_length=512, device=device)
+            kwargs = {}
+            if device == "cuda":
+                kwargs["model_kwargs"] = {"torch_dtype": torch.float16}
+                logger.info("Caricamento CrossEncoder in FP16 per ottimizzazione VRAM.")
+                
+            self.model = CrossEncoder(model_name, max_length=2048, device=device, **kwargs)
             logger.info("Reranker caricato con successo.")
         except Exception as e:
             logger.error(f"Errore nel caricamento del Reranker: {e}")
@@ -53,8 +58,14 @@ class Reranker:
         try:
             scores = self.model.predict(pairs, convert_to_numpy=True)
             
+            import math
+            def sigmoid(x):
+                return 1 / (1 + math.exp(-x))
+            
             for chunk, score in zip(chunks, scores):
-                chunk.score = float(score)
+                # Normalizziamo il raw logit in una probabilità [0,1]
+                prob = sigmoid(float(score))
+                chunk.score = prob
                 chunk.source += "+rerank"
 
             # Riordina
@@ -63,10 +74,26 @@ class Reranker:
             # Applica il filtro di qualità (Thresholding)
             min_score = settings.RERANK_MIN_SCORE
             before_filter = len(chunks)
-            chunks = [c for c in chunks if c.score >= min_score]
+            filtered_chunks = []
+            for c in chunks:
+                if c.score >= min_score:
+                    logger.info(f"⚖️ Reranker: Promosso '{c.expression_id}' (Score: {c.score:.4f})")
+                    filtered_chunks.append(c)
+                else:
+                    logger.info(f"✂️ Reranker: Scartato '{c.expression_id}' (Score: {c.score:.4f} < {min_score})")
+            
+            # Garantisci un minimo di 3 chunk all'LLM (se ce ne sono abbastanza in partenza)
+            MIN_RERANK_KEEP = 3
+            if len(filtered_chunks) < MIN_RERANK_KEEP and len(chunks) >= MIN_RERANK_KEEP:
+                logger.info(f"Rerank Filter: Ripescati i top {MIN_RERANK_KEEP - len(filtered_chunks)} chunk sotto soglia per garantire un minimo di contesto all'LLM.")
+                filtered_chunks = chunks[:MIN_RERANK_KEEP]
+            elif len(filtered_chunks) < MIN_RERANK_KEEP and len(chunks) < MIN_RERANK_KEEP:
+                filtered_chunks = chunks
+
+            chunks = filtered_chunks
             
             if len(chunks) < before_filter:
-                logger.info(f"Rerank Filter: scartati {before_filter - len(chunks)} chunk sotto soglia {min_score}")
+                logger.info(f"Rerank Filter: scartati totali {before_filter - len(chunks)} chunk sotto soglia {min_score}")
             
             if chunks:
                 logger.info(f"Reranking completato. Miglior score: {chunks[0].score:.4f}")
@@ -102,6 +129,21 @@ async def rerank_node(state: RagState) -> dict:
     # Taglio al final_k (es. top 5 dei migliori sopra soglia)
     final_k = state.get("final_k", 10)
     final_chunks = final_chunks[:final_k]
+    
+    # --- SAFETY NET ---
+    vector_anchor_id = state.get("vector_anchor_id")
+    if vector_anchor_id:
+        anchor_present = any(
+            c.expression_id == vector_anchor_id or c.expression_id == f"merged_{vector_anchor_id}"
+            for c in final_chunks
+        )
+        if not anchor_present:
+            for c in fused_chunks:
+                if c.expression_id == vector_anchor_id or c.expression_id == f"merged_{vector_anchor_id}":
+                    logger.info(f"🛡️ Safety Net: ripescato anchor vettoriale '{c.expression_id}'")
+                    final_chunks.append(c)
+                    break
+    # ------------------
     
     elapsed = time.perf_counter() - start
     top_score = final_chunks[0].score if final_chunks else 0

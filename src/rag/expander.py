@@ -33,8 +33,10 @@ def should_expand(state: RagState) -> str:
         logger.info("Multi-hop disabilitato tramite flag (enable_multi_hop=False). Skip espansione.")
         return "__end__"
 
-    if hop_count >= settings.MAX_CITATION_HOPS:
-        logger.info(f"Multi-hop: raggiunto limite ({hop_count}/{settings.MAX_CITATION_HOPS}), terminazione.")
+    max_hops = state.get("max_citation_hops", settings.MAX_CITATION_HOPS)
+
+    if hop_count >= max_hops:
+        logger.info(f"Multi-hop: raggiunto limite ({hop_count}/{max_hops}), terminazione.")
         # Copia i chunk fusi nei final_chunks prima di terminare
         return "__end__"
 
@@ -57,16 +59,19 @@ async def expand_citations(state: RagState) -> dict:
             state["final_chunks"]
     """
     driver: AsyncDriver = state["_driver"]
-    fused_chunks = state.get("fused_chunks") or []
+    # Partiamo dai chunk che sono sopravvissuti al reranker (final_chunks)
+    # per evitare di espandere citazioni di documenti giudicati irrilevanti
+    source_chunks = state.get("final_chunks") or state.get("fused_chunks") or []
     hop_count = state.get("hop_count", 0)
 
     # Raccogli tutti gli expression_id dei chunk attuali
-    chunk_ids = [c.expression_id for c in fused_chunks if c.expression_id]
-    existing_ids = set(chunk_ids)
+    chunk_ids = [c.expression_id for c in source_chunks if c.expression_id]
+    
+    # Per evitare duplicati finali, controlliamo contro i fused_chunks originali
+    existing_ids = {c.expression_id for c in (state.get("fused_chunks") or [])}
 
     if not chunk_ids:
         return {
-            "final_chunks": fused_chunks,
             "hop_count": hop_count + 1,
         }
 
@@ -131,10 +136,12 @@ async def expand_citations(state: RagState) -> dict:
     else:
         logger.info(f"Multi-hop {hop_count + 1}: nessuna citazione interna trovata")
 
-    # I chunk espansi vengono aggiunti alla fine (score più basso)
-    all_chunks = fused_chunks + new_chunks
+    # FIX: Aggiungiamo i nuovi chunk trovati al pool di graph_results
+    # così il successivo nodo fuse_and_filter li integrerà e li valuterà col RRF
+    current_graph_results = state.get("graph_results") or []
+    updated_graph_results = current_graph_results + new_chunks
 
     return {
-        "fused_chunks": all_chunks,
+        "graph_results": updated_graph_results,
         "hop_count": hop_count + 1,
     }

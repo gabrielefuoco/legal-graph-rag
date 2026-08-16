@@ -1,0 +1,16 @@
+query,baseline_time_s,graphrag_time_s,baseline_recall,graphrag_recall,baseline_sim_score,graphrag_sim_score,baseline_ctx_chars,graphrag_ctx_chars,baseline_chunks,graphrag_chunks
+Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,93.3,134.28,1.0,1.0,0.403,0.415,929,6005,1,1
+Da quanti membri è composta la Commissione e da chi vengono scelti?,98.73,143.52,0.0,0.0,0.709,0.87,2374,14335,2,3
+Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,94.25,209.08,1.0,1.0,0.791,0.791,10704,8256,2,1
+Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,143.53,181.24,1.0,1.0,0.757,0.863,11302,10855,2,1
+Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,132.7,149.96,1.0,1.0,0.637,0.633,2879,4277,1,1
+Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,127.87,155.07,1.0,1.0,0.781,0.435,8650,89977,2,2
+Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,107.71,519.14,1.0,1.0,0.546,0.695,7905,26632,2,3
+"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",112.08,217.01,1.0,1.0,0.746,0.77,521,1265,1,1
+A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,160.7,190.64,0.0,0.0,0.778,0.878,9285,36434,1,3
+Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,117.91,160.91,1.0,1.0,0.909,0.908,3748,1949,2,2
+"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",124.69,142.21,1.0,1.0,0.851,0.851,8498,40294,2,1
+"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",139.62,144.76,1.0,1.0,0.654,0.712,851,5966,1,1
+A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,125.94,158.49,1.0,1.0,0.68,0.683,962,2218,1,1
+"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",111.19,162.59,1.0,1.0,0.782,0.779,4251,6005,2,1
+Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,132.07,112.17,1.0,1.0,0.76,0.779,783,13008,1,1
