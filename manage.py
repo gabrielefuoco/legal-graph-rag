@@ -230,6 +230,18 @@ def main():
     
     ret = subparsers.add_parser("retrieve")
     ret.add_argument("--query", required=True)
+
+    gs1 = subparsers.add_parser("grid-search-stage1")
+    gs1.add_argument("--dataset", default="data/eval_dataset.json")
+    gs1.add_argument("--output", default="grid_search_stage1_results.csv")
+    gs1.add_argument("--cache-candidates", default=None)
+    gs1.add_argument("--load-candidates", default=None)
+
+    gs2 = subparsers.add_parser("grid-search-stage2")
+    gs2.add_argument("--stage1-configs", default="top_stage1_configs.json")
+    gs2.add_argument("--dataset", default="data/eval_dataset.json")
+    gs2.add_argument("--output", default="grid_search_stage2_results.csv")
+    gs2.add_argument("--dry-run", action="store_true")
     
     args = parser.parse_args()
     if args.command == "build-graph": asyncio.run(run_topic_pipeline(args.topic))
@@ -247,6 +259,17 @@ def main():
         subprocess.run(["streamlit", "run", "src/ui/app.py"])
     elif args.command == "retrieve":
         asyncio.run(run_retrieve(args.query))
+    elif args.command == "grid-search-stage1":
+        import subprocess
+        cmd = ["py", "scripts/grid_search_stage1.py", "--dataset", args.dataset, "--output", args.output]
+        if args.cache_candidates: cmd.extend(["--cache-candidates", args.cache_candidates])
+        if args.load_candidates: cmd.extend(["--load-candidates", args.load_candidates])
+        subprocess.run(cmd)
+    elif args.command == "grid-search-stage2":
+        import subprocess
+        cmd = ["py", "scripts/grid_search_stage2.py", "--stage1-configs", args.stage1_configs, "--dataset", args.dataset, "--output", args.output]
+        if args.dry_run: cmd.append("--dry-run")
+        subprocess.run(cmd)
 
 if __name__ == "__main__":
     main()

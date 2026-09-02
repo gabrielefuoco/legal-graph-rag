@@ -8,6 +8,7 @@ from langgraph.graph.message import add_messages
 
 from src.config import settings
 from src.rag.engine import RagEngine
+from src.rag.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -83,11 +84,9 @@ class SupervisorAgent:
         # Estrai il context limit dal config, se presente
         num_ctx = config.get("supervisor_num_ctx", settings.SUPERVISOR_NUM_CTX) if config else settings.SUPERVISOR_NUM_CTX
         
-        llm = ChatOllama(
-            base_url=settings.QWEN3_ENDPOINT,
-            model=settings.GENERATIVE_MODEL_NAME,
-            temperature=0.0,
+        llm = get_llm(
             num_ctx=num_ctx,
+            temperature=0.0,
             reasoning=False,
         )
         

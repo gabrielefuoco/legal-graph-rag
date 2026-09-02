@@ -42,14 +42,14 @@ def test_build_messages(mock_chunks):
     assert "Quali sono i diritti inviolabili riconosciuti?" in human_msg
 
 @pytest.mark.asyncio
-@patch("src.rag.generator.ChatOllama")
-async def test_generate_mocked(mock_chat_ollama_cls, mock_chunks):
+@patch("src.rag.generator.get_llm")
+async def test_generate_mocked(mock_get_llm, mock_chunks):
     # Setup mock per LLM
     mock_llm = MagicMock()
     mock_response = MagicMock()
     mock_response.content = "La Repubblica riconosce i diritti inviolabili dell'uomo [Costituzione, Art. 2]."
     mock_llm.ainvoke = AsyncMock(return_value=mock_response)
-    mock_chat_ollama_cls.return_value = mock_llm
+    mock_get_llm.return_value = mock_llm
     
     generator = LegalGenerator()
     state: RagState = {
@@ -79,8 +79,8 @@ async def test_generate_mocked(mock_chat_ollama_cls, mock_chunks):
     mock_llm.ainvoke.assert_called_once()
 
 @pytest.mark.asyncio
-@patch("src.rag.generator.ChatOllama")
-async def test_generate_stream_mocked(mock_chat_ollama_cls, mock_chunks):
+@patch("src.rag.generator.get_llm")
+async def test_generate_stream_mocked(mock_get_llm, mock_chunks):
     # Setup mock per streaming
     mock_llm = MagicMock()
     
@@ -93,7 +93,7 @@ async def test_generate_stream_mocked(mock_chat_ollama_cls, mock_chunks):
             yield chunk_mock
             
     mock_llm.astream = mock_astream
-    mock_chat_ollama_cls.return_value = mock_llm
+    mock_get_llm.return_value = mock_llm
     
     generator = LegalGenerator()
     

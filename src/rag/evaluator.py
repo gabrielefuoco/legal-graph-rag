@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from src.config import settings
 from src.rag.models import RagState, RetrievedChunk
+from src.rag.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +26,9 @@ class RetrievalGrader:
     usando un LLM-as-a-judge (Qwen in locale).
     """
     def __init__(self):
-        self.llm = ChatOllama(
-            base_url=settings.QWEN3_ENDPOINT,
-            model=settings.GENERATIVE_MODEL_NAME,
-            temperature=0.0,
+        self.llm = get_llm(
             num_ctx=settings.SUPERVISOR_NUM_CTX,
+            temperature=0.0,
             reasoning=False,
         )
         self.structured_llm = self.llm.with_structured_output(GraderOutput)
@@ -82,9 +81,7 @@ class QueryRewriter:
     cercando di renderla più adatta al retrieval semantico.
     """
     def __init__(self):
-        self.llm = ChatOllama(
-            base_url=settings.QWEN3_ENDPOINT,
-            model=settings.GENERATIVE_MODEL_NAME,
+        self.llm = get_llm(
             temperature=0.3, # Leggera variabilità per favorire la riformulazione
             reasoning=False,
         )

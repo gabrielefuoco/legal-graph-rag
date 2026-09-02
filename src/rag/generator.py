@@ -4,6 +4,7 @@ from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
 from src.rag.models import RagState, RetrievedChunk
 from src.config import settings
+from src.rag.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
@@ -13,8 +14,10 @@ class LegalGenerator:
     Prende i chunk recuperati e filtrati e genera una risposta legale strutturata.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, num_ctx: int = None):
+        from src.rag.llm_factory import get_llm
+        self.num_ctx = num_ctx or settings.GENERATOR_NUM_CTX
+        self.llm = get_llm(num_ctx=self.num_ctx, temperature=0.0, reasoning=False)
 
     def _format_context(self, chunks: List[RetrievedChunk]) -> str:
         """Formatta i chunk in una stringa di contesto leggibile dall'LLM."""
@@ -114,11 +117,10 @@ class LegalGenerator:
             HumanMessage(content=f"Domanda: {query}")
         ]
         
-        llm = ChatOllama(
-            base_url=settings.QWEN3_ENDPOINT,
-            model=settings.GENERATIVE_MODEL_NAME,
-            temperature=0.0,
+        from src.rag.llm_factory import get_llm
+        llm = get_llm(
             num_ctx=num_ctx,
+            temperature=0.0,
             reasoning=False,
         )
         
@@ -174,11 +176,10 @@ class LegalGenerator:
                 logger.info(f"📦 Prompt Pronto: Passo all'LLM {len(chunks)} documenti per un totale di {total_chars} caratteri (num_ctx: {num_ctx}).")
                 messages = self._build_messages(query, chunks, chat_history)
             
-            llm = ChatOllama(
-                base_url=settings.QWEN3_ENDPOINT,
-                model=settings.GENERATIVE_MODEL_NAME,
-                temperature=0.0,
+            from src.rag.llm_factory import get_llm
+            llm = get_llm(
                 num_ctx=num_ctx,
+                temperature=0.0,
                 reasoning=False,
             )
             

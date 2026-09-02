@@ -13,11 +13,17 @@ class Settings(BaseSettings):
     NEO4J_USERNAME: str = "neo4j"
     NEO4J_PASSWORD: str = "password"
 
-    # LLM & Embedding
+    # LLM & Embedding (Local & Remote)
+    LLM_PROVIDER: str = "ollama"  # "ollama" o "openrouter"
     QWEN3_ENDPOINT: str = "http://localhost:11434"
     EMBEDDING_MODEL_NAME: str = "qwen3-embedding:0.6b"
     EMBEDDING_DIMENSIONS: int = 1024  # Aggiornato per il nuovo modello
     GENERATIVE_MODEL_NAME: str = "qwen3.5:4b"
+
+    # OpenRouter Settings
+    OPENROUTER_API_KEY: Optional[str] = None
+    OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
+    OPENROUTER_MODEL_NAME: str = "qwen/qwen3.5-9b"
 
     # RAG Retrieval
     TESEO_RDF_PATH: str = "data/external/teseo_full.ttl"

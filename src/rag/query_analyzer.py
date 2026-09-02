@@ -222,12 +222,8 @@ async def contextualize_query(state: RagState) -> dict:
     if generator and hasattr(generator, "llm"):
         llm = generator.llm
     else:
-        from langchain_ollama import ChatOllama
-        llm = ChatOllama(
-            base_url=settings.QWEN3_ENDPOINT,
-            model=settings.GENERATIVE_MODEL_NAME,
-            temperature=0.0,
-        )
+        from src.rag.llm_factory import get_llm
+        llm = get_llm(temperature=0.0, reasoning=False)
 
     # Formattiamo la chat history in un formato testuale leggibile
     formatted_history = ""
