@@ -1,32 +1,40 @@
+"""Asynchronous client for EUR-Lex (EU Law)."""
+
 import asyncio
 import logging
 import aiohttp
 from typing import List, Dict
 from pathlib import Path
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 EURLEX_SPARQL_ENDPOINT = "http://publications.europa.eu/webapi/rdf/sparql"
 
 class AsyncEurLexClient:
-    """
-    Asynchronous client for EUR-Lex (EU Law).
-    Queries the EU Publications Office SPARQL endpoint.
-    Downloads HTML/XML content.
+    """Asynchronous client for EUR-Lex (EU Law).
+
+    Queries the EU Publications Office SPARQL endpoint and downloads XML content.
     """
 
     def __init__(self, output_dir: str = "data/raw/eurlex"):
+        """Initialize client with target output directory.
+
+        Args:
+            output_dir: Directory where downloaded EU law documents are stored.
+        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     async def fetch_legislation_metadata(self, limit: int = 100) -> List[Dict[str, str]]:
+        """Query EUR-Lex for recent Regulations, Directives, and Decisions.
+
+        Args:
+            limit: Maximum number of legislation records to retrieve.
+
+        Returns:
+            List of dictionaries containing URI, title, and date.
         """
-        Queries EUR-Lex for recent Regulations and Directives.
-        """
-        # Query for Regulations (320...) and Directives (320...)
-        # cellar: is the ontology prefix.
-        # Query for Regulations (R), Directives (L), Decisions (D) from 2024 onwards
+        # Filter for Regulations (R), Directives (L), and Decisions (D) from 2024 onwards
         query = f"""
         SELECT DISTINCT ?work ?title ?date
         WHERE {{
@@ -69,9 +77,16 @@ class AsyncEurLexClient:
                 return []
 
     async def download_document(self, session: aiohttp.ClientSession, celex: str, title: str, date: str) -> bool:
-        """
-        Downloads the document content in XML (Formex) format using the CELEX ID.
-        URL format: https://eur-lex.europa.eu/legal-content/IT/TXT/XML/?uri=CELEX:{celex}
+        """Download document content in XML (Formex) format using CELEX identifier.
+
+        Args:
+            session: Active aiohttp client session.
+            celex: CELEX identifier of the document.
+            title: Title used to form the destination filename.
+            date: Document date prefix.
+
+        Returns:
+            True if download succeeded, False otherwise.
         """
         try:
             # Clean title for filename
@@ -83,14 +98,14 @@ class AsyncEurLexClient:
                 logger.info(f"Skipping existing: {filepath}")
                 return True
 
-            # Use the reliable CELEX-based XML download URL
+            # Use the CELEX-based XML download endpoint
             url = f"https://eur-lex.europa.eu/legal-content/IT/TXT/XML/?uri=CELEX:{celex}"
             
             async with session.get(url) as response:
                 if response.status == 200:
                     content = await response.read()
                     
-                    # Verify if we actually got XML (sometimes it's an error page with 200)
+                    # Verify whether payload is valid XML rather than HTML error page
                     if b"<?xml" in content or b"<html" not in content[:100].lower():
                         with open(filepath, "wb") as f:
                             f.write(content)
@@ -107,16 +122,18 @@ class AsyncEurLexClient:
             return False
 
     async def run(self, start_date: str = "2024-01-01", limit: int = 100):
-        """
-        Main execution with date filtering.
+        """Fetch metadata and download EU legislation documents from a given start date.
+
+        Args:
+            start_date: ISO date string filtering document publication dates.
+            limit: Maximum number of documents to retrieve.
         """
         logger.info(f"Starting Async EUR-Lex Client (Start Date: {start_date})...")
         
-        # Override query date filter dynamically
-        # Simple string injection for now, could be improved
         original_fetch = self.fetch_legislation_metadata
         
         async def fetch_with_date(limit_val):
+            """Fetch legislation metadata filtered by start date."""
             query = f"""
             SELECT DISTINCT ?work ?title ?date ?celex
             WHERE {{
@@ -156,7 +173,6 @@ class AsyncEurLexClient:
                     logger.error(f"Error fetching data: {e}")
                     return []
 
-        # Use the dynamic fetch
         metadata = await fetch_with_date(limit)
         
         logger.info(f"[DEBUG] Metadata fetch result: {len(metadata) if metadata else 0} items")
@@ -175,5 +191,4 @@ class AsyncEurLexClient:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     client = AsyncEurLexClient()
-    # Example usage
     asyncio.run(client.run(start_date="2024-01-01", limit=5))

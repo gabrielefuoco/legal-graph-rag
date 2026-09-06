@@ -1,3 +1,5 @@
+"""Extract normative citations from Expression text via regex and link CITES relationships in Neo4j."""
+
 import asyncio
 import logging
 import re
@@ -11,7 +13,7 @@ from neo4j import AsyncGraphDatabase
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# Regex robusta per estrarre citazioni dal testo nudo
+# Regex for extracting normative citations from raw text
 PATTERN = re.compile(
     r'(?P<tipo>legge|decreto\s+legislativo|d\.lgs\.?|decreto\s+legge|d\.l\.?)\s+'
     r'(?:(?:del\s+)?(?P<giorno>\d{1,2})\s+(?P<mese>[a-z]+)\s+(?P<anno1>\d{4})\s*,?\s*(?:n\.?\s*)?(?P<num1>\d+)'
@@ -20,6 +22,7 @@ PATTERN = re.compile(
 )
 
 async def patch_regex_cites():
+    """Scan Neo4j Expression nodes, extract law citations, and write CITES edges."""
     driver = AsyncGraphDatabase.driver(
         settings.NEO4J_URI,
         auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD)
@@ -29,7 +32,7 @@ async def patch_regex_cites():
         logger.info("Connessione a Neo4j per estrarre il testo delle Expression...")
         
         async with driver.session() as session:
-            # 1. Recupero tutti i nodi Expression con il loro testo
+            # Fetch Expression nodes containing textual content
             result = await session.run("MATCH (e:Expression) WHERE e.text_display IS NOT NULL RETURN e.id AS id, e.text_display AS text")
             records = await result.data()
             
@@ -40,7 +43,7 @@ async def patch_regex_cites():
             text = record["text"]
             source_id = record["id"]
             
-            # Applichiamo la Regex
+            # Match citation patterns against expression text
             for match in PATTERN.finditer(text):
                 d = match.groupdict()
                 tipo = d['tipo'].lower()
@@ -54,7 +57,7 @@ async def patch_regex_cites():
                 num = d['num1'] or d['num2']
                 anno = d['anno1'] or d['anno2']
                 
-                # URN standard approssimato
+                # Approximate standard URN identifier
                 target_urn = f"urn:nir:stato:{urn_tipo}:{anno};{num}"
                 quoted_text = match.group(0)
                 
@@ -70,7 +73,7 @@ async def patch_regex_cites():
             logger.info("Nessun arco da iniettare.")
             return
 
-        # 2. Caricamento in Neo4j
+        # Load CITES edges into Neo4j graph
         logger.info("Caricamento archi CITES in Neo4j (con creazione Work placeholders se assenti)...")
         
         query_cites = """

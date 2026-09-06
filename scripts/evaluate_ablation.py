@@ -1,11 +1,11 @@
-"""
-Ablation Study — Script parametrico per la valutazione del GraphRAG.
-Tutti i parametri architetturali vengono letti da src.config.settings.
+"""Parametric ablation study script for evaluating GraphRAG vs Baseline RAG.
 
-Uso:
-  py scripts/evaluate_ablation.py                    # Esegue tutte le query del dataset
-  py scripts/evaluate_ablation.py --queries 3 11 13  # Esegue solo le query indicate (1-indexed)
-  py scripts/evaluate_ablation.py --output results.csv  # Salva su file custom
+Architectural parameters are loaded from src.config.settings.
+
+Usage:
+    py scripts/evaluate_ablation.py
+    py scripts/evaluate_ablation.py --queries 3 11 13
+    py scripts/evaluate_ablation.py --output results.csv
 """
 import asyncio
 import json
@@ -31,12 +31,13 @@ logger = logging.getLogger("ablation_study")
 
 
 def split_into_sentences(text: str) -> List[str]:
-    """Split testuale grezzo in frasi."""
+    """Split raw text into sentence units."""
     sentences = re.split(r'(?<=[.!?])\s+', text.strip())
     return [s.strip() for s in sentences if len(s.strip()) > 10]
 
 
 def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
+    """Compute cosine similarity between two numeric vectors."""
     v1 = np.array(vec1)
     v2 = np.array(vec2)
     norm = np.linalg.norm(v1) * np.linalg.norm(v2)
@@ -46,10 +47,11 @@ def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
 
 
 async def calculate_sentence_similarity(golden_text: str, generated_text: str, vector_engine: VectorEngine) -> float:
-    """
-    Misura la similarità semantica chunk-by-chunk tra la golden answer e la risposta generata.
-    Calcola l'embedding per ogni frase, e per ogni frase della golden answer trova il match migliore
-    nella risposta generata (ordine indipendente). Restituisce la media dei best match.
+    """Measure semantic similarity between golden answer and generated answer.
+
+    Computes embeddings for each sentence in both answers, finds the best
+    matching generated sentence for each golden sentence, and returns the
+    mean of maximum similarity scores.
     """
     if not golden_text or not generated_text:
         return 0.0
@@ -74,13 +76,14 @@ async def calculate_sentence_similarity(golden_text: str, generated_text: str, v
                 best_score = score
         match_scores.append(best_score)
         
-    # Media delle similarità massime per ogni concetto golden
+    # Average of maximum similarities for each golden concept
     return sum(match_scores) / len(match_scores) if match_scores else 0.0
 
 
 def calculate_recall(retrieved_chunks: list, expected_ids: List[str]) -> float:
+    """Calculate retrieval recall against expected target expression IDs."""
     if not expected_ids:
-        return 1.0 # Nessun target atteso = 100%
+        return 1.0  # No expected target corresponds to 100% recall
     
     retrieved_ids = [chunk.expression_id for chunk in retrieved_chunks]
     hits = 0
@@ -91,13 +94,14 @@ def calculate_recall(retrieved_chunks: list, expected_ids: List[str]) -> float:
 
 
 async def evaluate_query(engine: RagEngine, vector_engine: VectorEngine, query_data: dict) -> dict:
+    """Evaluate a single query under baseline RAG and GraphRAG configurations."""
     query = query_data["query"]
     expected_ids = query_data.get("expected_ids", [])
     golden_answer = query_data.get("golden_answer", "")
     
     logger.info(f"\n=== Valutazione Query: '{query}' ===")
     
-    # RUN A: Baseline RAG
+    # Baseline RAG evaluation
     logger.info("-> RUN A: Baseline RAG")
     start_time_a = time.perf_counter()
     chunks_a, trace_a, answer_a = await engine.retrieve_with_trace(
@@ -112,7 +116,7 @@ async def evaluate_query(engine: RagEngine, vector_engine: VectorEngine, query_d
     sim_a = await calculate_sentence_similarity(golden_answer, answer_a, vector_engine)
     ctx_len_a = sum(len(getattr(c, 'expanded_text', None) or c.text) for c in chunks_a)
     
-    # RUN B: GraphRAG
+    # GraphRAG evaluation
     logger.info("-> RUN B: GraphRAG")
     start_time_b = time.perf_counter()
     chunks_b, trace_b, answer_b = await engine.retrieve_with_trace(
@@ -143,7 +147,7 @@ async def evaluate_query(engine: RagEngine, vector_engine: VectorEngine, query_d
 
 
 def log_config():
-    """Logga la configurazione architetturale usata per questa run."""
+    """Log architectural configuration settings for current run."""
     logger.info("=" * 60)
     logger.info("CONFIGURAZIONE ARCHITETTURALE")
     logger.info("=" * 60)
@@ -167,6 +171,7 @@ def log_config():
 
 
 async def main():
+    """Parse CLI arguments and run ablation evaluation."""
     parser = argparse.ArgumentParser(description="Ablation Study parametrico per GraphRAG")
     parser.add_argument("--queries", nargs="+", type=int, default=None,
                         help="Indici delle query da testare (1-indexed). Es: --queries 3 11 13")
@@ -184,7 +189,7 @@ async def main():
     with open(dataset_path, "r", encoding="utf-8") as f:
         full_dataset = json.load(f)
     
-    # Filtra le query se specificato
+    # Filter queries if specific indices were requested
     if args.queries:
         dataset = [full_dataset[i - 1] for i in args.queries if 1 <= i <= len(full_dataset)]
         logger.info(f"MINI-TEST: eseguendo {len(dataset)} query su {len(full_dataset)} totali (indici: {args.queries})")
@@ -192,7 +197,7 @@ async def main():
         dataset = full_dataset
         logger.info(f"FULL-TEST: eseguendo tutte le {len(dataset)} query")
     
-    # Logga la configurazione
+    # Log architectural configuration
     log_config()
         
     engine = RagEngine()
@@ -207,7 +212,7 @@ async def main():
         res = await evaluate_query(engine, vector_engine, data)
         results.append(res)
         
-        # Salvataggio incrementale ad ogni iterazione
+        # Incrementally append result row
         mode = "a" if file_initialized else "w"
         with open(csv_path, mode, newline='', encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=res.keys())
@@ -219,7 +224,7 @@ async def main():
     await engine.close()
     
     if results:
-        # Metriche aggregate
+        # Compute aggregate metrics
         b_recalls = [r["baseline_recall"] for r in results]
         g_recalls = [r["graphrag_recall"] for r in results]
         b_sims = [r["baseline_sim_score"] for r in results]
@@ -241,7 +246,7 @@ async def main():
         logger.info(f"  Risultati salvati in:  {csv_path}")
         logger.info("=" * 60)
 
-        # Generazione report Markdown leggibile
+        # Generate Markdown summary report
         md_path = os.path.splitext(csv_path)[0] + ".md"
         with open(md_path, "w", encoding="utf-8") as f:
             f.write("# Report Studio di Ablazione — GraphRAG vs Baseline\n\n")

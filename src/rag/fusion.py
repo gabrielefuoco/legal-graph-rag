@@ -1,9 +1,7 @@
-"""
-Fusion & Filtering — Step 3 del Retrieval Engine.
+"""Fusion and filtering module for hybrid retrieval channels.
 
-Implementa:
-- Reciprocal Rank Fusion (RRF) pesato per combinare i risultati dei 3 canali
-- Filtro temporale rigido basato su vigenza_start / vigenza_end
+Implements weighted Reciprocal Rank Fusion (RRF), text-overlap deduplication,
+temporal validity checking, and structural chunk merging.
 """
 import logging
 from collections import defaultdict
@@ -19,28 +17,25 @@ def _reciprocal_rank_fusion(
     channels: list[tuple[list[RetrievedChunk], float]],
     k: int = 60,
 ) -> list[RetrievedChunk]:
-    """
-    Reciprocal Rank Fusion (RRF) pesato.
+    """Weighted Reciprocal Rank Fusion (RRF).
 
-    Per ogni chunk, lo score combinato è:
-        RRF_score = Σ (weight / (k + rank))
-    dove rank è la posizione nel canale (1-indexed) e weight è il peso del canale.
-
-    I chunk sono identificati univocamente per `expression_id`.
-    Se lo stesso nodo appare in più canali, gli score si sommano.
+    For each chunk, the combined score is:
+        RRF_score = sum(weight / (k + rank))
+    where rank is the 1-indexed position in the channel and weight is the channel weight.
+    Chunks are identified uniquely by `expression_id`.
 
     Args:
-        channels: Lista di (risultati, peso) per ogni canale.
-        k: Costante RRF (default 60, standard nella letteratura).
+        channels: List of (results, weight) tuples for each retrieval channel.
+        k: RRF constant (default 60).
 
     Returns:
-        Lista di RetrievedChunk ordinata per score RRF decrescente.
+        List of RetrievedChunk instances sorted by descending RRF score.
     """
-    # Accumula score per expression_id
+    # Accumulate scores per expression_id
     scores: dict[str, float] = defaultdict(float)
-    # Mantieni il chunk con il testo più completo per ogni ID
+    # Keep the chunk with the most complete text for each ID
     best_chunk: dict[str, RetrievedChunk] = {}
-    # Traccia le fonti
+    # Track retrieval sources
     sources: dict[str, set[str]] = defaultdict(set)
 
     for results, weight in channels:
@@ -50,29 +45,27 @@ def _reciprocal_rank_fusion(
             scores[chunk.expression_id] += rrf_score
             sources[chunk.expression_id].add(chunk.source)
 
-            # Conserva il chunk con il testo più lungo come rappresentante
+            # Keep the chunk with the longest text as representative
             existing = best_chunk.get(chunk.expression_id)
             if existing is None:
                 best_chunk[chunk.expression_id] = chunk
             else:
-                # Uniamo i metadati in modo intelligente (unione di liste per matched_concepts)
+                # Merge metadata intelligently (union of lists for matched_concepts)
                 if chunk.metadata:
                     for key, val in chunk.metadata.items():
                         if key == "matched_concepts" and key in existing.metadata:
-                            # Unione di liste senza duplicati
                             combined = list(set(existing.metadata[key] + val))
                             existing.metadata[key] = combined
                         else:
                             existing.metadata[key] = val
 
                 if len(chunk.text) > len(existing.text):
-                    # Se il nuovo chunk ha testo più lungo, lo usiamo come base
-                    # ma preserviamo i metadati accumulati finora
+                    # If the new chunk has longer text, use it while preserving accumulated metadata
                     old_meta = existing.metadata
                     best_chunk[chunk.expression_id] = chunk
                     best_chunk[chunk.expression_id].metadata = old_meta
 
-    # Costruisci risultato finale
+    # Build fused results sorted by score
     fused = []
     for expr_id, rrf_score in sorted(scores.items(), key=lambda x: x[1], reverse=True):
         chunk = best_chunk[expr_id]
@@ -82,7 +75,7 @@ def _reciprocal_rank_fusion(
             work_urn=chunk.work_urn,
             structural_context=chunk.structural_context,
             score=rrf_score,
-            source="+".join(sorted(sources[expr_id])),  # es. "bm25+vector"
+            source="+".join(sorted(sources[expr_id])),
             vigenza_start=chunk.vigenza_start,
             vigenza_end=chunk.vigenza_end,
             metadata=chunk.metadata
@@ -92,14 +85,11 @@ def _reciprocal_rank_fusion(
 
 
 def _deduplicate_by_text(chunks: list[RetrievedChunk], overlap_threshold: float = 0.8) -> list[RetrievedChunk]:
-    """
-    Rimuove chunk il cui testo è un sottoinsieme significativo di un altro chunk.
-    Mantiene il chunk con lo score più alto.
-    """
+    """Remove chunks whose text substantially overlaps with another chunk, keeping the higher-scoring one."""
     if len(chunks) <= 1:
         return chunks
     
-    # Ordina per score decrescente così i chunk migliori vengono mantenuti
+    # Sort by score descending to retain top-scoring chunks
     sorted_chunks = sorted(chunks, key=lambda c: c.score, reverse=True)
     kept = []
     
@@ -115,7 +105,7 @@ def _deduplicate_by_text(chunks: list[RetrievedChunk], overlap_threshold: float 
             if not existing_words:
                 continue
             
-            # Calcola overlap bidirezionale
+            # Compute bidirectional overlap
             intersection = candidate_words & existing_words
             smaller_set = min(len(candidate_words), len(existing_words))
             
@@ -136,10 +126,7 @@ def _mark_abrogated_chunks(
     chunks: list[RetrievedChunk],
     reference_date: date,
 ) -> list[RetrievedChunk]:
-    """
-    Controlla la vigenza e marca esplicitamente i testi abrogati anteponendo un avviso.
-    Non rimuove i chunk, in modo che l'LLM sappia che la norma esiste ma non è più in vigore.
-    """
+    """Check temporal validity and prepend a warning banner to abrogated provisions."""
     for chunk in chunks:
         is_abrogato = False
         if chunk.vigenza_end and chunk.vigenza_end < reference_date:
@@ -153,15 +140,11 @@ def _mark_abrogated_chunks(
 
 
 def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
-    """
-    Fonde i chunk restituiti che appartengono allo stesso Atto (Work)
-    e sono strutturalmente adiacenti.
-    Mantiene lo score massimo del gruppo e concatena i testi.
-    """
+    """Merge structurally adjacent chunks belonging to the same legal act (Work)."""
     if not chunks:
         return []
 
-    # Raggruppa i chunk per Work
+    # Group chunks by Work
     grouped: dict[str, list[RetrievedChunk]] = defaultdict(list)
     for c in chunks:
         key = c.metadata.get("work_title") or c.work_urn or c.expression_id
@@ -173,11 +156,10 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
             merged_chunks.append(group[0])
             continue
         
-        # Ordiniamo per structural_context
+        # Sort by structural_context
         group_sorted = sorted(group, key=lambda x: x.structural_context or "")
         
-        # Suddividi in sotto-gruppi adiacenti
-        # Due chunk sono "adiacenti" se differiscono solo nell'ultimo segmento del breadcrumb
+        # Partition into adjacent subgroups sharing the same parent structure
         sub_groups = []
         current_sub = [group_sorted[0]]
         
@@ -185,7 +167,6 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
             prev_ctx = current_sub[-1].structural_context or ""
             curr_ctx = group_sorted[i].structural_context or ""
             
-            # Consideriamo adiacenti se condividono lo stesso prefisso (stessa sezione)
             prev_parts = prev_ctx.rsplit(" > ", 1)
             curr_parts = curr_ctx.rsplit(" > ", 1)
             
@@ -199,7 +180,7 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
                 current_sub = [group_sorted[i]]
         sub_groups.append(current_sub)
         
-        # Merge solo i sotto-gruppi con più di un chunk
+        # Merge only subgroups containing multiple chunks
         for sub in sub_groups:
             if len(sub) == 1:
                 merged_chunks.append(sub[0])
@@ -239,16 +220,14 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
 
 
 def fuse_and_filter(state: RagState) -> dict:
-    """
-    Nodo LangGraph: fonde i risultati dei 3 canali con RRF e applica il filtro temporale.
-    """
+    """LangGraph node to fuse retrieval channels via RRF and apply filtering and merging."""
     import time
     start = time.perf_counter()
     vector_results = state.get("vector_results") or []
     bm25_results = state.get("bm25_results") or []
     graph_results = state.get("graph_results") or []
 
-    # RRF pesato
+    # Weighted RRF
     channels = [
         (vector_results, settings.RRF_WEIGHT_VECTOR),
         (bm25_results, settings.RRF_WEIGHT_BM25),
@@ -256,14 +235,14 @@ def fuse_and_filter(state: RagState) -> dict:
     ]
     fused = _reciprocal_rank_fusion(channels, k=settings.RRF_K)
 
-    # Score-based cutoff: rimuovi chunk con score troppo basso
+    # Score cutoff: remove low-scoring chunks
     min_score = settings.RAG_MIN_SCORE
     before_cutoff = len(fused)
     fused = [c for c in fused if c.score >= min_score]
     if len(fused) < before_cutoff:
         logger.info(f"Score cutoff (>= {min_score}): rimossi {before_cutoff - len(fused)} chunk sotto soglia")
 
-    # Positional cutoff (Pre-Rerank): prendiamo abbastanza chunk per il reranking
+    # Positional cutoff for reranker candidate pool
     rerank_top_k = settings.RERANK_TOP_K
     fused = fused[:rerank_top_k]
     
@@ -273,13 +252,12 @@ def fuse_and_filter(state: RagState) -> dict:
         f"→ {before_cutoff} unici → {len(fused)} per reranker | {elapsed:.2f}s"
     )
 
-
-    # Deduplicazione per overlap testuale
+    # Text overlap deduplication
     fused = _deduplicate_by_text(fused)
 
-    # Marcatura temporale per norme abrogate
+    # Mark abrogated provisions relative to reference date
     ref_date_str = state.get("reference_date")
-    ref_date = date.today()  # Default a oggi se non specificata
+    ref_date = date.today()  # Default to today if omitted
     if ref_date_str:
         try:
             ref_date = date.fromisoformat(ref_date_str)
@@ -288,7 +266,7 @@ def fuse_and_filter(state: RagState) -> dict:
             
     fused = _mark_abrogated_chunks(fused, ref_date)
     
-    # Merging dei chunk dello stesso Atto (solo se strutturalmente adiacenti)
+    # Merge adjacent chunks from the same act
     fused = _merge_chunks(fused)
 
     vector_anchor_id = vector_results[0].expression_id if vector_results else None

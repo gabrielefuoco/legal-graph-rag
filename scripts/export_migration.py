@@ -1,23 +1,26 @@
+"""Create a clean migration archive (.zip) of the project excluding caches, raw data, and logs."""
+
 import os
 import zipfile
 from pathlib import Path
 import time
 
 def create_migration_archive():
-    # Identifica la cartella principale del progetto (Tesi)
+    """Package project files into a migration zip archive with exclusions."""
+    # Identify project root directory
     project_root = Path(__file__).parent.parent.resolve()
     
-    # Salva il file .zip al di fuori della cartella Tesi per non includerlo per sbaglio o inquinare il progetto
+    # Store zip archive outside project root to avoid self-inclusion
     archive_name = project_root.parent / "Tesi_Migration.zip"
     
-    # Cartelle generali da escludere
+    # Directories to exclude
     EXCLUDES = {
         '.git', '.agent', '.gemini', 'venv', '.venv', 'env', 
         '__pycache__', '.pytest_cache', 'scratch', '.vscode', '.idea',
         'models_cache', 'raw'
     }
     
-    # Estensioni e file specifici da escludere (spazzatura, test intermedi, log)
+    # File extensions and specific filenames to exclude
     EXCLUDE_EXTENSIONS = {'.csv', '.log', '.ipynb'}
     EXCLUDE_FILES = {
         'scratch.py', 'metrics_summary.md', 'relazione_tecnica_rag.md',
@@ -34,24 +37,24 @@ def create_migration_archive():
     start_time = time.time()
     total_files = 0
     
-    # Apre (o crea) lo zip in modalità scrittura con compressione
+    # Open zip archive with standard compression
     with zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as zipf:
         for root, dirs, files in os.walk(project_root):
-            # Filtra le directory in-place per non attraversare quelle escluse e ignora ollama/data
+            # Filter directories in-place to avoid traversing excluded paths
             dirs[:] = [
                 d for d in dirs 
                 if d not in EXCLUDES and not (d == 'data' and 'ollama' in root.replace('\\', '/'))
             ]
             
             for file in files:
-                # Evita di auto-zippare l'archivio stesso o file spazzatura
+                # Skip archive itself and excluded files
                 if file == archive_name.name or file in EXCLUDE_FILES:
                     continue
                 if any(file.endswith(ext) for ext in EXCLUDE_EXTENSIONS):
                     continue
                 
                 file_path = Path(root) / file
-                # Definisce il percorso all'interno dello zip (es. Tesi/src/main.py)
+                # Compute relative archive path
                 arcname = "Tesi" / file_path.relative_to(project_root)
                 
                 zipf.write(file_path, arcname)

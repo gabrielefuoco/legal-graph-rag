@@ -1,7 +1,7 @@
-﻿"""
-LLM Factory — Creazione centralizzata di istanze BaseChatModel (Ollama o OpenRouter).
-Fornisce un'astrazione unificata che consente lo switch trasparente tra
-l'infrastruttura locale Ollama e le API remote OpenRouter.
+"""LLM Factory — Centralized factory for BaseChatModel instances (Ollama or OpenRouter).
+
+Provides a unified abstraction allowing transparent switching between
+local Ollama instances and remote OpenRouter APIs.
 """
 import logging
 from typing import Optional
@@ -19,14 +19,17 @@ def get_llm(
     model_name: Optional[str] = None,
     provider: Optional[str] = None,
 ) -> BaseChatModel:
-    """
-    Restituisce un'istanza BaseChatModel (ChatOllama o ChatOpenAI) in base al provider configurato.
+    """Return a BaseChatModel instance (ChatOllama or ChatOpenAI) based on the configured provider.
 
-    :param num_ctx: Finestra di contesto (utilizzata da Ollama; OpenRouter gestisce la finestra nativamente).
-    :param temperature: Temperatura per il campionamento (default 0.0 per compiti deterministici).
-    :param reasoning: Flag per disabilitare/abilitare thinking tags su modelli compatibili (es. Ollama).
-    :param model_name: Override opzionale del nome del modello.
-    :param provider: Override opzionale ("ollama" o "openrouter"). Default da settings.LLM_PROVIDER.
+    Args:
+        num_ctx: Context window size (used by Ollama; OpenRouter manages context natively).
+        temperature: Sampling temperature (default 0.0 for deterministic tasks).
+        reasoning: Flag to enable/disable thinking tags on compatible models (e.g., Ollama).
+        model_name: Optional override for model name.
+        provider: Optional provider override ("ollama" or "openrouter"). Defaults to settings.LLM_PROVIDER.
+
+    Returns:
+        Configured BaseChatModel instance.
     """
     active_provider = (provider or settings.LLM_PROVIDER).strip().lower()
 

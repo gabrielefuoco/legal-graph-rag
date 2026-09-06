@@ -1,3 +1,9 @@
+"""Data transformations and streaming enrichment pipeline.
+
+Maps external datasets (Camera dei Deputati, Corte Costituzionale) to DTOs,
+enriches DocumentDTO objects with vector embeddings and TESEO topics,
+and loads them into Neo4j.
+"""
 import asyncio
 import hashlib
 import json
@@ -26,9 +32,7 @@ logger = logging.getLogger(__name__)
 BATCH_SIZE = 50
 
 
-# ---------------------------------------------------------------------------
-# Camera → IterLegisStepDTO
-# ---------------------------------------------------------------------------
+# Camera -> IterLegisStepDTO
 
 # Keywords for classifying step types from titles
 _STEP_TYPE_PATTERNS = {
@@ -55,7 +59,7 @@ def _generate_step_id(uri: str, date: str) -> str:
 
 def _uri_to_work_urn(uri: str) -> str:
     """Convert a Camera/Senato URI to a work URN for matching."""
-    # Example: http://dati.camera.it/ocd/atto/123 → urn:camera:atto:123
+    # Example: http://dati.camera.it/ocd/atto/123 -> urn:camera:atto:123
     if "dati.camera.it" in uri:
         parts = uri.rstrip("/").split("/")
         # Take the last 2 meaningful segments (atto/number)
@@ -69,8 +73,7 @@ def _uri_to_work_urn(uri: str) -> str:
 
 
 def transform_camera_to_iter_legis(jsonl_path: str) -> list[IterLegisStepDTO]:
-    """
-    Transform Camera dei Deputati JSONL data into IterLegisStepDTO objects.
+    """Transform Camera dei Deputati JSONL data into IterLegisStepDTO objects.
 
     Reads the JSONL file produced by AsyncCameraClient.save_metadata()
     and maps each record to a validated DTO.
@@ -120,9 +123,8 @@ def transform_camera_to_iter_legis(jsonl_path: str) -> list[IterLegisStepDTO]:
     return results
 
 
-# ---------------------------------------------------------------------------
-# Corte Costituzionale → JudgementDTO (Scaffold with Graceful Fallback)
-# ---------------------------------------------------------------------------
+# Corte Costituzionale -> JudgementDTO (Scaffold with Graceful Fallback)
+
 
 # Expected XML structure (best-effort, will be refined with real data)
 _PRONOUNCEMENT_TAGS = {"sentenza", "ordinanza", "pronuncia", "decisione"}
@@ -236,7 +238,7 @@ def _extract_judgement(element: etree._Element, fallback_id: str) -> Optional[Ju
                 break
 
     if not date_str:
-        return None  # non posso creare un giudizio senza data
+        return None  # Cannot create judgement without date
 
     # Extract type
     tag_name = element.tag
@@ -263,17 +265,11 @@ def _extract_judgement(element: etree._Element, fallback_id: str) -> Optional[Ju
     )
 
 
-# ---------------------------------------------------------------------------
-# Document Enrichment
-# ---------------------------------------------------------------------------
-
-# ---------------------------------------------------------------------------
-# Phase 3: Streaming, Enrichment & Neo4j Loading
-# ---------------------------------------------------------------------------
+# Streaming, Enrichment & Neo4j Loading
 
 async def read_jsonl_stream(filepath: str) -> AsyncGenerator[DocumentDTO, None]:
-    """
-    Asynchronous generator that yields DocumentDTO objects from a JSONL file.
+    """Asynchronous generator that yields DocumentDTO objects from a JSONL file.
+
     Memory efficient for large datasets.
     """
     path = Path(filepath)
@@ -299,16 +295,14 @@ async def process_batch(
     teseo_matcher: TESEOMatcher,
     neo4j_loader: AsyncNeo4jLoader
 ):
-    """
-    Processes a batch of documents: enrich with vectors and topics, then load to Neo4j.
-    """
+    """Process a batch of documents: enrich with vectors and topics, then load to Neo4j."""
     all_nodes = []
     all_edges = []
     
     expression_nodes: List[GraphNodeDTO] = []
     payloads: List[str] = []
     
-    # 1. Estraggo tutti i nodi EXPRESSION e costruisco i payload per l'intero batch
+    # 1. Extract EXPRESSION nodes and build payloads for the entire batch
     for doc in docs_batch:
         for node in doc.nodes:
             if node.type.value == "EXPRESSION":
@@ -316,7 +310,7 @@ async def process_batch(
                 payload = vector_engine.build_vector_payload(node, doc.frbr.title)
                 payloads.append(payload)
 
-    # 2. Inferenza Vettoriale in Batch (Unica chiamata API)
+    # 2. Batch vector inference in a single API call
     embeddings = []
     if payloads:
         logger.info(f"Computing embeddings for {len(payloads)} nodes in batch...")
@@ -325,27 +319,27 @@ async def process_batch(
         except Exception as e:
             logger.error(f"Embedding failed for a batch. Nodes will be loaded without vectors. Error: {e}")
 
-    # Mappa veloce per lookup O(1)
+    # Fast mapping for O(1) vector lookup
     expr_id_to_vector = {}
     for i, node in enumerate(expression_nodes):
         if embeddings and i < len(embeddings) and embeddings[i]:
             expr_id_to_vector[node.id] = embeddings[i]
 
-    # 3. Costruzione della lista di nodi e archi con Arricchimento Semantico (Memory-fast)
+    # 3. Build nodes and edges with semantic enrichment
     for doc in docs_batch:
         all_nodes.append({
             "type": "WORK",
             "urn": doc.frbr.urn,
             "title": doc.frbr.title,
             "date": doc.frbr.date_promulgation,
-            "source": doc.frbr.country  # Usiamo il paese come fonte per ora o "Normattiva"
+            "source": doc.frbr.country  # Country or source identifier
         })
 
         for node in doc.nodes:
             if node.type.value == "EXPRESSION":
                 node_emb = expr_id_to_vector.get(node.id)
                 if node_emb:
-                    # In-memory semantic scoring senza bloccare il thread su HTTP
+                    # In-memory semantic scoring without blocking HTTP requests
                     topics = teseo_matcher.extract_topics_with_embedding(node.text_display or "", node_emb)
                     for topic in topics:
                         all_edges.append({
@@ -355,20 +349,20 @@ async def process_batch(
                             "score": topic["score"]
                         })
             
-            # Aggiungo il nodo alla lista di persistenza
+            # Add node to persistence list
             node_dict = node.model_dump()
-            node_dict["work_urn"] = doc.frbr.urn # Injection per le query di linking
+            node_dict["work_urn"] = doc.frbr.urn  # Injected for linking queries
             node_dict["vigenza_start"] = doc.frbr.vigenza_start
             node_dict["vigenza_end"] = doc.frbr.vigenza_end
             if node.id in expr_id_to_vector:
                 node_dict["embedding"] = expr_id_to_vector[node.id]
             all_nodes.append(node_dict)
 
-        # Aggiungo gli archi strutturali esistenti
+        # Add existing structural edges
         for edge in doc.edges:
             all_edges.append(edge.model_dump())
 
-        # Aggiungo i nodi Giurisprudenza e gli archi INTERPRETS
+        # Add judgement nodes and INTERPRETS edges
         for judgement in doc.judgements:
             all_nodes.append({
                 "type": "JUDGEMENT",
@@ -386,7 +380,7 @@ async def process_batch(
                     "target_id": target_urn
                 })
                 
-        # Aggiungo i nodi Iter Legis e gli archi ITER_STEP
+        # Add iter legis nodes and ITER_STEP edges
         for step in doc.iter_legis:
             all_nodes.append({
                 "type": "ITER_LEGIS",
@@ -408,17 +402,14 @@ async def process_batch(
 
 
 async def enrich_and_load_pipeline(input_jsonl: str, teseo_rdf: str):
-    """
-    Main entry point for Phase 3 pipeline.
-    Streams, enriches and loads.
-    """
+    """Stream DocumentDTO objects from JSONL, enrich with embeddings and topics, and load to Neo4j."""
     vector_engine = VectorEngine()
     teseo_matcher = TESEOMatcher(teseo_rdf)
     neo4j_loader = AsyncNeo4jLoader()
     
     await neo4j_loader.setup_schema()
     
-    # NEW: Ensure TESEO labels and broader relations are loaded into Neo4j
+    # Ensure TESEO labels and broader relations are loaded into Neo4j
     if teseo_rdf and Path(teseo_rdf).exists():
         await neo4j_loader.load_teseo_ontology(teseo_rdf)
         
@@ -433,10 +424,11 @@ async def enrich_and_load_pipeline(input_jsonl: str, teseo_rdf: str):
                 await process_batch(current_batch, vector_engine, teseo_matcher, neo4j_loader)
                 current_batch = []
         
-        # Process remaining
+        # Process remaining documents
         if current_batch:
             await process_batch(current_batch, vector_engine, teseo_matcher, neo4j_loader)
             
     finally:
         await neo4j_loader.close()
         logger.info("Pipeline completed.")
+

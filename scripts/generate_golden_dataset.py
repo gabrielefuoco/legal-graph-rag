@@ -1,3 +1,5 @@
+"""Generate a synthetic gold-standard evaluation dataset using Neo4j normative texts and an LLM."""
+
 import asyncio
 import json
 import logging
@@ -14,32 +16,34 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 class GoldenItem(BaseModel):
+    """Schema for structured generation of query, keywords, and golden answer."""
     query: str = Field(description="Una domanda legale realistica, complessa e specifica a cui il testo risponde.")
     expected_keywords: list[str] = Field(description="3-5 parole chiave o concetti chiave estratti dal testo.")
     golden_answer: str = Field(description="La risposta corretta, fattuale e sintetica basata solo sul testo.")
 
 async def generate_golden():
+    """Sample normative nodes from Neo4j and generate evaluation benchmark instances."""
     driver = AsyncGraphDatabase.driver(
         settings.NEO4J_URI,
         auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD)
     )
     
-    # Inizializziamo l'LLM locale
+    # Initialize local chat model
     llm = ChatOllama(
         base_url=settings.QWEN3_ENDPOINT,
         model=settings.GENERATIVE_MODEL_NAME,
-        temperature=0.2, # Bassa temperatura per maggior aderenza ai fatti
-        format="json" # Chiediamo esplicitamente l'output in JSON per Pydantic
+        temperature=0.2,  # Low temperature for factual consistency
+        format="json"  # Request JSON output for structured decoding
     )
     
-    # Facciamo in modo che il modello restituisca un output aderente allo schema Pydantic
+    # Bind structured output schema
     llm_structured = llm.with_structured_output(GoldenItem)
     
     dataset = []
     
     try:
         async with driver.session() as session:
-            # Peschiamo 15 nodi a caso che siano abbastanza lunghi (es. > 400 caratteri) per garantire sostanza
+            # Sample nodes with sufficient length for substantive evaluation
             query = """
             MATCH (e:Expression)
             WHERE size(e.text_display) > 400
@@ -69,13 +73,13 @@ async def generate_golden():
                 )
                 
                 try:
-                    # Invochiamo l'LLM chiedendo il formato strutturato
+                    # Invoke model with structured output prompt
                     res = await llm_structured.ainvoke([
                         SystemMessage(content=system_prompt),
                         HumanMessage(content=f"Genera l'output richiesto basandoti ESCLUSIVAMENTE su questo testo normativo:\n\n{text}")
                     ])
                     
-                    # Convertiamo in dizionario compatibile con il formato richiesto dal valutatore
+                    # Build evaluation benchmark item
                     item = {
                         "query": res.query,
                         "expected_ids": [node_id],
@@ -88,7 +92,7 @@ async def generate_golden():
                 except Exception as e:
                     logger.error(f"Errore nella generazione LLM per il nodo {node_id}: {e}")
                     
-        # Salviamo il dataset su file
+        # Persist generated dataset to JSON
         output_path = "data/eval_dataset.json"
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(dataset, f, indent=4, ensure_ascii=False)

@@ -1,8 +1,7 @@
-"""
-Data Model — Pydantic V2 DTOs for the parsing pipeline output.
+"""Data Models — Pydantic V2 DTOs for the parsing pipeline output.
 
-Definisce il formato di interscambio tra il parser e il layer di ingestione Neo4j.
-Tutti i nodi e gli archi prodotti dal parser sono validati attraverso questi modelli.
+Defines the data interchange format between the parser and the Neo4j ingestion layer.
+All nodes and edges produced by the parser are validated through these models.
 """
 import hashlib
 from datetime import date
@@ -12,9 +11,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, model_validator
 
 
-# ---------------------------------------------------------------------------
 # Enums
-# ---------------------------------------------------------------------------
 
 class NodeType(str, Enum):
     """Type of graph node."""
@@ -34,36 +31,31 @@ class EdgeType(str, Enum):
 
 class ModificationType(str, Enum):
     """Type of normative modification inside a <mod> element."""
-    SUBSTITUTION = "SUBSTITUTION"   # "è sostituito dal seguente"
-    INSERTION = "INSERTION"         # "è inserito" / "è aggiunto"
-    REPEAL = "REPEAL"              # "è abrogato" / "è soppresso"
-    AMENDMENT = "AMENDMENT"         # fallback generico
+    SUBSTITUTION = "SUBSTITUTION"   # e.g., "è sostituito dal seguente"
+    INSERTION = "INSERTION"         # e.g., "è inserito" / "è aggiunto"
+    REPEAL = "REPEAL"              # e.g., "è abrogato" / "è soppresso"
+    AMENDMENT = "AMENDMENT"         # Generic amendment fallback
 
 
-# ---------------------------------------------------------------------------
 # ID Generation
-# ---------------------------------------------------------------------------
 
 def generate_id(urn: str, eid: str) -> str:
-    """
-    Generate a deterministic node ID from URN + eId.
+    """Generate a deterministic node ID from URN + eId.
 
     Uses SHA-256 hash truncated to 16 hex characters.
 
     Args:
-        urn: Document URN (e.g. "urn:nir:stato:legge:2024-01-11;2")
-        eid: Element ID within the document (e.g. "art_1__para_1")
+        urn: Document URN (e.g. "urn:nir:stato:legge:2024-01-11;2").
+        eid: Element ID within the document (e.g. "art_1__para_1").
 
     Returns:
-        16-character hex string (e.g. "a1b2c3d4e5f6g7h8")
+        16-character hex string (e.g. "a1b2c3d4e5f6g7h8").
     """
     composite = f"{urn}#{eid}"
     return hashlib.sha256(composite.encode("utf-8")).hexdigest()[:16]
 
 
-# ---------------------------------------------------------------------------
 # DTO Models
-# ---------------------------------------------------------------------------
 
 class FRBRMetadata(BaseModel):
     """FRBR metadata extracted from the <meta> block."""
@@ -122,8 +114,8 @@ class GraphEdgeDTO(BaseModel):
 
 
 class IterLegisStepDTO(BaseModel):
-    """
-    Represents a step in the legislative process (e.g., presentation, vote).
+    """Represents a step in the legislative process (e.g., presentation, vote).
+
     Source: Camera/Senato RDF.
     """
     id: str  # Deterministic ID
@@ -135,22 +127,21 @@ class IterLegisStepDTO(BaseModel):
 
 
 class JudgementDTO(BaseModel):
-    """
-    Represents a court judgement (Sentenza).
+    """Represents a court judgement (Sentenza).
+
     Source: Corte Costituzionale / EurLex.
     """
     id: str  # E.g., "sentenza_cortecost_2024_1"
     date: str
     description: str  # Massima or Abstract
-    court: str # e.g. "Corte Costituzionale"
+    court: str  # e.g. "Corte Costituzionale"
     judgement_type: str  # "Sentenza", "Ordinanza"
-    judgement_result: str | None = None # "Accoglimento", "Rigetto"
-    affected_urns: list[str] = Field(default_factory=list) # List of URNs interpreted/judged
+    judgement_result: str | None = None  # "Accoglimento", "Rigetto"
+    affected_urns: list[str] = Field(default_factory=list)  # List of URNs interpreted/judged
 
 
 class DocumentDTO(BaseModel):
-    """
-    Root output object for a single parsed document.
+    """Root output object for a single parsed document.
 
     Contains FRBR metadata, all graph nodes, and all graph edges.
     This is the interchange format between the parser and the Neo4j ingestion layer.
@@ -174,3 +165,4 @@ class DocumentDTO(BaseModel):
     def node_ids(self) -> set[str]:
         """Return the set of all node IDs in this document."""
         return {n.id for n in self.nodes}
+

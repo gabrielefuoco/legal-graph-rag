@@ -1,8 +1,7 @@
-"""
-Header Parser — FRBR Metadata Extraction.
+"""Header Parser — FRBR Metadata Extraction.
 
-Estrae i metadati FRBR (Work, Expression, Manifestation) dal blocco <meta>
-degli documenti Akoma Ntoso, producendo un FRBRMetadata DTO.
+Extracts FRBR metadata (Work, Expression, Manifestation) from the <meta> block
+of Akoma Ntoso documents, producing an FRBRMetadata DTO.
 """
 import logging
 import re
@@ -19,13 +18,10 @@ from src.parsing.models import FRBRMetadata
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def parse_meta(root: etree._Element, ns_map: dict) -> FRBRMetadata:
-    """
-    Parse the <meta> block and produce FRBRMetadata.
+    """Parse the <meta> block and produce FRBRMetadata.
 
     Args:
         root: The root <akomaNtoso> element.
@@ -54,20 +50,19 @@ def parse_meta(root: etree._Element, ns_map: dict) -> FRBRMetadata:
     if is_nir:
         return _parse_meta_nir(doc_element, meta_el, ns_map, doc_type)
 
-    # --- Standard AKN Path ---
-    # --- Extract FRBR layers ---
+    # Standard AKN Path: Extract FRBR layers
     frbr_work = _extract_frbr_work(meta_el, ns_map)
     frbr_expr = _extract_frbr_expression(meta_el, ns_map)
     frbr_manif = _extract_frbr_manifestation(meta_el, ns_map)
 
-    # --- Extract identifiers ---
+    # Extract identifiers
     urn = _extract_urn(meta_el, ns_map, frbr_work)
     eli = _extract_eli(meta_el, ns_map)
 
-    # --- Extract title from preface/coverPage ---
+    # Extract title from preface or coverPage
     title = _extract_title(doc_element, ns_map)
 
-    # --- Extract dates ---
+    # Extract dates
     date_promulgation = _extract_date(frbr_work, ns_map)
     vigenza_start, vigenza_end = _extract_vigenza(meta_el, ns_map)
     
@@ -77,7 +72,7 @@ def parse_meta(root: etree._Element, ns_map: dict) -> FRBRMetadata:
         seed = f"{title}_{date_promulgation}".encode("utf-8")
         urn = f"urn:fallback:{hashlib.sha256(seed).hexdigest()[:16]}"
 
-    # --- Extract doc number ---
+    # Extract doc number
     doc_number = _extract_attrib(frbr_work, ns_map, "FRBRnumber", "value", "")
 
     return FRBRMetadata(
@@ -98,9 +93,7 @@ def parse_meta(root: etree._Element, ns_map: dict) -> FRBRMetadata:
     )
 
 
-# ---------------------------------------------------------------------------
 # Internal Helpers
-# ---------------------------------------------------------------------------
 
 def _get_document_element(root: etree._Element, ns_map: dict) -> Optional[etree._Element]:
     """Find the main document element (act, bill, doc, amendment, etc.)."""
@@ -225,12 +218,9 @@ def _extract_attrib(
 
 
 def _extract_urn(meta_el: etree._Element, ns_map: dict, frbr_work: Optional[etree._Element]) -> str:
-    """
-    Extract the URN identifier.
-    
-    Tries:
-    1. FRBRalias[@name="urn"] or FRBRalias[@name="urn:nir"]
-    2. Derive from FRBRthis value
+    """Extract the URN identifier.
+
+    Attempts extraction via FRBRalias with urn or derives from the FRBRthis URI.
     """
     if frbr_work is not None:
         # Look for FRBRalias with urn
@@ -249,17 +239,14 @@ def _extract_urn(meta_el: etree._Element, ns_map: dict, frbr_work: Optional[etre
 
 
 def _uri_to_urn(uri: str) -> str:
-    """
-    Convert an AKN/FRBR URI to a URN-like identifier.
+    """Convert an AKN/FRBR URI to a URN-like identifier.
 
-    Handles both:
-    - AKN paths: /akn/it/act/legge/stato/2024-01-11/2/!main
-    - Senato HTTP URIs: http://dati.senato.it/osr/Ddl/2022-10-13/1/main
+    Handles both AKN paths and Senato HTTP URIs.
     """
     # Remove trailing /main, /!main, etc.
     uri = re.sub(r"/?!?main.*$", "", uri)
 
-    # --- Case 1: AKN path ---
+    # Case 1: AKN path
     if uri.startswith("/akn/"):
         uri = re.sub(r"^/akn/it/act/", "", uri)
         parts = uri.strip("/").split("/")
@@ -268,9 +255,9 @@ def _uri_to_urn(uri: str) -> str:
             return f"urn:nir:{authority}:{doc_type}:{doc_date};{number}"
         return f"urn:akn:{uri}"
 
-    # --- Case 2: Senato HTTP URI ---
+    # Case 2: Senato HTTP URI
     if "dati.senato.it" in uri:
-        # http://dati.senato.it/osr/Ddl/2022-10-13/1 → urn:senato:Ddl:2022-10-13;1
+        # e.g. http://dati.senato.it/osr/Ddl/2022-10-13/1 -> urn:senato:Ddl:2022-10-13;1
         try:
             from urllib.parse import urlparse
             path = urlparse(uri).path.strip("/")
@@ -285,7 +272,7 @@ def _uri_to_urn(uri: str) -> str:
             pass
         return f"urn:senato:{uri}"
 
-    # --- Case 3: Already a URN ---
+    # Case 3: Already a URN
     if uri.startswith("urn:"):
         return uri
 
@@ -353,9 +340,10 @@ def _extract_date(frbr_work: Optional[etree._Element], ns_map: dict) -> date:
 
 
 def _extract_vigenza(meta_el: etree._Element, ns_map: dict) -> tuple[Optional[date], Optional[date]]:
-    """
-    Extract validity period (vigenza) from lifecycle events.
-    Returns (vigenza_start, vigenza_end).
+    """Extract validity period (vigenza) from lifecycle events.
+
+    Returns:
+        A tuple of (vigenza_start, vigenza_end).
     """
     lifecycle = find(ns_map, meta_el, "lifecycle")
     if lifecycle is None:
@@ -385,7 +373,7 @@ def _extract_vigenza(meta_el: etree._Element, ns_map: dict) -> tuple[Optional[da
     return dates[0], dates[-1] if dates[-1] != dates[0] else None
 
 def _build_synthetic_urn(doc_type: str, title: str, promulgation_date: date, doc_number: str) -> Optional[str]:
-    """Attempts to synthesize a valid NIR URN when the XML is missing it."""
+    """Attempt to synthesize a valid NIR URN when missing from the XML."""
     if promulgation_date == date.min or not doc_number:
         return None
         
@@ -415,7 +403,7 @@ def _build_synthetic_urn(doc_type: str, title: str, promulgation_date: date, doc
     return f"urn:nir:stato:{urn_doc_type}:{date_str};{doc_number}"
 
 def _parse_meta_nir(doc_element: etree._Element, meta_el: etree._Element, ns_map: dict, doc_type: str) -> FRBRMetadata:
-    """Specialized parser for NIR 2.2 metadata."""
+    """Parse metadata specialized for NIR 2.2 documents."""
     descrittori = find(ns_map, meta_el, "descrittori")
     
     # 1. URN Extraction

@@ -1,3 +1,5 @@
+"""Cross-Encoder reranking module with score thresholding and safety netting."""
+
 import logging
 import os
 import torch
@@ -6,20 +8,18 @@ from sentence_transformers import CrossEncoder
 from src.config import settings
 from src.rag.models import RetrievedChunk, RagState
 
-# Silenzia warning di Hugging Face non critici
+# Silence non-critical Hugging Face tokenizer warnings
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
 class Reranker:
-    """
-    Reranker basato su Cross-Encoder con supporto GPU e filtraggio per soglia.
-    """
+    """Cross-Encoder reranker supporting GPU acceleration and threshold-based filtering."""
 
     def __init__(self, model_name: str = None):
         model_name = model_name or settings.RERANKER_MODEL_NAME
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        # Supporto per Mac M1/M2/M3
+        # Support Apple Silicon MPS
         if device == "cpu" and hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
             device = "mps"
             
@@ -38,16 +38,16 @@ class Reranker:
             self.model = None
 
     def rerank(self, query: str, chunks: List[RetrievedChunk], instruction: str = None) -> List[RetrievedChunk]:
-        """
-        Applica il reranking e filtra i risultati sotto la soglia minima.
-        Supporta l'iniezione di istruzioni per modelli task-aware.
+        """Rerank retrieved chunks and filter low-confidence results below a threshold.
+
+        Supports instruction prefixes for task-aware cross-encoder models.
         """
         if not self.model or not chunks:
             return chunks
         from copy import copy
         chunks = [copy(c) for c in chunks]
 
-        # Se presente un'istruzione, formattiamo la query per il modello instruction-aware
+        # Format instruction-aware prompt if provided
         if instruction:
             prompted_query = f"Istruzione: {instruction}\nQuery: {query}"
         else:
@@ -63,15 +63,15 @@ class Reranker:
                 return 1 / (1 + math.exp(-x))
             
             for chunk, score in zip(chunks, scores):
-                # Normalizziamo il raw logit in una probabilità [0,1]
+                # Normalize raw logits to [0, 1] probability
                 prob = sigmoid(float(score))
                 chunk.score = prob
                 chunk.source += "+rerank"
 
-            # Riordina
+            # Sort by descending score
             chunks.sort(key=lambda x: x.score, reverse=True)
             
-            # Applica il filtro di qualità (Thresholding)
+            # Apply score threshold filter
             min_score = settings.RERANK_MIN_SCORE
             before_filter = len(chunks)
             filtered_chunks = []
@@ -82,7 +82,7 @@ class Reranker:
                 else:
                     logger.info(f"✂️ Reranker: Scartato '{c.expression_id}' (Score: {c.score:.4f} < {min_score})")
             
-            # Garantisci un minimo di 3 chunk all'LLM (se ce ne sono abbastanza in partenza)
+            # Retain at least MIN_RERANK_KEEP chunks if available to preserve sufficient context
             MIN_RERANK_KEEP = 3
             if len(filtered_chunks) < MIN_RERANK_KEEP and len(chunks) >= MIN_RERANK_KEEP:
                 logger.info(f"Rerank Filter: Ripescati i top {MIN_RERANK_KEEP - len(filtered_chunks)} chunk sotto soglia per garantire un minimo di contesto all'LLM.")
@@ -106,9 +106,7 @@ class Reranker:
             return chunks
 
 async def rerank_node(state: RagState) -> dict:
-    """
-    Nodo LangGraph: applica il reranking e pulisce i risultati finali.
-    """
+    """LangGraph node to apply cross-encoder reranking, slicing, and safety netting."""
     import time
     start = time.perf_counter()
     query = state["query"]
@@ -118,19 +116,19 @@ async def rerank_node(state: RagState) -> dict:
     if not fused_chunks or not reranker:
         return {"final_chunks": fused_chunks}
 
-    # Estraiamo l'istruzione dall'analisi della query (se disponibile)
+    # Extract task instruction from analyzed query if available
     instruction = ""
     if state.get("analyzed_query"):
         instruction = state["analyzed_query"].reranker_instruction
 
-    # Applichiamo il reranking e il filtraggio
+    # Execute reranking and filtering
     final_chunks = reranker.rerank(query, fused_chunks, instruction=instruction)
     
-    # Taglio al final_k (es. top 5 dei migliori sopra soglia)
+    # Truncate to top final_k results
     final_k = state.get("final_k", 10)
     final_chunks = final_chunks[:final_k]
     
-    # --- SAFETY NET ---
+    # Safety net: guarantee retention of top vector anchor chunk
     vector_anchor_id = state.get("vector_anchor_id")
     if vector_anchor_id:
         anchor_present = any(
@@ -143,7 +141,6 @@ async def rerank_node(state: RagState) -> dict:
                     logger.info(f"🛡️ Safety Net: ripescato anchor vettoriale '{c.expression_id}'")
                     final_chunks.append(c)
                     break
-    # ------------------
     
     elapsed = time.perf_counter() - start
     top_score = final_chunks[0].score if final_chunks else 0

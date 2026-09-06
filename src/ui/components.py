@@ -1,7 +1,9 @@
+"""UI rendering components for displaying retrieved legal documents and XAI traces."""
+
 import streamlit as st
 
 def get_badge_html(source_string: str) -> str:
-    """Restituisce HTML per i badge dei canali di origine."""
+    """Generate HTML badge markup for retrieval source channels."""
     badges = []
     if "vector" in source_string:
         badges.append('<span class="badge-vector">Vector</span>')
@@ -17,7 +19,7 @@ def get_badge_html(source_string: str) -> str:
     return " ".join(badges) if badges else source_string
 
 def render_retrieved_docs(chunks):
-    """Renderizza la lista dei documenti recuperati in un expander."""
+    """Render retrieved document chunks inside a collapsible expander widget."""
     with st.expander(f"🔍 Documenti Recuperati ({len(chunks)})", expanded=False):
         if not chunks:
             st.write("Nessun documento recuperato.")
@@ -29,7 +31,7 @@ def render_retrieved_docs(chunks):
             if chunk.work_urn and chunk.work_urn != "urn:unknown":
                 st.caption(f"URN: `{chunk.work_urn}`")
             
-            # Mostra solo i primi 300 caratteri per non ingombrare troppo
+            # Truncate preview to 300 characters to keep layout concise
             text_preview = chunk.text
             if len(text_preview) > 300:
                 text_preview = text_preview[:300] + "..."
@@ -37,7 +39,7 @@ def render_retrieved_docs(chunks):
             st.divider()
 
 def render_graph_trace(state: dict):
-    """Renderizza la traccia di esecuzione del grafo (TESEO e multi-hop)."""
+    """Render graph execution trace including TESEO concept expansion and multi-hop citations."""
     with st.expander("🕸️ Graph Trace (TESEO & Multi-hop)", expanded=False):
         if not state.get("enable_graph_search", True) and not state.get("enable_multi_hop", True):
             st.info("Ricerca su grafo e Multi-hop sono attualmente disabilitati.")
@@ -73,7 +75,7 @@ def render_graph_trace(state: dict):
         st.write(f"- Nodi Grafo (TESEO): {state.get('graph_results_count', 0)}")
 
 def render_agentic_log(state: dict):
-    """Renderizza i log del loop agentico self-reflective."""
+    """Render execution logs for the self-reflective agentic loop."""
     with st.expander("🤖 Agentic Loop (Self-Reflective)", expanded=False):
         iterations = state.get("iterations", 0)
         

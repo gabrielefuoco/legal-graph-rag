@@ -1,8 +1,7 @@
-"""
-Edge Extractor — Estrazione di relazioni inline.
+"""Edge Extractor — Inline relationship extraction.
 
-Scansiona i nodi atomici (EXPRESSION) per elementi inline come <ref>, <mod>,
-<quotedStructure>, <quotedText> e produce archi CITES/MODIFIES.
+Scans atomic content nodes (EXPRESSION) for inline elements such as <ref>, <mod>,
+<quotedStructure>, and <quotedText>, producing CITES and MODIFIES graph edges.
 """
 import logging
 import re
@@ -16,9 +15,7 @@ from src.parsing.models import GraphEdgeDTO, EdgeType, ModificationType, generat
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def extract_edges(
     element: etree._Element,
@@ -26,9 +23,7 @@ def extract_edges(
     source_node_id: str,
     doc_urn: str,
 ) -> list[GraphEdgeDTO]:
-    """
-    Scan an element (typically a content/paragraph node) for inline
-    references and modifications, producing graph edges.
+    """Scan an element (typically a content/paragraph node) for inline references and modifications.
 
     Args:
         element: The XML element to scan (e.g. <content>, <paragraph>).
@@ -68,9 +63,7 @@ def extract_edges(
     return edges
 
 
-# ---------------------------------------------------------------------------
-# Internal: <ref> → CITES
-# ---------------------------------------------------------------------------
+# Internal: <ref> -> CITES
 
 def _parse_ref(
     ref_el: etree._Element,
@@ -100,17 +93,14 @@ def _parse_ref(
     )
 
 
-# ---------------------------------------------------------------------------
-# Internal: <rref> → CITES (range)
-# ---------------------------------------------------------------------------
+# Internal: <rref> -> CITES (range)
 
 def _parse_rref(
     rref_el: etree._Element,
     source_node_id: str,
     doc_urn: str,
 ) -> list[GraphEdgeDTO]:
-    """
-    Parse a <rref> (range reference) element.
+    """Parse a <rref> (range reference) element.
 
     Generates a single CITES edge with range=True property,
     since the exact range boundaries are often not machine-parsable.
@@ -153,17 +143,14 @@ def _parse_rref(
     return edges
 
 
-# ---------------------------------------------------------------------------
-# Internal: <mod> → MODIFIES
-# ---------------------------------------------------------------------------
+# Internal: <mod> -> MODIFIES
 
 def _parse_mod(
     mod_el: etree._Element,
     source_node_id: str,
     doc_urn: str,
 ) -> list[GraphEdgeDTO]:
-    """
-    Parse a <mod> element (normative modification).
+    """Parse a <mod> element (normative modification).
 
     Finds the <ref> inside <mod> to identify the target,
     extracts <quotedText>/<quotedStructure> as the modification content,
@@ -225,8 +212,8 @@ _REPEAL_PATTERN = re.compile(
 
 
 def _classify_modification(mod_el: etree._Element) -> ModificationType:
-    """
-    Classify the type of normative modification.
+    """Classify the type of normative modification.
+
     Prioritizes AKN structural attributes, then NIR <azione> tags, then falls back to regex.
     """
     # 1. Check AKN 'type' attribute
@@ -272,19 +259,16 @@ def _extract_quoted(mod_el: etree._Element) -> str:
     return ""
 
 
-# ---------------------------------------------------------------------------
 # Internal: Href Resolution
-# ---------------------------------------------------------------------------
 
 def _resolve_href(href: str, doc_urn: str) -> str:
-    """
-    Resolve an href attribute to a target node ID or external URN.
+    """Resolve an href attribute to a target node ID or external URN.
 
     Cases:
-    1. href starts with '#' → internal reference → generate_id(doc_urn, fragment)
-    2. href starts with '/akn/' → absolute AKN URI → use as-is
-    3. href starts with 'urn:' → URN → use as-is
-    4. href is relative → resolve against doc_urn
+    1. href starts with '#' -> internal reference -> generate_id(doc_urn, fragment)
+    2. href starts with '/akn/' -> absolute AKN URI -> use as-is
+    3. href starts with 'urn:' -> URN -> use as-is
+    4. href is relative -> resolve against doc_urn
     """
     if href.startswith("#"):
         # Internal reference within the same document

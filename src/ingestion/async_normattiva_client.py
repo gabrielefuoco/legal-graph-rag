@@ -1,3 +1,5 @@
+"""Asynchronous client for Normattiva Open Data API."""
+
 import asyncio
 import logging
 import os
@@ -6,28 +8,38 @@ from typing import Dict, Any, Optional
 import aiohttp
 from pathlib import Path
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 class AsyncNormattivaClient:
-    """
-    Asynchronous client for Normattiva API.
-    Handles async search requests and downloads.
+    """Asynchronous client for Normattiva API.
+
+    Handles asynchronous search requests, status polling, and XML collection downloads.
     """
     # URL pattern confirmed by documentation
     BASE_URL = "https://api.normattiva.it/t/normattiva.api/bff-opendata/v1/api/v1"
     
     def __init__(self, output_dir="data/raw/normattiva"):
+        """Initialize client with target output directory.
+
+        Args:
+            output_dir: Directory where downloaded Normattiva archives are stored.
+        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     async def search_async(self, search_params: Dict[str, Any], email: str = "", fmt: str = "XML") -> Optional[str]:
-        """
-        Initiates an asynchronous search.
+        """Initiate an asynchronous search request on the Normattiva API.
+
+        Args:
+            search_params: Search parameters matching RicercaAvanzataFilterDto.
+            email: Notification email registered with Normattiva.
+            fmt: Export format ('XML' or 'JSON').
+
+        Returns:
+            Search request token if initiated and confirmed, None otherwise.
         """
         url = f"{self.BASE_URL}/ricerca-asincrona/nuova-ricerca"
         
-        # Default email if none provided
         if not email: email = "ingestion@example.com"
         
         # Map user-friendly keys to API keys if necessary
@@ -68,7 +80,6 @@ class AsyncNormattivaClient:
                     token = text.strip().replace('"', '')
                     logger.info(f"Search initiated. Token: {token}")
                     
-                    # Confirm the search
                     if await self._confirm_search(session, token):
                         return token
                     else:
@@ -78,9 +89,7 @@ class AsyncNormattivaClient:
                 return None
 
     async def _confirm_search(self, session: aiohttp.ClientSession, token: str) -> bool:
-        """
-        Confirms the async search request.
-        """
+        """Confirm the asynchronous search request using the returned token."""
         url = f"{self.BASE_URL}/ricerca-asincrona/conferma-ricerca"
         payload = {"token": token}
         
@@ -94,9 +103,7 @@ class AsyncNormattivaClient:
             return False
 
     async def check_status(self, session: aiohttp.ClientSession, token: str) -> Dict[str, Any]:
-        """
-        Checks the status of the async search.
-        """
+        """Check the processing status of an ongoing asynchronous search."""
         url = f"{self.BASE_URL}/ricerca-asincrona/check-status/{token}"
         try:
             async with session.get(url) as response:
@@ -107,8 +114,15 @@ class AsyncNormattivaClient:
             return {}
 
     async def wait_and_download(self, token: str, poll_interval=5, timeout=300):
-        """
-        Polls status until complete, then downloads.
+        """Poll search status until completion, then download and extract results.
+
+        Args:
+            token: Search operation token.
+            poll_interval: Polling interval in seconds.
+            timeout: Maximum wait duration in seconds.
+
+        Returns:
+            Extracted directory path on success, None on failure or timeout.
         """
         start_time = time.time()
         async with aiohttp.ClientSession() as session:
@@ -133,8 +147,14 @@ class AsyncNormattivaClient:
         return None
 
     async def _download_collection(self, session: aiohttp.ClientSession, token: str):
-        """
-        Downloads the ZIP collection and extracts it to the XML directory.
+        """Download the ZIP collection and extract XML contents to target directory.
+
+        Args:
+            session: Active aiohttp client session.
+            token: Search operation token.
+
+        Returns:
+            String path to the extracted XML directory, or None if failed.
         """
         url = f"{self.BASE_URL}/collections/download/collection-asincrona/{token}"
         try:
@@ -150,7 +170,7 @@ class AsyncNormattivaClient:
                     
                 logger.info(f"Downloaded ZIP: {filepath}")
                 
-                # Scompattamento automatico
+                # Extract archive contents
                 import zipfile
                 xml_dir = self.output_dir / f"xml_{token}"
                 xml_dir.mkdir(exist_ok=True)
@@ -164,8 +184,15 @@ class AsyncNormattivaClient:
             return None
 
     async def download_by_date(self, date_str: str, email: str = "ingestion@example.com", fmt: str = "XML") -> Optional[str]:
-        """
-        Download acts for a specific date (YYYY-MM-DD).
+        """Download acts published on a specific date (YYYY-MM-DD).
+
+        Args:
+            date_str: Date string in YYYY-MM-DD format.
+            email: Contact email for the Normattiva API.
+            fmt: Export format ('XML').
+
+        Returns:
+            Extracted XML directory path on success, None otherwise.
         """
         logger.info(f"Starting bulk download for Date {date_str}...")
         try:
@@ -189,12 +216,8 @@ class AsyncNormattivaClient:
             return None
 
     async def run(self, date: str = None):
-        """
-        Main execution method.
-        If no date is provided, defaults to yesterday's date.
-        """
+        """Execute ingestion for a target date (defaults to yesterday if omitted)."""
         if not date:
-            # Default to yesterday
             import datetime
             yesterday = datetime.date.today() - datetime.timedelta(days=1)
             date = yesterday.strftime("%Y-%m-%d")
@@ -209,5 +232,4 @@ class AsyncNormattivaClient:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     client = AsyncNormattivaClient()
-    # Example usage
     asyncio.run(client.run()) 

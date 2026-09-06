@@ -1,16 +1,14 @@
-"""
-Gestore dei Namespace per il parsing XML Akoma Ntoso.
+"""Namespace manager for Akoma Ntoso XML parsing.
 
-Gestisce le due convenzioni di namespace utilizzate dalle fonti di dati legali italiane:
-- Normattiva: namespace predefinito (nessun prefisso) — AKN 3.0
-- Senato: namespace con prefisso (an:) — AKN 3.0 CSD03
+Handles namespace conventions used by Italian legal data sources:
+- Normattiva: default namespace (no prefix) — AKN 3.0
+- Senato: prefixed namespace (an:) — AKN 3.0 CSD03
+- NIR: legacy NormeInRete namespace (NIR 2.2)
 """
 from lxml import etree
 from typing import Dict, Optional
 
-# ---------------------------------------------------------------------------
-# Namespace Dictionaries
-# ---------------------------------------------------------------------------
+# Namespace dictionaries
 
 # Normattiva uses AKN 3.0 as default namespace (no prefix in XML)
 NS_NORMATTIVA: Dict[str, str] = {
@@ -29,9 +27,8 @@ _KNOWN_AKN_URIS = {
     "http://www.normeinrete.it/nir/2.2/",
 }
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
+
 
 def detect_namespace(root: etree._Element) -> Dict[str, str]:
     """

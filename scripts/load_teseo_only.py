@@ -1,3 +1,5 @@
+"""Load TESEO SKOS ontology file directly into Neo4j."""
+
 import asyncio
 import logging
 from src.ingestion.neo4j_loader import AsyncNeo4jLoader
@@ -5,6 +7,7 @@ from src.ingestion.neo4j_loader import AsyncNeo4jLoader
 logging.basicConfig(level=logging.INFO)
 
 async def main():
+    """Initialize Neo4j loader and ingest TESEO ontology."""
     loader = AsyncNeo4jLoader()
     try:
         await loader.load_teseo_ontology('data/external/teseo_full.ttl')

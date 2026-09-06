@@ -1,7 +1,6 @@
-"""
-Orchestratore Pipeline — Main AKN Parser.
+"""Pipeline Orchestrator — Main AKN Parser.
 
-Coordina le tre fasi di parsing (Meta → Body → Edges) e produce un output DocumentDTO validato.
+Coordinates parsing stages (Metadata, Body, and Edges) to produce validated DocumentDTO objects.
 """
 import argparse
 import json
@@ -20,28 +19,25 @@ from src.parsing.body_parser import parse_body
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
 # Main Parser Class
-# ---------------------------------------------------------------------------
 
 class AknParser:
-    """
-    Akoma Ntoso deterministic parser.
+    """Akoma Ntoso deterministic parser.
 
     Transforms AKN XML documents into validated DocumentDTO objects,
     ready for Neo4j batch ingestion.
     """
 
     def __init__(self, recover: bool = True):
-        """
+        """Initialize the parser.
+
         Args:
             recover: If True, lxml will try to recover from malformed XML.
         """
         self.recover = recover
 
     def parse_file(self, filepath: str) -> DocumentDTO:
-        """
-        Parse a single Akoma Ntoso XML file.
+        """Parse a single Akoma Ntoso XML file.
 
         Args:
             filepath: Path to the XML file.
@@ -55,15 +51,15 @@ class AknParser:
         logger.info(f"Parsing file: {filepath}")
         path = Path(filepath)
 
-        # --- ROB-5/ROB-6: Handle encoding and BOM ---
+        # Handle encoding and BOM
         xml_bytes = path.read_bytes()
 
-        # Strip BOM if present (ROB-6)
+        # Strip BOM if present
         if xml_bytes.startswith(b"\xef\xbb\xbf"):
             xml_bytes = xml_bytes[3:]
             logger.debug("Stripped UTF-8 BOM")
 
-        # Parse with lxml (ROB-1: recover mode)
+        # Parse with lxml (recover mode)
         parser = etree.XMLParser(
             recover=self.recover,
             encoding="utf-8",
@@ -73,7 +69,7 @@ class AknParser:
         try:
             tree = etree.fromstring(xml_bytes, parser=parser)
         except etree.XMLSyntaxError:
-            # ROB-5: Prova la codifica latin-1
+            # Fallback to latin-1 encoding if UTF-8 fails
             logger.warning(f"UTF-8 parsing failed for {filepath}, trying latin-1")
             try:
                 text = xml_bytes.decode("latin-1")
@@ -87,11 +83,11 @@ class AknParser:
 
         root = tree if isinstance(tree, etree._Element) else tree.getroot()
 
-        # Rileva la convenzione del namespace
+        # Detect namespace convention
         ns_map = detect_namespace(root)
         logger.debug(f"Detected namespace: {ns_map}")
 
-        # --- Fase A: Meta Parsing ---
+        # Metadata parsing
         try:
             frbr = parse_meta(root, ns_map)
         except Exception as e:
@@ -103,14 +99,14 @@ class AknParser:
             f"Date: {frbr.date_promulgation}"
         )
 
-        # --- Fase B+C: Body Parsing (con estrazione degli archi integrata) ---
+        # Body parsing with integrated edge extraction
         try:
             nodes, edges = parse_body(root, ns_map, frbr.urn)
         except Exception as e:
             logger.error(f"Body parsing failed: {e}")
             raise
 
-        # --- Output Phase: Build and validate DTO ---
+        # Build and validate DTO
         doc = DocumentDTO(
             frbr=frbr,
             nodes=nodes,
@@ -124,8 +120,7 @@ class AknParser:
         return doc
 
     def parse_directory(self, dirpath: str) -> list[DocumentDTO]:
-        """
-        Parse all XML files in a directory recursively.
+        """Parse all XML files in a directory recursively.
 
         Args:
             dirpath: Path to the directory.
@@ -164,9 +159,8 @@ class AknParser:
         return results
 
 
-# ---------------------------------------------------------------------------
 # CLI Entry Point
-# ---------------------------------------------------------------------------
+
 
 def main():
     """Command-line interface for the AKN parser."""

@@ -1,3 +1,4 @@
+"""Vector engine for dense embedding generation of legal text chunks."""
 import logging
 from typing import List
 from langchain_ollama import OllamaEmbeddings
@@ -7,9 +8,9 @@ from src.config import settings
 logger = logging.getLogger(__name__)
 
 class VectorEngine:
-    """
-    Handles generation of dense vectors for legal chunks.
-    Integrates with LangChain to use Qwen3 models via local or remote endpoints.
+    """Generate dense vectors for legal chunks.
+
+    Integrates with LangChain to use embedding models via local or remote endpoints.
     """
 
     def __init__(self):
@@ -20,10 +21,7 @@ class VectorEngine:
         )
 
     def build_vector_payload(self, node: GraphNodeDTO, hierarchy_context: str) -> str:
-        """
-        Formats the text for embedding by injecting hierarchical context.
-        As specified in Fase 4.2.
-        """
+        """Format node text for embedding by injecting hierarchical context."""
         text = node.text_vector or node.text_display or ""
         payload = f"Contesto: {hierarchy_context}\n\nTesto: {text}"
         
@@ -37,8 +35,8 @@ class VectorEngine:
         return payload
 
     async def compute_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
-        """
-        Generates embeddings for a list of texts in parallel.
+        """Generate dense embeddings for a list of texts in parallel.
+
         Ensures output is cast to native Python float lists.
         """
         if not texts:
@@ -48,8 +46,9 @@ class VectorEngine:
             # LangChain's aembed_documents is asynchronous
             embeddings = await self.embeddings_model.aembed_documents(texts)
             
-            # Ensure float casting as per Fase 4.4
+            # Ensure elements are cast to native Python floats
             return [[float(val) for val in vector] for vector in embeddings]
         except Exception as e:
             logger.error(f"Error during batch embedding inference: {e}")
             raise
+

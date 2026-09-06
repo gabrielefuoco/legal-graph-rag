@@ -1,8 +1,11 @@
+"""Test script for CrossEncoder reranker scoring and ordering."""
+
 import asyncio
 from src.rag.reranker import rerank
 from src.rag.models import RagState, RetrievedChunk
 
 async def test():
+    """Construct sample chunks, invoke rerank node, and print output scores."""
     state = RagState(
         original_query="Quali sono le soglie economiche per gli affidamenti diretti di lavori, servizi e forniture?",
         chat_history=[],

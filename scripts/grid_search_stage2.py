@@ -1,16 +1,16 @@
-﻿"""
-Grid Search — Stadio 2: Tuning di Contesto e Generazione su OpenRouter.
-Valuta sulle migliori configurazioni di retrieval dello Stadio 1:
-  - Finestra di contesto: GENERATOR_NUM_CTX (8k, 16k, 32k)
-  - Soglia di stuffing vs map-reduce: GENERATOR_STUFF_THRESHOLD (8k, 16k, 32k, 64k)
-  - Espansione topologica: TOPOLOGICAL_MAX_CHARS (6k, 12k, 20k)
-  - Misura Similarita Semantica rispetto alla golden_answer, Recall ed efficienza token.
-  - Integra caching automatico e retry/backoff per le chiamate OpenRouter.
+"""Grid Search Stage 2: Context window and generation tuning via OpenRouter.
 
-Uso:
-  py scripts/grid_search_stage2.py --stage1-configs top_stage1_configs.json
-  py scripts/grid_search_stage2.py --dataset data/eval_dataset.json --dry-run
-  py scripts/grid_search_stage2.py --output results_stage2.csv
+Evaluates candidates from top Stage 1 retrieval configurations against:
+  - Context window size: GENERATOR_NUM_CTX (8k, 16k, 32k)
+  - Stuffing vs map-reduce threshold: GENERATOR_STUFF_THRESHOLD (8k, 16k, 32k, 64k)
+  - Topological expansion budget: TOPOLOGICAL_MAX_CHARS (6k, 12k, 20k)
+  - Semantic similarity against golden answer, recall, and token efficiency.
+  - Automatic response caching to handle rate limits and transient connection issues.
+
+Usage:
+    py scripts/grid_search_stage2.py --stage1-configs top_stage1_configs.json
+    py scripts/grid_search_stage2.py --dataset data/eval_dataset.json --dry-run
+    py scripts/grid_search_stage2.py --output results_stage2.csv
 """
 import asyncio
 import argparse
@@ -39,7 +39,7 @@ logger = logging.getLogger("grid_search_stage2")
 
 
 def split_into_sentences(text: str) -> List[str]:
-    """Split testuale grezzo in frasi significative."""
+    """Split raw text into clean sentence units."""
     if not text:
         return []
     sentences = re.split(r'(?<=[.!?])\s+', text.strip())
@@ -47,6 +47,7 @@ def split_into_sentences(text: str) -> List[str]:
 
 
 def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
+    """Compute cosine similarity between two numeric vectors."""
     v1 = np.array(vec1)
     v2 = np.array(vec2)
     norm = np.linalg.norm(v1) * np.linalg.norm(v2)
@@ -56,7 +57,7 @@ def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
 
 
 def fallback_text_similarity(text1: str, text2: str) -> float:
-    """Similarita basata su overlap di n-grammi / token (utilizzata come fallback)."""
+    """Compute token-level Jaccard overlap similarity as fallback metric."""
     if not text1 or not text2:
         return 0.0
     tokens1 = set(re.findall(r'\w+', text1.lower()))
@@ -69,10 +70,7 @@ def fallback_text_similarity(text1: str, text2: str) -> float:
 
 
 async def compute_similarity(golden_text: str, generated_text: str, vector_engine: Any = None) -> float:
-    """
-    Calcola la similarita semantica chunk-by-chunk. Se vector_engine non e disponibile
-    o fallisce (es. server locale non attivo), ricorre a fallback_text_similarity.
-    """
+    """Compute chunk-by-chunk semantic similarity using vector embeddings or token overlap fallback."""
     if not golden_text or not generated_text:
         return 0.0
 
@@ -99,6 +97,7 @@ async def compute_similarity(golden_text: str, generated_text: str, vector_engin
 
 @dataclass
 class Stage2Config:
+    """Configuration parameters for Stage 2 context and generation tuning."""
     stage1_rank: int
     weight_vector: float
     weight_bm25: float
@@ -113,7 +112,7 @@ class Stage2Config:
 
 
 class GenerationCache:
-    """Cache su file JSON per rendere i run resilienti a interruzioni di rete."""
+    """JSON-backed generation cache for resilience against network interruptions."""
     def __init__(self, cache_file: str):
         self.cache_file = cache_file
         self.cache: Dict[str, str] = {}
@@ -126,13 +125,16 @@ class GenerationCache:
                 logger.warning(f"Impossibile leggere cache: {e}")
 
     def get_key(self, query: str, context_text: str, num_ctx: int, model: str) -> str:
+        """Derive deterministic SHA256 cache key from query, context, and generator parameters."""
         payload = f"{query}::{context_text}::{num_ctx}::{model}"
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
     def get(self, key: str) -> Optional[str]:
+        """Retrieve cached generation if present."""
         return self.cache.get(key)
 
     def set(self, key: str, answer: str):
+        """Store generated answer in cache and sync to file."""
         self.cache[key] = answer
         try:
             os.makedirs(os.path.dirname(os.path.abspath(self.cache_file)) or ".", exist_ok=True)
@@ -143,7 +145,7 @@ class GenerationCache:
 
 
 def build_default_stage2_grid(stage1_top_configs: List[dict]) -> List[Stage2Config]:
-    """Combina le top configurazioni di Stage 1 con le finestre di contesto di Stage 2."""
+    """Combine top Stage 1 retrieval configurations with Stage 2 context parameters."""
     num_ctx_options = [8192, 16384, 32768]
     stuff_thresholds = [16000, 32000, 64000]
     topo_max_chars_options = [6000, 12000, 20000]
@@ -176,12 +178,12 @@ async def evaluate_stage2_query(
     vector_engine: Any = None,
     dry_run: bool = False
 ) -> dict:
-    """Esegue il retrieval con i parametri Stage 1 e la generazione con i parametri Stage 2."""
+    """Execute retrieval using Stage 1 settings and generation using Stage 2 parameters."""
     query = query_item["query"]
     expected_ids = query_item.get("expected_ids", [])
     golden_answer = query_item.get("golden_answer", "")
 
-    # Configura i parametri a runtime nello state
+    # Retrieve chunks using Stage 1 and Stage 2 configuration parameters
     chunks, trace, _ = await engine.retrieve_with_trace(
         query=query,
         top_k=cfg.rerank_top_k,
@@ -196,7 +198,7 @@ async def evaluate_stage2_query(
     from scripts.grid_search_stage1 import calculate_recall
     recall = calculate_recall(chunks, expected_ids)
 
-    # Contesto combinato per generatore
+    # Build formatted context and derive cache key
     context_str = generator._format_context(chunks)
     model_name = settings.OPENROUTER_MODEL_NAME if settings.is_openrouter else settings.GENERATIVE_MODEL_NAME
     cache_key = cache.get_key(query, context_str, cfg.generator_num_ctx, model_name)
@@ -216,7 +218,7 @@ async def evaluate_stage2_query(
             "expanded_chunks": chunks,
             "generator_num_ctx": cfg.generator_num_ctx,
         }
-        # Override temporaneo della soglia di stuffing
+        # Temporarily override generator stuffing threshold
         old_stuff = getattr(settings, "GENERATOR_STUFF_THRESHOLD", 8000)
         settings.GENERATOR_STUFF_THRESHOLD = cfg.generator_stuff_threshold
         try:
@@ -239,7 +241,7 @@ async def evaluate_stage2_query(
 
 
 def generate_stage2_report(results: List[dict], output_md: str):
-    """Genera report Markdown finale per lo Stadio 2."""
+    """Generate comprehensive Markdown report for Stage 2 evaluation."""
     if not results:
         return
 
@@ -282,6 +284,7 @@ def generate_stage2_report(results: List[dict], output_md: str):
 
 
 async def main():
+    """Execute Stage 2 grid search workflow across context and model settings."""
     parser = argparse.ArgumentParser(description="Grid Search Stadio 2: Context & OpenRouter Tuning")
     parser.add_argument("--stage1-configs", type=str, default="top_stage1_configs.json", help="Path JSON con top configurazioni Stadio 1")
     parser.add_argument("--dataset", type=str, default="data/eval_dataset.json", help="Path dataset di valutazione")
@@ -292,7 +295,7 @@ async def main():
     parser.add_argument("--dry-run", action="store_true", help="Esegui senza chiamare realmente le API LLM")
     args = parser.parse_args()
 
-    # 1. Carica configurazioni Stadio 1
+    # Load top Stage 1 configurations
     if not os.path.exists(args.stage1_configs):
         logger.warning(f"File {args.stage1_configs} non trovato. Uso configurazione di fallback da settings.")
         stage1_top = [{
@@ -308,7 +311,7 @@ async def main():
         with open(args.stage1_configs, "r", encoding="utf-8") as f:
             stage1_top = json.load(f)
 
-    # 2. Carica dataset
+    # Load evaluation dataset
     if not os.path.exists(args.dataset):
         logger.error(f"Dataset {args.dataset} non trovato.")
         return
@@ -355,7 +358,7 @@ async def main():
         avg_sim = float(np.mean(q_sims)) if q_sims else 0.0
         avg_t = float(np.mean(q_times)) if q_times else 0.0
 
-        # Global Score: 50% Recall + 50% Similarity
+        # Composite score: 50% Recall + 50% Similarity
         global_score = (avg_rec * 0.50) + (avg_sim * 0.50)
 
         res_row = {
@@ -369,10 +372,10 @@ async def main():
 
     await engine.close()
 
-    # Ordina per global score decrescente
+    # Sort descending by composite score, breaking ties with similarity
     results.sort(key=lambda x: (x["global_score"], x["avg_similarity"]), reverse=True)
 
-    # Salvataggio CSV
+    # Export results to CSV
     if results:
         fieldnames = list(results[0].keys())
         with open(args.output, "w", newline="", encoding="utf-8") as f:
@@ -381,11 +384,11 @@ async def main():
             writer.writerows(results)
         logger.info(f"Risultati salvati in: {args.output}")
 
-        # Report Markdown
+        # Export Markdown report
         md_file = os.path.splitext(args.output)[0] + ".md"
         generate_stage2_report(results, md_file)
 
-        # Salva migliore configurazione globale
+        # Export optimal global configuration to JSON
         best_cfg = results[0]
         with open(args.best_output, "w", encoding="utf-8") as f:
             json.dump(best_cfg, f, indent=2)

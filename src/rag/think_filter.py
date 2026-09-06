@@ -1,14 +1,12 @@
+"""Thinking tag filtering utilities for reasoning LLM outputs."""
+
 import re
 import logging
 
 logger = logging.getLogger(__name__)
 
 def strip_thinking_tags(text: str) -> str:
-    """
-    Rimuove i blocchi <think>...</think> da una risposta completa.
-    Se il modello produce: "<think>ragionamento...</think>\n\nRisposta vera"
-    restituisce solo: "Risposta vera"
-    """
+    """Strip <think>...</think> reasoning blocks from full model completions."""
     if not text:
         return text
     cleaned = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
@@ -18,9 +16,7 @@ def strip_thinking_tags(text: str) -> str:
 
 
 async def filter_think_stream(async_gen):
-    """
-    Generatore asincrono wrapper che filtra i token <think> in tempo reale.
-    """
+    """Asynchronous generator wrapper filtering <think>...</think> token streams in real time."""
     buffer = ""
     inside_think = False
     

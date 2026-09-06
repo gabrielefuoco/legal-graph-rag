@@ -1,3 +1,5 @@
+"""Asynchronous client for downloading TESEO classification RDF data."""
+
 import asyncio
 import logging
 import os
@@ -5,23 +7,23 @@ import aiohttp
 from pathlib import Path
 from rdflib import Graph
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 class AsyncTeseoClient:
-    """
-    Asynchronous client for TESEO download.
-    """
+    """Asynchronous client for downloading TESEO classification schemes via SPARQL."""
     SPARQL_ENDPOINT = "http://dati.senato.it/sparql"
     
     def __init__(self, output_dir="data/external"):
+        """Initialize client with target output directory.
+
+        Args:
+            output_dir: Directory where downloaded TESEO RDF files are stored.
+        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     async def download_teseo_rdf(self):
-        """
-        Attempts to download the full classification scheme asynchronously.
-        """
+        """Download TESEO classification scheme concepts and serialize to RDF."""
         query = """
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         CONSTRUCT {
@@ -52,7 +54,7 @@ class AsyncTeseoClient:
                     
                     logger.info(f"Downloaded TESEO sample to {filepath}")
                     
-                    # Validation (Sync is fine here as it's CPU bound and fast for sample)
+                    # Validate parsed RDF graph structure
                     try:
                         g = Graph()
                         g.parse(filepath, format="xml")
@@ -64,7 +66,7 @@ class AsyncTeseoClient:
                 logger.error(f"Failed to download TESEO data: {e}")
 
     async def run(self):
-        """Main execution wrapper."""
+        """Execute TESEO download workflow."""
         await self.download_teseo_rdf()
 
 if __name__ == "__main__":

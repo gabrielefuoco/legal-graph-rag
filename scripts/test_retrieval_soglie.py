@@ -1,3 +1,5 @@
+"""Step-by-step test script for procurement threshold retrieval pipeline."""
+
 import asyncio
 import logging
 from src.rag.models import RagState
@@ -7,11 +9,11 @@ from src.config import settings
 logging.basicConfig(level=logging.INFO)
 
 async def test_retrieval():
+    """Execute sequential pipeline steps: analysis, multi-channel search, fusion, and reranking."""
     engine = RagEngine()
     
     query = "Quali sono le soglie economiche per gli affidamenti diretti di lavori, servizi e forniture?"
     
-    # Run pipeline step by step
     state = RagState(
         original_query=query,
         chat_history=[],

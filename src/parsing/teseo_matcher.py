@@ -1,3 +1,4 @@
+"""Semantic engine and lexical matcher for linking legal text to the TESEO thesaurus."""
 import re
 import logging
 from typing import List, Dict, Set
@@ -9,8 +10,8 @@ from src.config import settings
 logger = logging.getLogger(__name__)
 
 class TESEOMatcher:
-    """
-    Semantic engine for linking legal text to the TESEO thesaurus.
+    """Semantic engine for linking legal text to the TESEO thesaurus.
+
     Uses Aho-Corasick for O(n) string matching of prefLabels and altLabels,
     and Full Semantic Matching (Dense) via numpy broadcasting.
     """
@@ -38,8 +39,8 @@ class TESEOMatcher:
         return text
 
     def load_ontology(self, filepath: str):
-        """
-        Parses TESEO RDF/SKOS file and populates the Aho-Corasick automaton.
+        """Parse TESEO RDF/SKOS file and populate the Aho-Corasick automaton.
+
         Expects concepts with skos:prefLabel and optional skos:altLabel.
         """
         g = Graph()
@@ -83,8 +84,8 @@ class TESEOMatcher:
             logger.warning("No labels found in TESEO ontology.")
 
     async def precompute_embeddings(self, vector_engine):
-        """
-        Precomputes embeddings for all unique labels in the automaton using batching.
+        """Precompute embeddings for all unique labels in the automaton using batching.
+
         Call this once at startup if semantic scoring is needed.
         """
         labels = list(self.label_to_id.keys())
@@ -131,11 +132,11 @@ class TESEOMatcher:
         except Exception as e:
             logger.error(f"Failed to save cache: {e}")
 
-        # Inizializza la matrice per il dense matching
+        # Initialize dense matching matrix
         self._initialize_dense_matrix()
 
     def _initialize_dense_matrix(self):
-        """Builds the normalized numpy matrix for fast broadcasting."""
+        """Build the normalized numpy matrix for fast broadcasting."""
         import numpy as np
         labels_list = list(self.label_embeddings.keys())
         if not labels_list:
@@ -151,9 +152,9 @@ class TESEOMatcher:
         logger.info(f"Initialized Dense Matching matrix of shape {self._embedding_matrix_normalized.shape}")
 
     def dense_match_all(self, query_embedding: list[float], threshold: float = None, max_results: int = None) -> List[Dict]:
-        """
-        Confronta un embedding con TUTTI i concetti TESEO tramite dot product broadcasting.
-        Restituisce i concetti con score >= threshold.
+        """Compare a query embedding against all TESEO concepts via dot product broadcasting.
+
+        Returns concepts with score >= threshold.
         """
         if self._embedding_matrix_normalized is None:
             return []
@@ -184,7 +185,7 @@ class TESEOMatcher:
         return results[:max_results]
 
     def _aho_corasick_match(self, text: str) -> List[Dict]:
-        """Esegue il match lessicale esatto tramite automa Aho-Corasick."""
+        """Perform exact lexical matching using the Aho-Corasick automaton."""
         norm_text = self.normalize_text(text)
         matches = []
         seen_ids = set()
@@ -205,21 +206,19 @@ class TESEOMatcher:
         return matches
 
     def extract_topics_with_embedding(self, text: str, text_embedding: list) -> List[Dict]:
-        """
-        Esegue matching ibrido: match esatti Aho-Corasick + Full Semantic Matching.
-        """
+        """Perform hybrid matching: exact Aho-Corasick matches and dense semantic matching."""
         if not text:
             return []
             
-        # 1. Sparse
+        # 1. Sparse lexical matching
         sparse_matches = self._aho_corasick_match(text)
         
-        # 2. Dense
+        # 2. Dense semantic matching
         dense_matches = []
         if text_embedding and self._embedding_matrix_normalized is not None:
             dense_matches = self.dense_match_all(text_embedding)
             
-        # 3. Fusione: sparse ha priorità (sovrascrive eventuali score inferiori del dense)
+        # 3. Fusion: sparse matches take precedence over lower dense scores
         results = {}
         for m in dense_matches:
             results[m["teseo_id"]] = m
@@ -230,19 +229,17 @@ class TESEOMatcher:
         return final[:settings.TESEO_MAX_CONCEPTS]
 
     async def extract_topics(self, text: str, vector_engine=None) -> List[Dict]:
-        """
-        Versione asincrona usata dal QueryAnalyzer. Supporta il matching ibrido se c'è un vector_engine.
-        """
+        """Extract topics asynchronously. Supports hybrid matching when vector_engine is provided."""
         if not text:
             return []
             
-        # 1. Sparse
+        # 1. Sparse lexical matching
         sparse_matches = self._aho_corasick_match(text)
         
         if not vector_engine:
             return sparse_matches
             
-        # 2. Dense on the fly
+        # 2. Dense on-the-fly semantic matching
         try:
             embeddings = await vector_engine.compute_embeddings_batch([text])
             if embeddings:
@@ -254,7 +251,7 @@ class TESEOMatcher:
             if self._embedding_matrix_normalized is not None:
                 dense_matches = self.dense_match_all(self.last_query_embedding)
                 
-            # Fusione
+            # 3. Fusion
             results = {}
             for m in dense_matches:
                 results[m["teseo_id"]] = m

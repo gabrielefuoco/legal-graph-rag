@@ -1,1 +1,1 @@
-# src/rag — Hybrid Retrieval Engine (LangGraph)
+"""Hybrid Retrieval Engine (LangGraph) module."""

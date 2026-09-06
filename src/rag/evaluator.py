@@ -1,3 +1,5 @@
+"""Evaluation and query rewriting module for agentic RAG loops."""
+
 import logging
 import asyncio
 from typing import List, Dict, Any
@@ -13,6 +15,7 @@ from src.rag.llm_factory import get_llm
 logger = logging.getLogger(__name__)
 
 class GraderOutput(BaseModel):
+    """Structured output schema for chunk relevance grading."""
     reasoning: str = Field(
         description="Breve ragionamento per spiegare quali documenti sono utili o vanno scartati e perché."
     )
@@ -21,10 +24,8 @@ class GraderOutput(BaseModel):
     )
 
 class RetrievalGrader:
-    """
-    Valuta la pertinenza dei documenti recuperati rispetto alla query,
-    usando un LLM-as-a-judge (Qwen in locale).
-    """
+    """Evaluates the relevance of retrieved documents against the query using an LLM judge."""
+
     def __init__(self):
         self.llm = get_llm(
             num_ctx=settings.SUPERVISOR_NUM_CTX,
@@ -48,6 +49,7 @@ class RetrievalGrader:
         )
 
     async def grade_chunks_batch(self, query: str, chunks: List[RetrievedChunk]) -> List[bool]:
+        """Grade relevance of a batch of chunks against the query."""
         docs_text = ""
         for i, chunk in enumerate(chunks, 1):
             truncated_text = chunk.text[:1500] + "..." if len(chunk.text) > 1500 else chunk.text
@@ -76,13 +78,11 @@ class RetrievalGrader:
             return [True] * len(chunks)
 
 class QueryRewriter:
-    """
-    Riformula una query utente che non ha prodotto documenti rilevanti,
-    cercando di renderla più adatta al retrieval semantico.
-    """
+    """Reformulates queries that yielded no relevant documents to improve retrieval."""
+
     def __init__(self):
         self.llm = get_llm(
-            temperature=0.3, # Leggera variabilità per favorire la riformulazione
+            temperature=0.3,  # Slight temperature variability to encourage reformulation
             reasoning=False,
         )
         self.system_prompt = (
@@ -96,6 +96,7 @@ class QueryRewriter:
         )
 
     async def rewrite(self, query: str, history: List[str]) -> str:
+        """Rewrite the query considering previous attempts to improve retrieval performance."""
         history_text = "\n".join([f"- {q}" for q in history]) if history else "Nessuno."
         user_message = (
             f"Domanda attuale: {query}\n"
@@ -116,7 +117,7 @@ class QueryRewriter:
 
 
 async def grade_documents_node(state: RagState) -> dict:
-    """Nodo LangGraph per valutare i documenti (Chunk-by-Chunk)."""
+    """LangGraph node for evaluating retrieved chunks batch by batch."""
     import time
     start = time.perf_counter()
     grader: RetrievalGrader = state.get("_grader")
@@ -145,7 +146,7 @@ async def grade_documents_node(state: RagState) -> dict:
         else:
             logger.debug(f"Scartato chunk (URN: {chunk.work_urn}) in quanto valutato irrilevante.")
             
-    # SAFETY NET POST-GRADING
+    # Safety net: preserve vector anchor chunk if accidentally discarded
     if vector_anchor_id and not anchor_found:
         for chunk in chunks:
             if chunk.expression_id == vector_anchor_id:
@@ -159,7 +160,7 @@ async def grade_documents_node(state: RagState) -> dict:
 
 
 async def rewrite_query_node(state: RagState) -> dict:
-    """Nodo LangGraph per riformulare la query e incrementare l'iterazione."""
+    """LangGraph node to rewrite query and increment agentic iteration count."""
     rewriter: QueryRewriter = state.get("_rewriter")
     if not rewriter:
         rewriter = QueryRewriter()

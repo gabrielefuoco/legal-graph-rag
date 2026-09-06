@@ -1,3 +1,5 @@
+"""Command-line interface and workflow orchestration for the Legal GraphRAG system."""
+
 import sys
 import os
 import logging
@@ -35,7 +37,7 @@ async def run_pipeline(start_date: str = None, limit: int = 100):
         logger.error(f"Pipeline error: {e}")
 
 async def run_targeted_ingest(source: str, params: dict):
-    """Esegue un'ingestione mirata (es. per parola chiave o anno) su una specifica fonte."""
+    """Run targeted ingestion (e.g. by keyword or year) on a specific source."""
     logger.info(f"Targeted Ingestion started for {source} with params: {params}")
     
     if source == "normattiva":
@@ -49,7 +51,7 @@ async def run_targeted_ingest(source: str, params: dict):
     return None
 
 async def run_parse_and_load(raw_dir: str, output_jsonl: str, teseo_rdf: str, limit: int = None):
-    """Orchestra il parsing di file XML e il caricamento in Neo4j."""
+    """Orchestrate XML file parsing and loading into Neo4j."""
     from src.parsing.parser import AknParser
     from pathlib import Path
     
@@ -73,6 +75,7 @@ async def run_parse_and_load(raw_dir: str, output_jsonl: str, teseo_rdf: str, li
         await enrich_and_load_pipeline(input_jsonl=output_jsonl, teseo_rdf=teseo_rdf)
 
 async def run_topic_pipeline(topic: str):
+    """Execute end-to-end ingestion, parsing, unification, and loading for a topic."""
     from pathlib import Path
     logger.info(f"Starting Holistic Topic-Based Pipeline for topic: '{topic}'")
     
@@ -82,9 +85,7 @@ async def run_topic_pipeline(topic: str):
     cortecost_dir = base_raw / "cortecost"
     camera_dir = base_raw / "camera"
     
-    logger.info("--- PHASE 1: Fetch & Update ---")
-    
-    # 1.1 Senato Bulk Data (Git Pull)
+    # Senato Bulk Data (Git Pull)
     if senato_repo.exists() and (senato_repo / ".git").exists():
         import subprocess
         try:
@@ -96,7 +97,6 @@ async def run_topic_pipeline(topic: str):
     else:
         logger.warning(f"Senato repo not found at {senato_repo}. Please clone it first.")
         
-    # 1.2 Fetch Data
     logger.info(f"Fetching Normattiva for '{topic}'...")
     norm_client = AsyncNormattivaClient(output_dir=str(normattiva_dir))
     token = await norm_client.search_async({"testo": topic})
@@ -115,7 +115,6 @@ async def run_topic_pipeline(topic: str):
     corte_client = AsyncCorteCostClient(output_dir=str(cortecost_dir))
     await corte_client.run()
     
-    logger.info("--- PHASE 2 & 3: Parse & Unify & Load ---")
     output_jsonl = "data/processed/knowledge_graph.jsonl"
     teseo_rdf = "data/external/teseo_full.ttl"
     
@@ -141,7 +140,7 @@ async def run_topic_pipeline(topic: str):
         if senato_ids:
             senato_files = list(senato_repo.rglob("*.xml"))
             for xml_file in senato_files:
-                # Euristic filter: does filename contain the bill number?
+                # Filter by Senato act identifier in filename
                 if any(f"_{sid}_" in xml_file.name or xml_file.name.endswith(f"{sid}.xml") for sid in senato_ids):
                     try:
                         doc = parser_inst.parse_file(str(xml_file))
@@ -166,7 +165,7 @@ async def run_topic_pipeline(topic: str):
         await enrich_and_load_pipeline(input_jsonl=output_jsonl, teseo_rdf=teseo_rdf)
 
 async def run_docker(action: str = "up"):
-    """Gestisce i container Docker."""
+    """Manage Docker container lifecycle."""
     import subprocess
     try:
         if action == "up":
@@ -177,7 +176,7 @@ async def run_docker(action: str = "up"):
         logger.error(f"Docker error: {e}")
 
 def check_health():
-    """Verifica lo stato dei servizi."""
+    """Verify operational status of Neo4j and Ollama services."""
     import requests
     from neo4j import GraphDatabase
     from src.config import settings
@@ -188,7 +187,7 @@ def check_health():
         status["neo4j"] = "🟢 Online"
     except: pass
     try:
-        # Pulisce l'endpoint rimuovendo /api o /v1 se presenti
+        # Strip trailing API path segments if present
         base_url = settings.QWEN3_ENDPOINT.rstrip('/')
         if requests.get(f"{base_url}/api/tags", timeout=2).status_code == 200:
             status["ollama"] = "🟢 Online"
@@ -196,7 +195,7 @@ def check_health():
     return status
 
 async def run_retrieve(query: str, reference_date: str = None, top_k: int = 10, final_k: int = 5, verbose: bool = False):
-    """Esegue il retrieval e stampa i risultati."""
+    """Execute retrieval pipeline and display retrieved chunks and generated answer."""
     from src.rag.engine import RagEngine
     engine = RagEngine()
     try:
@@ -211,6 +210,7 @@ async def run_retrieve(query: str, reference_date: str = None, top_k: int = 10, 
         await engine.close()
 
 def main():
+    """Parse CLI arguments and dispatch commands."""
     parser = argparse.ArgumentParser(description="Legal GraphRAG CLI")
     subparsers = parser.add_subparsers(dest="command")
     

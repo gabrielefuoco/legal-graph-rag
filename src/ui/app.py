@@ -1,3 +1,5 @@
+"""Streamlit web user interface for the Legal GraphRAG assistant."""
+
 import os
 import streamlit as st
 import asyncio
@@ -16,7 +18,7 @@ from src.ui.rag_bridge import query_rag_with_trace, run_async
 
 st.set_page_config(page_title="Legal GraphRAG", layout="wide", page_icon="⚖️")
 
-# Inietta il CSS minimale
+# Inject minimal custom styling
 css_path = os.path.join(os.path.dirname(__file__), "style.css")
 try:
     with open(css_path, "r") as f:
@@ -26,15 +28,17 @@ except FileNotFoundError:
 
 @st.cache_resource
 def get_engine():
+    """Instantiate and cache the RAG engine."""
     return RagEngine()
 
 def get_supervisor(_engine):
+    """Instantiate the supervisor agent wrapping the RAG engine."""
     return SupervisorAgent(_engine)
 
 engine = get_engine()
 supervisor = get_supervisor(engine)
 
-# --- SIDEBAR: Pannello di Ablazione ---
+# Sidebar: Ablation study controls and system parameters
 with st.sidebar:
     st.title("⚙️ Configurazioni")
     st.markdown("Usa questi controlli per lo **Studio di Ablazione**.")
@@ -57,22 +61,22 @@ with st.sidebar:
         st.session_state.traces = []
         st.rerun()
 
-# --- GESTIONE STATO ---
+# Session state initialization
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "traces" not in st.session_state:
     st.session_state.traces = []
 
-# --- MAIN AREA ---
+# Main chat interface
 st.title("⚖️ Legal GraphRAG")
 st.markdown("Assistente legale basato su Knowledge Graph e LLM locale.")
 
-# Mostra lo storico dei messaggi e le tracce (XAI)
+# Render chat message history and explainable AI (XAI) traces
 for i, msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
         
-        # Mostra gli expander XAI se il messaggio è dell'assistant e abbiamo la traccia
+        # Render XAI inspection widgets for assistant responses
         if msg["role"] == "assistant" and i//2 < len(st.session_state.traces):
             trace_data = st.session_state.traces[i//2]
             if trace_data:
@@ -82,14 +86,14 @@ for i, msg in enumerate(st.session_state.messages):
                 render_graph_trace(state)
                 render_agentic_log(state)
 
-# Gestione Input Utente
+# Handle user query input
 if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze delle regioni?')"):
-    # Mostra messaggio utente
+    # Render user message in chat
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Preparazione config per l'engine
+    # Prepare pipeline configuration parameters
     config = {
         "top_k": top_k,
         "final_k": final_k,
@@ -102,11 +106,12 @@ if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze dell
         "supervisor_num_ctx": supervisor_num_ctx
     }
 
-    # Ottenimento risposta
+    # Execute query and stream assistant response
     with st.chat_message("assistant"):
         status = st.status("⚖️ Pipeline RAG in corso...", expanded=True)
         
         def status_callback(node_name: str, state_update: dict):
+            """Handle pipeline state updates and display progress status."""
             import logging
             logging.getLogger(__name__).info(f"STATUS CALLBACK: {node_name}")
             node_map = {
@@ -126,7 +131,7 @@ if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze dell
             label = node_map.get(node_name, f"Esecuzione nodo: {node_name}...")
             status.update(label=label)
             
-            # Generazione dei dettagli intelligenti basati sul nodo
+            # Generate contextual progress details based on active graph node
             details = ""
             if node_name == "supervisor_tool_rag":
                 q = state_update.get("query", "")
@@ -162,43 +167,41 @@ if prompt := st.chat_input("Poni una domanda (es. 'Quali sono le competenze dell
             else:
                 status.write(f"🔹 {label}")
 
-        # Costruisci lo storico per l'LLM con Sliding Window intelligente basata sui token
-        # Stimiamo ~3 caratteri per token in italiano. Soglia massima: 12.000 token (su 32K).
+        # Sliding window history bounded by token limit (~3 chars/token for Italian)
         MAX_HISTORY_TOKENS = 12000
         chat_history = []
         current_tokens = 0
         
-        # Iteriamo a ritroso, saltando l'ultimo messaggio (che è il prompt attuale, già gestito)
+        # Iterate backwards, omitting the most recent prompt already captured
         for m in reversed(st.session_state.messages[:-1]):
-            # Stima token (lunghezza testo / 3)
             msg_tokens = len(m["content"]) // 3
             if current_tokens + msg_tokens > MAX_HISTORY_TOKENS:
                 break
             
-            # Inseriamo in testa alla lista per mantenere l'ordine cronologico
+            # Prepend to preserve chronological conversation order
             chat_history.insert(0, {"role": m["role"], "content": m["content"]})
             current_tokens += msg_tokens
         
-        # Esecuzione async (Streamlit is sync, we use run_async)
+        # Execute asynchronous query generator within Streamlit sync execution
         coro = query_rag_with_trace(supervisor, prompt, config, chat_history, status_callback)
         sync_generator = run_async(coro)
         
-        # Ora eseguiamo lo stream della risposta visualmente. Durante questo stream, la pipeline e l'agente lavorano, e status_callback viene invocato!
+        # Stream response tokens to UI while invoking status callback
         full_response = st.write_stream(sync_generator)
         
-        # RECUPERIAMO i chunk e trace estratti dall'engine SOLO DOPO l'esecuzione del generatore
+        # Retrieve final document chunks and execution trace state from engine
         final_chunks = getattr(supervisor.engine, "_temp_chunks", [])
         trace = getattr(supervisor.engine, "_temp_trace", {})
 
-        # Alla fine, chiudiamo lo status
+        # Finalize execution status indicator
         status.update(label="✅ Ricerca e Generazione completate.", state="complete", expanded=False)
 
-        # Mostriamo subito gli expander per la nuova risposta
+        # Render XAI inspection panels for current response
         render_retrieved_docs(final_chunks)
         render_graph_trace(trace)
         render_agentic_log(trace)
 
-    # Salviamo messaggio e traccia
+    # Persist assistant response and execution trace in session state
     st.session_state.messages.append({"role": "assistant", "content": full_response})
     st.session_state.traces.append({
         "chunks": final_chunks,

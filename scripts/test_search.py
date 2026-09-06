@@ -1,3 +1,5 @@
+"""Diagnostic script for inspecting query analysis, multi-channel retrieval, and fusion outputs."""
+
 import asyncio
 import logging
 logging.basicConfig(level=logging.ERROR)
@@ -5,6 +7,7 @@ from src.rag.engine import RagEngine
 from src.rag.models import RagState
 
 async def main():
+    """Execute retrieval pipeline up to fusion stage and verify target chunk presence."""
     engine = RagEngine()
     state = RagState(
         query="Quali sono le soglie economiche per gli affidamenti diretti di lavori, servizi e forniture?",
@@ -24,19 +27,19 @@ async def main():
         final_chunks=[]
     )
     
-    # Analyze
+    # Query analysis
     from src.rag.query_analyzer import analyze_query
     state = await analyze_query(state)
     
-    # Retrieve
+    # Candidate retrieval
     from src.rag.retriever import retrieve_all_node
     state = await retrieve_all_node(state)
     
-    # Fusion
+    # Fusion and deduplication
     from src.rag.fusion import fuse_and_filter
     state = await fuse_and_filter(state)
     
-    # Check if Art 50 is in fused
+    # Verify whether Article 50 appears in fused candidate set
     chunks = state.get("fused_chunks", [])
     print(f"\nTop 20 Fused Chunks:")
     found = False

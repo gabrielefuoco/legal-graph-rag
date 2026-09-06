@@ -1,9 +1,8 @@
-"""
-Body Parser — Attraversamento Ricorsivo DFS & Semantic Chunking.
+"""Body Parser — Recursive DFS traversal and semantic chunking.
 
-Attraversa l'elemento <body> dei documenti Akoma Ntoso usando DFS,
-producendo nodi STRUCTURAL e EXPRESSION con archi PART_OF/NEXT.
-Implementa l'iniezione di contesto per i nodi EXPRESSION.
+Traverses the <body> element of Akoma Ntoso documents using DFS,
+producing STRUCTURAL and EXPRESSION nodes with PART_OF and NEXT edges.
+Implements context injection for EXPRESSION nodes.
 """
 import logging
 import re
@@ -20,9 +19,7 @@ from src.parsing.edge_extractor import extract_edges
 logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# Tag Classification Sets
-# ---------------------------------------------------------------------------
+# Tag classification sets
 
 # Tags that create STRUCTURAL nodes (containers in the hierarchy)
 STRUCTURAL_TAGS: set[str] = {
@@ -71,16 +68,23 @@ FORMATTING_TAGS: set[str] = {
 }
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def parse_body(
     root: etree._Element,
     ns_map: dict,
     urn: str,
 ) -> tuple[list[GraphNodeDTO], list[GraphEdgeDTO]]:
-    """Phase B+C: Scan the document body and extract edges."""
+    """Scan the document body to extract structural/atomic nodes and edges.
+
+    Args:
+        root: The root XML element of the document.
+        ns_map: XML namespace mappings.
+        urn: The unique document URN.
+
+    Returns:
+        A tuple containing lists of extracted GraphNodeDTO and GraphEdgeDTO objects.
+    """
     # 1. Resolve the main document element (act, bill, doc, etc.)
     doc_element = root
     if local_name(root) in ("akomaNtoso", "NIR"):
@@ -138,7 +142,7 @@ def parse_body(
         prev_sibling_ids={},
     )
 
-    # --- NIR/AKN Attachments (ROB-10) ---
+    # NIR/AKN attachments
     attachments_el = find(ns_map, doc_element, "attachments")
     if attachments_el is None:
         attachments_el = find(ns_map, doc_element, "annessi")
@@ -187,9 +191,7 @@ def parse_body(
     return all_nodes, all_edges
 
 
-# ---------------------------------------------------------------------------
 # Internal: DFS Traversal
-# ---------------------------------------------------------------------------
 
 def _traverse(
     element: etree._Element,
@@ -204,16 +206,15 @@ def _traverse(
     all_edges: list[GraphEdgeDTO],
     prev_sibling_ids: dict[int, str],
 ):
-    """
-    Recursive DFS traversal of the document body.
+    """Perform recursive DFS traversal of the document body.
 
     For each child element:
-    1. Classify as STRUCTURAL, ATOMIC, or SKIP
-    2. Create the appropriate node
-    3. Generate PART_OF edge to parent
-    4. Generate NEXT edge to previous sibling at same depth
-    5. For ATOMIC nodes: extract inline edges and apply context injection
-    6. Recurse into children (for STRUCTURAL nodes)
+    1. Classify as STRUCTURAL, ATOMIC, or SKIP.
+    2. Create the appropriate node.
+    3. Generate PART_OF edge to parent.
+    4. Generate NEXT edge to previous sibling at same depth.
+    5. For ATOMIC nodes: extract inline edges and apply context injection.
+    6. Recurse into children (for STRUCTURAL nodes).
     """
     for child in element:
         if not isinstance(child.tag, str):
@@ -564,9 +565,7 @@ def _table_to_linear(table_el: etree._Element) -> str:
     return ". ".join(parts)
 
 
-# ---------------------------------------------------------------------------
 # Internal: Attachments
-# ---------------------------------------------------------------------------
 
 def _parse_attachments(
     attachments_el: etree._Element,
@@ -630,13 +629,11 @@ def _parse_attachments(
             )
 
 
-# ---------------------------------------------------------------------------
 # Internal: Helpers
-# ---------------------------------------------------------------------------
 
 def _get_eid(element: etree._Element, ln: str, counters: dict, parent_eid: str = "") -> str:
-    """
-    Get the eId of an element, generating a surrogate if missing.
+    """Get the eId of an element, generating a surrogate if missing.
+
     Ensures hierarchical uniqueness by prepending parent_eid and qualifying numeric IDs.
     Handles sibling deduplication if the same EID is generated twice.
     """
@@ -710,13 +707,12 @@ def _extract_full_text(element: etree._Element) -> str:
 
 
 def _extract_display_text(element: etree._Element) -> str:
-    """
-    Extract text preserving some formatting for display.
+    """Extract text preserving some formatting for display.
 
     Converts:
-    - <i> → *italic*
-    - <b> → **bold**
-    - <ref> → [text](href)
+    - <i> -> *italic*
+    - <b> -> **bold**
+    - <ref> -> [text](href)
     """
     parts = []
     _walk_display(element, parts)

@@ -1,3 +1,5 @@
+"""Topological context expander traversing graph relationships around retrieved chunks."""
+
 import logging
 from typing import List
 from neo4j import AsyncDriver
@@ -8,21 +10,19 @@ import copy
 logger = logging.getLogger(__name__)
 
 class TopologyExpander:
-    """
-    Espande i chunk recuperati sfruttando la struttura del grafo Neo4j.
-    Interroga gli archi :NEXT, :PART_OF, :CITES, :MODIFIES per arricchire
-    il contesto normativo prima di passarlo al generatore.
-    """
+    """Expands retrieved chunks using graph topology (:NEXT, :PART_OF, :CITES, :MODIFIES)."""
+
     def __init__(self, driver: AsyncDriver):
         self.driver = driver
 
     async def expand(self, chunks: List[RetrievedChunk], topo_max_chars: int = 6000) -> List[RetrievedChunk]:
+        """Expand chunks with structural and relational context within a maximum character budget."""
         expanded_chunks = []
         for chunk in chunks:
             logger.info(f"🔍 Avvio espansione topologica per il chunk: {chunk.expression_id}")
             trace = {"expanded": False, "next": False, "parent": False, "cites": False}
             
-            # Budget per le espansioni: lo spazio rimanente dopo il testo originale
+            # Expansion budget: remaining capacity after original text
             budget = max(0, topo_max_chars - len(chunk.text))
             
             if budget == 0:
@@ -33,13 +33,13 @@ class TopologyExpander:
                 expanded_chunks.append(new_chunk)
                 continue
             
-            # Raccogli le parti di espansione separatamente
-            prefix_parts = []  # vanno PRIMA del testo originale
-            suffix_parts = []  # vanno DOPO il testo originale
+            # Collect expansion prefixes and suffixes separately
+            prefix_parts = []
+            suffix_parts = []
             
             try:
                 async with self.driver.session() as session:
-                    # 1. Espansione :NEXT (Comma precedente e successivo)
+                    # 1. :NEXT expansion (preceding and following paragraphs)
                     if settings.TOPOLOGICAL_EXPAND_NEXT:
                         result = await session.run(
                             """
@@ -60,7 +60,7 @@ class TopologyExpander:
                                 suffix_parts.append(next_text)
                                 trace["next"] = True
 
-                    # 2. Espansione :PART_OF (Rubrica articolo padre)
+                    # 2. :PART_OF expansion (parent article heading)
                     if settings.TOPOLOGICAL_EXPAND_PARENT:
                         result = await session.run(
                             """
@@ -75,7 +75,7 @@ class TopologyExpander:
                             prefix_parts.insert(0, f"[{heading}]")
                             trace["parent"] = True
 
-                    # 3. Espansione :CITES / :MODIFIES
+                    # 3. :CITES / :MODIFIES relationship expansion
                     if settings.TOPOLOGICAL_EXPAND_CITES:
                         result = await session.run(
                             """
@@ -101,17 +101,16 @@ class TopologyExpander:
             except Exception as e:
                 logger.error(f"Errore durante l'espansione topologica per il chunk {chunk.expression_id}: {e}")
 
-            # Assemblaggio con budget: il testo originale è SEMPRE integro
+            # Budget assembly: ensure original text is preserved completely
             prefix_text = "\n".join(prefix_parts)
             suffix_text = "\n\n".join(suffix_parts)
             
             total_additions = len(prefix_text) + len(suffix_text)
             
             if total_additions <= budget:
-                # Tutto entra nel budget
                 pass
             else:
-                # Tronca le aggiunte per rientrare nel budget
+                # Truncate additions to fit budget
                 half_budget = budget // 2
                 if prefix_text and len(prefix_text) > half_budget:
                     prefix_text = prefix_text[:half_budget] + "..."
@@ -121,7 +120,7 @@ class TopologyExpander:
                     suffix_text = suffix_text[:remaining] + "..."
                     logger.info(f"  [!] Suffix troncato a {remaining} chars.")
             
-            # Assemblaggio finale
+            # Final text assembly
             parts = []
             if prefix_text:
                 parts.append(prefix_text)
@@ -145,10 +144,7 @@ class TopologyExpander:
 
 
 async def topological_expand_node(state: RagState) -> dict:
-    """
-    Nodo LangGraph: espande i chunk validati sfruttando il grafo.
-    Se l'espansione è disabilitata, restituisce i chunk intatti.
-    """
+    """LangGraph node: expands validated chunks using graph relationships."""
     import time
     start = time.perf_counter()
     chunks = state.get("final_chunks") or []

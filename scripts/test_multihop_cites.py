@@ -1,3 +1,5 @@
+"""Test script for citation multi-hop graph retrieval expansion."""
+
 import asyncio
 import logging
 import sys
@@ -7,9 +9,10 @@ from src.rag.engine import RagEngine
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 async def test():
+    """Execute multi-hop retrieval query and print retrieved chunks and traversal trace."""
     engine = RagEngine()
     
-    # Questa query riguarda il Codice degli Appalti (D.Lgs 50/2016)
+    # Query targeting public procurement code exclusions (D.Lgs. 50/2016)
     query = "esclusioni operatori gara codice appalti 2016 D.Lgs. 50/2016 art. 94"
     
     print("=" * 80)
@@ -31,7 +34,7 @@ async def test():
         score = r.get('score', 0.0)
         source = meta.get('source', '')
         
-        # Vediamo se nei metadati c'è qualche flag che indica che è stato recuperato tramite espansione CITES
+        # Check metadata for citation graph expansion indicator
         expanded_via = meta.get('expanded_via', '')
         
         print(f"\n[{i+1}] Score: {score:.3f} | Source: {source}")

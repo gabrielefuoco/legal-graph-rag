@@ -1,17 +1,17 @@
-﻿"""
-Grid Search — Stadio 1: Ottimizzazione del Retrieval Ibrido e Ranking (Zero chiamate LLM).
-Valuta e ottimizza:
-  - Pesi RRF (Vector, BM25, Graph)
-  - Costante RRF K
-  - Cut-off di fusione (RAG_MIN_SCORE, RERANK_TOP_K)
-  - Soglie e filtraggio del CrossEncoder Reranker (RERANK_MIN_SCORE, final_k)
-  - Confronto matematico contro il ranking vettoriale puro e la configurazione di default.
+"""Grid Search Stage 1: Hybrid retrieval and ranking optimization (zero LLM calls).
 
-Uso:
-  py scripts/grid_search_stage1.py
-  py scripts/grid_search_stage1.py --dataset data/eval_dataset.json --output results_stage1.csv
-  py scripts/grid_search_stage1.py --cache-candidates data/cache_candidates.pkl
-  py scripts/grid_search_stage1.py --load-candidates data/cache_candidates.pkl
+Evaluates and tunes:
+  - RRF weights (dense vector, BM25, TESEO graph)
+  - RRF constant k
+  - Candidate fusion cutoffs (RERANK_TOP_K)
+  - CrossEncoder reranker score thresholding (RERANK_MIN_SCORE, final_k)
+  - Quantitative comparison against pure dense vector baseline.
+
+Usage:
+    py scripts/grid_search_stage1.py
+    py scripts/grid_search_stage1.py --dataset data/eval_dataset.json --output results_stage1.csv
+    py scripts/grid_search_stage1.py --cache-candidates data/cache_candidates.pkl
+    py scripts/grid_search_stage1.py --load-candidates data/cache_candidates.pkl
 """
 import asyncio
 import argparse
@@ -40,10 +40,12 @@ logger = logging.getLogger("grid_search_stage1")
 
 
 def sigmoid(x: float) -> float:
+    """Compute standard sigmoid function for logit normalization."""
     return 1.0 / (1.0 + math.exp(-x))
 
 
 def calculate_recall(retrieved_chunks: List[RetrievedChunk], expected_ids: List[str]) -> float:
+    """Calculate retrieval recall against ground-truth expected expression IDs."""
     if not expected_ids:
         return 1.0
     retrieved_ids = {c.expression_id for c in retrieved_chunks}
@@ -55,6 +57,7 @@ def calculate_recall(retrieved_chunks: List[RetrievedChunk], expected_ids: List[
 
 
 def calculate_hit_at_k(retrieved_chunks: List[RetrievedChunk], expected_ids: List[str], k: int = 1) -> float:
+    """Compute Hit@k binary indicator for retrieved chunks against expected IDs."""
     if not expected_ids:
         return 1.0
     top_chunks = retrieved_chunks[:k]
@@ -66,6 +69,7 @@ def calculate_hit_at_k(retrieved_chunks: List[RetrievedChunk], expected_ids: Lis
 
 
 def calculate_mrr(retrieved_chunks: List[RetrievedChunk], expected_ids: List[str]) -> float:
+    """Compute Mean Reciprocal Rank (MRR) for the first relevant retrieved chunk."""
     if not expected_ids:
         return 1.0
     for rank_0, chunk in enumerate(retrieved_chunks):
@@ -76,6 +80,7 @@ def calculate_mrr(retrieved_chunks: List[RetrievedChunk], expected_ids: List[str
 
 @dataclass
 class Stage1Config:
+    """Configuration parameters for Stage 1 retrieval and ranking tuning."""
     weight_vector: float
     weight_bm25: float
     weight_graph: float
@@ -87,12 +92,13 @@ class Stage1Config:
 
 @dataclass
 class QueryCandidatePool:
+    """Container for retrieved candidate chunks and cached CrossEncoder logits per query."""
     query: str
     expected_ids: List[str]
     vector_results: List[RetrievedChunk]
     bm25_results: List[RetrievedChunk]
     graph_results: List[RetrievedChunk]
-    # Mappa: expression_id -> raw_score CrossEncoder
+    # Map: expression_id -> CrossEncoder raw score
     reranker_raw_scores: Dict[str, float]
     vector_anchor_id: Optional[str]
 
@@ -102,11 +108,11 @@ def simulate_retrieval_and_rerank(
     cfg: Stage1Config,
     use_reranker: bool = True
 ) -> List[RetrievedChunk]:
+    """Simulate RRF fusion, post-filtering, and CrossEncoder reranking in memory.
+
+    Utilizes cached candidate sets and logits with O(N log N) complexity.
     """
-    Esegue in-memory la fusione RRF, i filtri e il reranking usando i punteggi pre-calcolati.
-    Complessità: O(N log N) in puro Python, ultra-rapido (microsecondi per query).
-    """
-    # 1. RRF
+    # Reciprocal Rank Fusion across retrieval channels
     channels = [
         (pool.vector_results, cfg.weight_vector),
         (pool.bm25_results, cfg.weight_bm25),
@@ -114,12 +120,12 @@ def simulate_retrieval_and_rerank(
     ]
     fused = _reciprocal_rank_fusion(channels, k=cfg.rrf_k)
 
-    # 2. Cutoff min_score e posizionale
+    # Score cutoff and top-k slicing
     min_score = settings.RAG_MIN_SCORE
     fused = [c for c in fused if c.score >= min_score]
     fused = fused[:cfg.rerank_top_k]
 
-    # 3. Deduplicazione e filtri
+    # Deduplication, status filtering, and sibling chunk merging
     fused = _deduplicate_by_text(fused)
     fused = _mark_abrogated_chunks(fused, date.today())
     fused = _merge_chunks(fused)
@@ -127,7 +133,7 @@ def simulate_retrieval_and_rerank(
     if not use_reranker or not pool.reranker_raw_scores:
         return fused[:cfg.final_k]
 
-    # 4. Simulazione Reranking
+    # CrossEncoder score application via sigmoid mapping
     reranked = [copy(c) for c in fused]
     for c in reranked:
         base_id = c.expression_id.replace("merged_", "")
@@ -136,7 +142,7 @@ def simulate_retrieval_and_rerank(
 
     reranked.sort(key=lambda x: x.score, reverse=True)
 
-    # Filtro soglia Reranker con salvataggio minimo di 3
+    # Filter by reranker score threshold with fallback minimum
     filtered = [c for c in reranked if c.score >= cfg.rerank_min_score]
     min_keep = min(3, len(reranked))
     if len(filtered) < min_keep:
@@ -144,7 +150,7 @@ def simulate_retrieval_and_rerank(
 
     final_chunks = filtered[:cfg.final_k]
 
-    # Safety Net per Anchor Vettoriale
+    # Safety net: preserve top vector anchor chunk if evicted
     if pool.vector_anchor_id:
         has_anchor = any(
             c.expression_id == pool.vector_anchor_id or c.expression_id == f"merged_{pool.vector_anchor_id}"
@@ -165,10 +171,7 @@ async def build_candidate_pools(
     reranker: Any,
     top_k_candidates: int = 30
 ) -> List[QueryCandidatePool]:
-    """
-    Raccoglie i chunk grezzi da ciascun canale e pre-calcola i raw score del CrossEncoder.
-    Questa fase viene eseguita una sola volta e memorizzata nella cache.
-    """
+    """Extract raw candidate chunks across channels and pre-compute CrossEncoder logits."""
     from src.rag.retriever import vector_search, bm25_search, graph_search
 
     pools = []
@@ -178,7 +181,7 @@ async def build_candidate_pools(
         expected_ids = item.get("expected_ids", [])
         logger.info(f"[{idx}/{total}] Estrazione candidati per query: '{query[:60]}...'")
 
-        # Prepariamo lo stato per l'analyzer
+        # Initialize state dictionary for query analyzer
         state: RagState = {
             "query": query,
             "reference_date": None,
@@ -194,11 +197,11 @@ async def build_candidate_pools(
             "_reranker": reranker,
         }
 
-        # Step 1: Query Analysis (Estrazione concetti TESEO e embedding query)
+        # Extract TESEO concepts and compute dense query embedding
         analyzed_state = await engine.analyzer.analyze(state)
         state.update(analyzed_state)
 
-        # Step 2: Retrieval parallelo sui tre canali
+        # Concurrent multi-channel candidate retrieval
         v_res, b_res, g_res = await asyncio.gather(
             vector_search(state),
             bm25_search(state),
@@ -211,7 +214,7 @@ async def build_candidate_pools(
 
         anchor_id = v_chunks[0].expression_id if v_chunks else None
 
-        # Raccogli tutti i chunk unici per calcolare i punteggi CrossEncoder in batch
+        # Deduplicate candidates to compute CrossEncoder logits in batch
         unique_chunks_dict = {}
         for c in (v_chunks + b_chunks + g_chunks):
             if c.expression_id not in unique_chunks_dict:
@@ -243,12 +246,10 @@ async def build_candidate_pools(
 
 
 def evaluate_grid(pools: List[QueryCandidatePool], grid_configs: List[Stage1Config]) -> List[dict]:
-    """
-    Valuta l'intera griglia di configurazioni sui candidate pool.
-    """
+    """Evaluate grid of configuration combinations across all candidate pools."""
     logger.info(f"Avvio valutazione di {len(grid_configs)} combinazioni su {len(pools)} query...")
 
-    # 1. Calcola Baseline Vettoriale Pura (solo Vector, niente BM25, niente Graph, niente Reranker)
+    # Compute pure dense vector baseline (no BM25, no graph, no reranker)
     vec_pure_cfg = Stage1Config(
         weight_vector=1.0,
         weight_bm25=0.0,
@@ -278,7 +279,7 @@ def evaluate_grid(pools: List[QueryCandidatePool], grid_configs: List[Stage1Conf
     logger.info(f"  Hit@1:     {base_vec_hit1:.2%}")
     logger.info("=" * 60)
 
-    # 2. Valutazione griglia
+    # Grid evaluation over parameter combinations
     results = []
     for cfg in grid_configs:
         recalls = []
@@ -297,7 +298,7 @@ def evaluate_grid(pools: List[QueryCandidatePool], grid_configs: List[Stage1Conf
         avg_hit1 = float(np.mean(hits1)) if hits1 else 0.0
         avg_hit5 = float(np.mean(hits5)) if hits5 else 0.0
 
-        # Score composito prioritario: 60% Recall + 30% MRR + 10% Hit@1
+        # Composite score: 60% Recall + 30% MRR + 10% Hit@1
         composite_score = (avg_recall * 0.60) + (avg_mrr * 0.30) + (avg_hit1 * 0.10)
         delta_recall_vs_pure = avg_recall - base_vec_recall
 
@@ -314,13 +315,13 @@ def evaluate_grid(pools: List[QueryCandidatePool], grid_configs: List[Stage1Conf
         }
         results.append(res_dict)
 
-    # Ordina per score composito decrescente
+    # Sort descending by composite score, breaking ties with recall
     results.sort(key=lambda x: (x["composite_score"], x["recall"]), reverse=True)
     return results
 
 
 def generate_grid_search_report(results: List[dict], output_md: str):
-    """Genera un report Markdown dettagliato per lo Stadio 1."""
+    """Generate detailed Markdown report of Stage 1 grid search outcomes."""
     if not results:
         return
 
@@ -364,7 +365,7 @@ def generate_grid_search_report(results: List[dict], output_md: str):
 
 
 def build_default_grid() -> List[Stage1Config]:
-    """Genera lo spazio di ricerca combinatorio per lo Stadio 1."""
+    """Generate default combinatorial search space for Stage 1 tuning."""
     weight_vectors = [0.8, 1.0, 1.5]
     weight_bm25s = [0.8, 1.0, 1.2]
     weight_graphs = [0.8, 1.2, 1.5, 2.0]
@@ -390,6 +391,7 @@ def build_default_grid() -> List[Stage1Config]:
 
 
 async def main():
+    """Execute Stage 1 grid search CLI workflow."""
     parser = argparse.ArgumentParser(description="Grid Search Stadio 1: Retrieval & Ranking Tuning")
     parser.add_argument("--dataset", type=str, default="data/eval_dataset.json", help="Path dataset di valutazione")
     parser.add_argument("--output", type=str, default="grid_search_stage1_results.csv", help="CSV di output")
@@ -402,13 +404,13 @@ async def main():
 
     pools: List[QueryCandidatePool] = []
 
-    # Opzione 1: Caricamento da cache esistente
+    # Load cached candidate pools if available
     if args.load_candidates and os.path.exists(args.load_candidates):
         logger.info(f"Caricamento candidati dalla cache: {args.load_candidates}")
         with open(args.load_candidates, "rb") as f:
             pools = pickle.load(f)
     else:
-        # Opzione 2: Estrazione live da Neo4j
+        # Extract candidates from Neo4j and vector store
         if not os.path.exists(args.dataset):
             logger.error(f"Dataset {args.dataset} non trovato.")
             return
@@ -441,11 +443,11 @@ async def main():
         logger.error("Nessun pool di candidati disponibile per la valutazione.")
         return
 
-    # Generazione e valutazione della griglia
+    # Build parameter grid and evaluate
     configs = build_default_grid()
     results = evaluate_grid(pools, configs)
 
-    # Salvataggio risultati CSV
+    # Export results to CSV
     if results:
         fieldnames = list(results[0].keys())
         with open(args.output, "w", newline="", encoding="utf-8") as f:
@@ -454,11 +456,11 @@ async def main():
             writer.writerows(results)
         logger.info(f"Risultati CSV salvati in: {args.output}")
 
-        # Salvataggio Report Markdown
+        # Export Markdown report
         md_file = os.path.splitext(args.output)[0] + ".md"
         generate_grid_search_report(results, md_file)
 
-        # Esportazione top-N per lo Stadio 2
+        # Export top-N configurations for Stage 2
         top_configs = results[:args.top_n]
         with open(args.top_configs_output, "w", encoding="utf-8") as f:
             json.dump(top_configs, f, indent=2)

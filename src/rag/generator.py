@@ -1,3 +1,5 @@
+"""Generation module for legal query answering with Map-Reduce and streaming support."""
+
 import logging
 from typing import List
 from langchain_ollama import ChatOllama
@@ -9,10 +11,7 @@ from src.rag.llm_factory import get_llm
 logger = logging.getLogger(__name__)
 
 class LegalGenerator:
-    """
-    Gestisce la sintesi della risposta finale utilizzando un LLM (Qwen3.5).
-    Prende i chunk recuperati e filtrati e genera una risposta legale strutturata.
-    """
+    """Synthesizes final answers using an LLM over retrieved and filtered legal chunks."""
 
     def __init__(self, num_ctx: int = None):
         from src.rag.llm_factory import get_llm
@@ -20,7 +19,7 @@ class LegalGenerator:
         self.llm = get_llm(num_ctx=self.num_ctx, temperature=0.0, reasoning=False)
 
     def _format_context(self, chunks: List[RetrievedChunk]) -> str:
-        """Formatta i chunk in una stringa di contesto leggibile dall'LLM."""
+        """Format retrieved chunks into a standardized context string for the LLM."""
         if not chunks:
             return "Nessuna informazione rilevante trovata nei documenti ufficiali."
         
@@ -28,21 +27,21 @@ class LegalGenerator:
         for i, chunk in enumerate(chunks, 1):
             source_info = f"Fonte: {chunk.structural_context}" if chunk.structural_context else ""
             urn_info = f" (URN: {chunk.work_urn})" if chunk.work_urn else ""
-            # Usa il testo espanso se presente, altrimenti il testo base
+            # Use expanded text if present, otherwise base text
             chunk_text = getattr(chunk, 'expanded_text', None) or chunk.text
             context_parts.append(f"[{i}] {source_info}{urn_info}\nTesto: {chunk_text}")
             
         return "\n\n".join(context_parts)
 
     def _build_messages(self, query: str, chunks: List[RetrievedChunk], chat_history: list = None) -> list:
-        """Costruisce la lista di messaggi (System + History + Human) per il LLM."""
+        """Construct the prompt messages (System, History, Human) for the LLM."""
         context = self._format_context(chunks)
         
         system_prompt = (
             "Sei un assistente legale virtuale esperto specializzato nel diritto italiano.\n"
             "Il tuo compito è rispondere alla domanda dell'utente basandoti ESCLUSIVAMENTE sul contesto fornito.\n\n"
             "Regole operative TASSATIVE da seguire:\n"
-            "1. GROUNDING RIGIDO: Rispondi esclusivamente usando i fatti e le disposizioni esplicitamente citati nel contesto. Non fare assunzioni, non estrapolare e non usare conoscenze esterne al contesto.\n"
+            "1. GROUNDING RIGIDO: Rispondi esclusivamente usando i facts e le disposizioni esplicitamente citati nel contesto. Non fare assunzioni, non estrapolare e non usare conoscenze esterne al contesto.\n"
             "2. GESTIONE MANCANZA INFORMAZIONI: Se il contesto non contiene le informazioni necessarie per rispondere alla domanda in modo completo, o se la domanda è del tutto irrilevante rispetto al contesto, devi rispondere ESATTAMENTE con la seguente frase di fallback e nient'altro:\n"
             "   \"Non dispongo di informazioni sufficienti per rispondere a questa domanda.\"\n"
             "3. FORMATO CITAZIONI: Cita la fonte per ogni affermazione rilevante alla fine della frase, inserendo il riferimento tra parentesi quadre nel formato [Titolo dell'Atto, Articolo X] o [Articolo X] (es. [Costituzione, Art. 2]).\n"
@@ -66,17 +65,17 @@ class LegalGenerator:
         return messages
 
     async def _map_extract(self, query: str, chunk: RetrievedChunk, num_ctx: int) -> str:
-        """Estrae le info rilevanti da un singolo chunk (Fase MAP).
-        Se il chunk è troppo grande per il contesto del modello, lo spezza in
-        finestre sovrapposte e processa ciascuna separatamente."""
+        """Extract relevant facts from a single chunk during the Map phase.
+        
+        Splits text into overlapping sliding windows if it exceeds the model context.
+        """
         chunk_text = getattr(chunk, 'expanded_text', None) or chunk.text
         
-        # Stima dei chars che entrano nel contesto del modello
-        # (lasciando spazio per system prompt ~500 token e risposta ~500 token)
-        max_map_chars = (num_ctx - 1000) * 3  # ~9.000 chars per num_ctx=4096
+        # Estimate character limit fitting the model context (~9,000 chars for num_ctx=4096)
+        max_map_chars = (num_ctx - 1000) * 3
         
         if len(chunk_text) > max_map_chars:
-            # Sliding window: finestre sovrapposte con 500 chars di overlap
+            # Sliding window with 500 characters of overlap
             overlap = 500
             step = max_map_chars - overlap
             windows = []
@@ -98,7 +97,7 @@ class LegalGenerator:
             return await self._map_extract_window(query, chunk_text, chunk.structural_context, num_ctx)
 
     async def _map_extract_window(self, query: str, text: str, structural_context: str | None, num_ctx: int) -> str:
-        """Estrae le info rilevanti da una finestra di testo (sotto-fase MAP)."""
+        """Extract relevant facts from a single text window during the Map phase."""
         from langchain_ollama import ChatOllama
         from langchain_core.messages import SystemMessage, HumanMessage
         from src.rag.think_filter import strip_thinking_tags
@@ -133,9 +132,7 @@ class LegalGenerator:
             return "NESSUNA_INFO"
 
     async def generate(self, state: RagState) -> dict:
-        """
-        Nodo LangGraph per la generazione della risposta.
-        """
+        """Generate the final legal answer using either direct stuffing or Map-Reduce."""
         from src.rag.think_filter import strip_thinking_tags
         from src.rag.models import RetrievedChunk
         query = state["query"]
@@ -191,9 +188,7 @@ class LegalGenerator:
             return {"generation": "Si è verificato un errore tecnico durante la generazione della risposta."}
 
     async def generate_stream(self, query: str, chunks: List[RetrievedChunk], chat_history: list = None):
-        """
-        Generatore asincrono per lo streaming della risposta.
-        """
+        """Asynchronous token generator streaming the model response."""
         from src.rag.think_filter import filter_think_stream
         import time
         messages = self._build_messages(query, chunks, chat_history)
@@ -219,9 +214,9 @@ class LegalGenerator:
             yield "Si è verificato un errore tecnico durante lo streaming della risposta."
 
 async def generation_node(state: RagState) -> dict:
-    """Wrapper per il nodo LangGraph."""
+    """LangGraph node wrapper for legal answer generation."""
     generator = state.get("_llm")
     if not generator:
-        # Fallback se non iniettato correttamente
+        # Fallback if generator is not injected in state
         generator = LegalGenerator()
     return await generator.generate(state)

@@ -1,7 +1,6 @@
-"""
-Modelli di dato per il Retrieval Engine.
+"""Data models for the Retrieval Engine.
 
-Definisce lo State di LangGraph (RagState) e i DTO di output (RetrievedChunk, AnalyzedQuery).
+Defines the LangGraph State (RagState) and output DTOs (RetrievedChunk, AnalyzedQuery).
 """
 from __future__ import annotations
 
@@ -10,89 +9,79 @@ from datetime import date
 from typing import TypedDict, Any
 
 
-# ---------------------------------------------------------------------------
-# DTO di output
-# ---------------------------------------------------------------------------
-
 @dataclass
 class RetrievedChunk:
-    """Singolo frammento recuperato dal knowledge graph."""
+    """Data transfer object representing a single chunk retrieved from the knowledge graph."""
 
-    text: str                            # Testo dell'Expression
-    expression_id: str                   # ID del nodo Expression in Neo4j
-    work_urn: str | None = None          # URN del Work padre
-    structural_context: str = ""         # es. "articolo - Art. 5"
-    score: float = 0.0                   # Score post-fusione RRF
-    source: str = ""                     # "vector" | "bm25" | "graph" | "citation_hop"
+    text: str                                  # Expression text
+    expression_id: str                         # Expression node ID in Neo4j
+    work_urn: str | None = None                # Parent Work URN
+    structural_context: str = ""               # Structural breadcrumb, e.g. "articolo - Art. 5"
+    score: float = 0.0                         # RRF post-fusion or rerank score
+    source: str = ""                           # "vector" | "bm25" | "graph" | "citation_hop"
     vigenza_start: date | None = None
     vigenza_end: date | None = None
-    metadata: dict[str, Any] = field(default_factory=dict)  # Metadati aggiuntivi (es. motivi retrieval)
-    expansion_trace: dict | None = None          # Traccia degli archi attraversati (XAI)
-    expanded_text: str | None = None             # Testo espanso (originale + contesto topologico)
+    metadata: dict[str, Any] = field(default_factory=dict)  # Additional metadata (e.g., retrieval reasoning)
+    expansion_trace: dict | None = None        # Traversed graph edges for XAI trace
+    expanded_text: str | None = None           # Expanded text (original + topological context)
 
 
 @dataclass
 class AnalyzedQuery:
-    """Risultato dell'analisi della query utente."""
+    """Analysis result for a user query including ontology concepts and expansions."""
 
-    original_query: str                                       # Testo originale
-    teseo_concept_ids: list[str] = field(default_factory=list) # TESEO concept IDs trovati
-    expanded_labels: list[str] = field(default_factory=list)   # Label narrower/broader espanse
-    expanded_query_text: str = ""                              # Query arricchita per BM25
-    reranker_instruction: str = ""                             # Istruzione task-aware per il reranker
+    original_query: str                                       # Original query text
+    teseo_concept_ids: list[str] = field(default_factory=list) # Matched TESEO concept IDs
+    expanded_labels: list[str] = field(default_factory=list)   # Expanded narrower/broader taxonomy labels
+    expanded_query_text: str = ""                              # Enriched query for BM25 search
+    reranker_instruction: str = ""                             # Task-aware reranker instruction
 
-
-# ---------------------------------------------------------------------------
-# LangGraph State
-# ---------------------------------------------------------------------------
 
 class RagState(TypedDict):
-    """
-    Stato condiviso tra tutti i nodi del grafo LangGraph.
+    """Shared state across all nodes of the LangGraph retrieval graph.
 
-    Ogni nodo legge i campi di cui ha bisogno e scrive i propri output.
-    I campi sono separati per canale di retrieval per evitare conflitti
-    durante il fan-out parallelo.
+    Each node reads its required inputs and writes its outputs.
+    Channel fields are segregated to prevent conflicts during parallel execution.
     """
 
-    # --- Input ---
+    # Input parameters
     query: str
-    iterations: int                          # Numero di iterazioni del loop agentico
-    rewritten_queries: list[str]             # Storico delle query riformulate
-    reference_date: str | None               # ISO format (YYYY-MM-DD), opzionale
-    top_k: int                               # Numero di risultati estratti per canale
-    final_k: int                             # Numero di risultati finali dopo RRF e filtering
-    enable_graph_search: bool                # Abilita la ricerca semantica basata su TESEO
-    enable_multi_hop: bool                   # Abilita l'espansione multi-hop delle citazioni
-    max_citation_hops: int                   # Numero massimo di salti citazionali
-    enable_topological_expansion: bool       # Abilita l'espansione topologica
-    topo_max_chars: int                      # Caratteri massimi per l'espansione topologica
-    generator_num_ctx: int                   # Context window dell'LLM (Generator)
-    skip_generation: bool                    # Flag per saltare il nodo di generazione finale
-    chat_history: list[dict[str, str]] | None # Storico conversazione per multi-turn
+    iterations: int                          # Agentic loop iteration count
+    rewritten_queries: list[str]             # History of reformulated queries
+    reference_date: str | None               # Optional ISO date (YYYY-MM-DD) for validity filtering
+    top_k: int                               # Number of candidate results extracted per channel
+    final_k: int                             # Target number of final results after reranking
+    enable_graph_search: bool                # Flag to toggle TESEO-based graph search
+    enable_multi_hop: bool                   # Flag to toggle multi-hop citation traversal
+    max_citation_hops: int                   # Maximum citation hops allowed
+    enable_topological_expansion: bool       # Flag to toggle topological context expansion
+    topo_max_chars: int                      # Maximum character budget for topological expansion
+    generator_num_ctx: int                   # Context window size for generation LLM
+    skip_generation: bool                    # Flag to bypass the final generation node
+    chat_history: list[dict[str, str]] | None # Conversation history for multi-turn chat
 
-    # --- Step 1: Query Analysis ---
+    # Step 1: Query Analysis
     analyzed_query: AnalyzedQuery | None
     query_embedding: list[float] | None
 
-    # --- Step 2: Retrieval (un campo per canale) ---
+    # Step 2: Retrieval channels
     vector_results: list[RetrievedChunk]
     bm25_results: list[RetrievedChunk]
     graph_results: list[RetrievedChunk]
 
-    # --- Step 3: Fusion ---
+    # Step 3: Fusion
     fused_chunks: list[RetrievedChunk]
     vector_anchor_id: str | None
 
-    # --- Step 4: Multi-hop ---
+    # Step 4: Expansion and grading
     hop_count: int
     final_chunks: list[RetrievedChunk]
-    expanded_chunks: list[RetrievedChunk]    # Chunk arricchiti dall'espansione topologica
+    expanded_chunks: list[RetrievedChunk]    # Chunks enriched by topological expansion
 
-    # --- Step 5: Generation ---
+    # Step 5: Generation
     generation: str | None
 
-    # --- Dipendenze iniettate (private) ---
+    # Injected internal dependencies
     _driver: Any      # AsyncDriver (Neo4j)
     _analyzer: Any    # QueryAnalyzer
     _reranker: Any    # Reranker

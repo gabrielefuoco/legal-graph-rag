@@ -1,3 +1,5 @@
+"""Re-link Neo4j Expression nodes to TESEO concepts using semantic embeddings."""
+
 import asyncio
 import logging
 from neo4j import AsyncGraphDatabase
@@ -9,6 +11,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(name)-30s | %(le
 logger = logging.getLogger(__name__)
 
 async def relink_teseo():
+    """Batch process Neo4j expressions to extract topics and merge HAS_TOPIC edges."""
     logger.info("Initializing VectorEngine and TESEOMatcher...")
     vector_engine = VectorEngine()
     teseo_matcher = TESEOMatcher('data/external/teseo_full.ttl')

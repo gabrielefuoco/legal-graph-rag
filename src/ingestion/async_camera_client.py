@@ -1,28 +1,40 @@
+"""Asynchronous client for Camera dei Deputati Linked Open Data."""
+
 import asyncio
 import logging
 import aiohttp
 from typing import List, Dict, Any
 from pathlib import Path
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 CAMERA_SPARQL_ENDPOINT = "https://dati.camera.it/sparql"
 
 class AsyncCameraClient:
-    """
-    Asynchronous client for Camera dei Deputati Linked Open Data.
-    Fetches Iter Legis steps (presentations, votes, assignments).
+    """Asynchronous client for Camera dei Deputati Linked Open Data.
+
+    Fetches Iter Legis events (presentations, votes, assignments) via SPARQL.
     """
 
     def __init__(self, output_dir: str = "data/raw/camera"):
+        """Initialize the client with target storage directory.
+
+        Args:
+            output_dir: Directory where downloaded data will be saved.
+        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     async def fetch_iter_legis(self, legislature: int = 19, limit: int = 100, keyword: str = None) -> List[Dict[str, Any]]:
-        """
-        Fetches Iter Legis events for a specific legislature.
-        Optionally filters by a keyword in the title.
+        """Fetch Iter Legis events for a specific legislature.
+
+        Args:
+            legislature: Parliamentary legislature number.
+            limit: Maximum number of records to retrieve.
+            keyword: Optional keyword filter for the title.
+
+        Returns:
+            List of dictionaries containing act metadata.
         """
         keyword_filter = ""
         if keyword:
@@ -72,11 +84,19 @@ class AsyncCameraClient:
                 return []
 
     async def save_metadata(self, results: List[Dict[str, Any]], filename: str = "camera_acts_metadata.jsonl") -> str:
-        """Saves metadata to a JSONL file."""
+        """Save act metadata to a JSONL file.
+
+        Args:
+            results: List of act metadata dictionaries.
+            filename: Output filename within the output directory.
+
+        Returns:
+            String path to the saved file.
+        """
         import json
         filepath = self.output_dir / filename
         
-        # Override file to avoid appending forever in the same topic run
+        # Overwrite file to avoid unbounded appending across topic runs
         with open(filepath, "w", encoding="utf-8") as f:
             for item in results:
                 f.write(json.dumps(item, ensure_ascii=False) + "\n")
@@ -85,7 +105,7 @@ class AsyncCameraClient:
         return str(filepath)
 
     async def run(self, keyword: str = None):
-        """Main execution."""
+        """Fetch and persist Camera records for a given topic keyword."""
         logger.info(f"Starting Async Camera Client (Topic: {keyword})...")
         results = await self.fetch_iter_legis(limit=20, keyword=keyword)
         

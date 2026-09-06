@@ -1,7 +1,10 @@
+"""Analyze and summarize ablation study results comparing Baseline RAG and GraphRAG."""
+
 import pandas as pd
 import numpy as np
 
 def analyze_results():
+    """Compute aggregate metrics from ablation results and export a Markdown summary table."""
     try:
         df = pd.read_csv('ablation_results.csv')
     except FileNotFoundError:
@@ -37,14 +40,14 @@ def analyze_results():
     print(f"   - Baseline RAG: {b_sim:.4f}")
     print(f"   - GraphRAG:     {g_sim:.4f}")
     
-    # Calcolo variazione percentuale
+    # Calculate percentage variation
     if b_sim > 0:
         var_perc = ((g_sim - b_sim) / b_sim) * 100
         print(f"   Miglioramento:  {var_perc:+.2f}%")
         
     print("\n" + "="*60 + "\n")
     
-    # Creazione di una tabellina in Markdown per esportazione rapida
+    # Generate Markdown summary table for quick reporting
     md_content = f"""# Riassunto Metriche Finali
     
 | Metrica | Baseline RAG | GraphRAG | Variazione |

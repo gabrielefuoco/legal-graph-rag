@@ -1,10 +1,9 @@
-"""
-Retriever — Step 2 del Retrieval Engine.
+"""Retriever module for multi-channel legal information retrieval.
 
-Tre nodi LangGraph indipendenti che eseguono retrieval su canali diversi:
-1. vector_search  — Cosine similarity sull'indice vettoriale Neo4j
-2. bm25_search    — Full-text search sull'indice BM25 Neo4j
-3. graph_search   — Navigazione dei topic TESEO nel grafo
+Provides three independent retrieval nodes executed concurrently:
+1. vector_search: Cosine similarity over Neo4j vector index
+2. bm25_search: Full-text Lucene search over Neo4j text index
+3. graph_search: Topic-based graph traversal over TESEO ontology nodes
 """
 import logging
 from datetime import date
@@ -19,12 +18,11 @@ logger = logging.getLogger(__name__)
 
 
 def _parse_date(value) -> date | None:
-    """Converte un valore Neo4j date in Python date (gestisce None e neo4j.time.Date)."""
+    """Convert a Neo4j date value to a standard Python date object."""
     if value is None:
         return None
     if isinstance(value, date):
         return value
-    # neo4j.time.Date ha .year, .month, .day
     try:
         return date(value.year, value.month, value.day)
     except Exception:
@@ -32,19 +30,16 @@ def _parse_date(value) -> date | None:
 
 
 def _build_breadcrumb(record) -> str:
-    """Costruisce un breadcrumb strutturale dal record Cypher.
-    
-    Esempio output: 'Legge 25 gen 1904 > Titolo II > Art. 38'
-    """
+    """Build a structural breadcrumb trail from a Cypher record (e.g. 'Legge 25 gen 1904 > Titolo II > Art. 38')."""
     parts = []
     work_title = record.get("work_title")
     if work_title:
-        # Abbrevia titoli lunghi
+        # Truncate overly long act titles
         if len(work_title) > 60:
             work_title = work_title[:57] + "..."
         parts.append(work_title)
     
-    # Breadcrumb path restituito dalla query Cypher
+    # Breadcrumb path returned by Cypher query
     breadcrumb_path = record.get("breadcrumb_path")
     if breadcrumb_path:
         parts.extend(breadcrumb_path)
@@ -57,7 +52,7 @@ def _build_breadcrumb(record) -> str:
 
 
 def _record_to_chunk(record, source: str) -> RetrievedChunk:
-    """Converte un record Cypher in un RetrievedChunk con euristiche per URN."""
+    """Convert a Cypher record into a RetrievedChunk object with URN fallback heuristics."""
     metadata = {}
     if "matched_concept" in record:
         metadata["matched_concepts"] = [record["matched_concept"]]
@@ -67,19 +62,18 @@ def _record_to_chunk(record, source: str) -> RetrievedChunk:
     work_urn = record.get("work_urn")
     expression_id = record.get("expression_id") or ""
     
-    # Eueristica: se l'URN è mancante, proviamo a cercarlo nel testo del chunk
+    # Fallback heuristic: search for Italian URN NIR pattern in chunk text if missing
     if not work_urn or work_urn == "urn:unknown":
         import re
-        # Cerca pattern urn:nir: (standard italiano)
         urn_match = re.search(r"urn:nir:[a-z0-9\.\-;~:]+", record.get("text") or "", re.IGNORECASE)
         if urn_match:
             work_urn = urn_match.group(0)
     
-    # Se abbiamo un titolo del Work, lo mettiamo nei metadati
+    # Store act title in metadata if available
     if record.get("work_title"):
         metadata["work_title"] = record.get("work_title")
 
-    # Costruisci breadcrumb strutturale
+    # Construct structural breadcrumb
     breadcrumb = _build_breadcrumb(record)
 
     return RetrievedChunk(
@@ -95,17 +89,8 @@ def _record_to_chunk(record, source: str) -> RetrievedChunk:
     )
 
 
-# ---------------------------------------------------------------------------
-# Nodo 1: Vector Search
-# ---------------------------------------------------------------------------
-
 async def vector_search(state: RagState) -> dict:
-    """
-    Nodo LangGraph: ricerca per similarità coseno sull'indice vettoriale.
-
-    Legge: state["query_embedding"]
-    Scrive: state["vector_results"]
-    """
+    """LangGraph node: execute cosine similarity search over Neo4j vector index."""
     import time
     start = time.perf_counter()
     driver: AsyncDriver = state["_driver"]
@@ -128,7 +113,7 @@ async def vector_search(state: RagState) -> dict:
                 WHERE score >= $min_score
                 OPTIONAL MATCH (e)-[:PART_OF*1..2]->(w:Work)
                 OPTIONAL MATCH (e)-[:PART_OF]->(u:StructuralUnit)
-                // Breadcrumb: risali la catena PART_OF per il contesto strutturale
+                // Breadcrumb: traverse PART_OF hierarchy for structural context
                 OPTIONAL MATCH path = (e)-[:PART_OF*1..4]->(w)
                 WITH e, w, u, score,
                      [n IN nodes(path) WHERE n:StructuralUnit | n.tag_name] AS breadcrumb_path
@@ -156,20 +141,8 @@ async def vector_search(state: RagState) -> dict:
     return {"vector_results": chunks}
 
 
-# ---------------------------------------------------------------------------
-# Nodo 2: BM25 Full-Text Search
-# ---------------------------------------------------------------------------
-
 async def bm25_search(state: RagState) -> dict:
-    """
-    Nodo LangGraph: ricerca keyword BM25 sull'indice full-text Neo4j.
-
-    Usa l'indice 'expression_text_fulltext' già creato in neo4j_loader.
-    La query è l'expanded_query_text (query originale + termini TESEO).
-
-    Legge: state["analyzed_query"]
-    Scrive: state["bm25_results"]
-    """
+    """LangGraph node: execute BM25 full-text keyword search over Neo4j index."""
     import time
     start = time.perf_counter()
     driver: AsyncDriver = state["_driver"]
@@ -180,10 +153,10 @@ async def bm25_search(state: RagState) -> dict:
         logger.warning("Query non analizzata, skip BM25 search.")
         return {"bm25_results": []}
 
-    # Usa la query espansa per il BM25
+    # Use expanded query for BM25 matching
     query_text = analyzed.expanded_query_text or analyzed.original_query
 
-    # Lucene richiede escape di caratteri speciali
+    # Escape Lucene special syntax characters
     query_text_escaped = _escape_lucene(query_text)
 
     if not query_text_escaped.strip():
@@ -199,7 +172,7 @@ async def bm25_search(state: RagState) -> dict:
                 YIELD node AS e, score
                 OPTIONAL MATCH (e)-[:PART_OF*1..2]->(w:Work)
                 OPTIONAL MATCH (e)-[:PART_OF]->(u:StructuralUnit)
-                // Breadcrumb: risali la catena PART_OF per il contesto strutturale
+                // Breadcrumb: traverse PART_OF hierarchy for structural context
                 OPTIONAL MATCH path = (e)-[:PART_OF*1..4]->(w)
                 WITH e, w, u, score,
                      [n IN nodes(path) WHERE n:StructuralUnit | n.tag_name] AS breadcrumb_path
@@ -228,7 +201,7 @@ async def bm25_search(state: RagState) -> dict:
 
 
 def _escape_lucene(text: str) -> str:
-    """Escape dei caratteri speciali Lucene per evitare errori di sintassi."""
+    """Escape special Lucene syntax characters to prevent query parsing errors."""
     special_chars = r'+-&|!(){}[]^"~*?:\/'
     escaped = []
     for char in text:
@@ -239,26 +212,15 @@ def _escape_lucene(text: str) -> str:
     return "".join(escaped)
 
 
-# ---------------------------------------------------------------------------
-# Nodo 3: Graph Search (TESEO Topics)
-# ---------------------------------------------------------------------------
-
 async def graph_search(state: RagState) -> dict:
-    """
-    Nodo LangGraph: ricerca basata sulla navigazione dei topic TESEO.
-
-    Trova le Expression collegate ai concetti TESEO estratti dalla query.
-
-    Legge: state["analyzed_query"]
-    Scrive: state["graph_results"]
-    """
+    """LangGraph node: retrieve provisions linked to matched TESEO ontology concepts."""
     import time
     start = time.perf_counter()
     driver: AsyncDriver = state["_driver"]
     analyzed = state.get("analyzed_query")
     top_k = settings.RAG_TOP_K
 
-    # Salta il canale Grafo se la ricerca sul grafo è disabilitata
+    # Skip graph retrieval if disabled
     if not state.get("enable_graph_search", True):
         logger.info("Ricerca su grafo disabilitata tramite flag (enable_graph_search=False). Skip graph_search.")
         return {"graph_results": []}
@@ -278,7 +240,7 @@ async def graph_search(state: RagState) -> dict:
                 WHERE t.id IN $teseo_ids
                 OPTIONAL MATCH (e)-[:PART_OF*1..2]->(w:Work)
                 OPTIONAL MATCH (e)-[:PART_OF]->(u:StructuralUnit)
-                // Breadcrumb strutturale
+                // Structural breadcrumb
                 OPTIONAL MATCH path = (e)-[:PART_OF*1..4]->(w)
                 WITH e, w, u,
                      MAX(r.score) AS score,
@@ -302,8 +264,7 @@ async def graph_search(state: RagState) -> dict:
             )
             async for record in result:
                 chunk = _record_to_chunk(record, source="graph")
-                # Fallback: se matched_concepts è vuoto ma sappiamo che è un match GRAPH,
-                # usiamo le label trovate nella query come spiegazione
+                # Fallback: assign matched query labels if matched_concepts list is empty
                 if not chunk.metadata.get("matched_concepts"):
                     chunk.metadata["matched_concepts"] = analyzed.expanded_labels
                 chunks.append(chunk)

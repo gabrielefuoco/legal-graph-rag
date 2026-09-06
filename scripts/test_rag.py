@@ -1,3 +1,5 @@
+"""Integration test script for end-to-end RAG retrieval pipeline."""
+
 import asyncio
 import logging
 from src.rag.engine import RagEngine
@@ -5,11 +7,11 @@ from src.rag.engine import RagEngine
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(name)-30s | %(levelname)-5s | %(message)s")
 
 async def test_rag():
+    """Execute test retrieval query and print retrieved sources and snippets."""
     engine = RagEngine()
     query = "Quali sono i limiti previsti dal Codice dei Contratti Pubblici in materia di subappalti?"
     print(f"Testing RAG with query: {query}")
     
-    # We use engine.retrieve to test retrieval
     results = await engine.retrieve(query)
     
     print(f"\n--- RAG RETRIEVAL RESULTS ---")

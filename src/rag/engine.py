@@ -1,11 +1,11 @@
-"""
-RAG Engine — Orchestrazione del Retrieval Engine con LangGraph.
+"""RAG Engine — LangGraph orchestration for hybrid retrieval and generation.
 
-Costruisce il StateGraph e fornisce la facciata pubblica `RagEngine.retrieve()`.
+Builds the StateGraph and provides the public interface `RagEngine.retrieve()`.
 
-Flusso del grafo:
-    START → analyze_query → [vector_search, bm25_search, graph_search] (fan-out)
-         → fuse_and_filter → should_expand? → expand_citations ↺ → END
+Graph flow:
+    START -> contextualize_query -> analyze_query -> retrieve_all -> fuse_and_filter -> rerank
+    rerank -> should_expand? -> expand_citations (loop) -> grade_documents
+    grade_documents -> [topological_expand -> generate, rewrite_query -> analyze_query, fallback_generation] -> END
 """
 import logging
 
@@ -34,18 +34,14 @@ logger = logging.getLogger(__name__)
 
 
 class RAGResult(list):
-    """
-    Wrapper retrocompatibile che si comporta come una lista di RetrievedChunk,
-    ma espone l'attributo .answer per contenere la risposta generata dall'LLM.
-    """
+    """Backward-compatible list wrapper of RetrievedChunk with an answer attribute."""
     def __init__(self, chunks, answer: str | None = None):
         super().__init__(chunks)
         self.answer = answer
 
 
-
 def fallback_generation(state: RagState) -> dict:
-    """Nodo che ritorna un messaggio predefinito se nessun documento supera il filtro."""
+    """Return a default message when no retrieved documents pass the grader."""
     logger.info("Esecuzione fallback_generation: nessun documento disponibile.")
     return {
         "generation": "Non dispongo di informazioni sufficienti per rispondere a questa domanda."
@@ -53,7 +49,7 @@ def fallback_generation(state: RagState) -> dict:
 
 
 def post_grading_router(state: RagState) -> str:
-    """Controlla la pertinenza dei documenti e, in caso negativo, il limite di iterazioni."""
+    """Route based on document grading relevance and agentic iteration limits."""
     chunks = state.get("final_chunks")
     
     if chunks:
@@ -67,27 +63,26 @@ def post_grading_router(state: RagState) -> str:
         return "__end__"
     return "fallback_generation"
 
+
 def post_expansion_router(state: RagState) -> str:
+    """Route after topological expansion to generation or graph termination."""
     if state.get("skip_generation"):
         return "__end__"
     return "generate"
 
 
 async def retrieve_all(state: RagState) -> dict:
-    """
-    Nodo LangGraph che esegue i tre canali di retrieval in parallelo.
-    Sostituisce il fan-out/fan-in manuale per evitare problemi di sincronizzazione.
-    """
+    """Execute vector, BM25, and graph retrieval channels concurrently."""
     import asyncio
     
-    # Esegue i tre nodi in parallelo
+    # Run all three retrieval branches in parallel
     results = await asyncio.gather(
         vector_search(state),
         bm25_search(state),
         graph_search(state)
     )
     
-    # Unisce i dizionari di output
+    # Combine output dictionaries
     combined = {}
     for r in results:
         combined.update(r)
@@ -95,23 +90,10 @@ async def retrieve_all(state: RagState) -> dict:
 
 
 def _build_graph() -> StateGraph:
-    """
-    Costruisce il StateGraph LangGraph per il retrieval ibrido + generazione + loop agentico.
-
-    Topologia aggiornata Fase 9:
-        START → contextualize_query → analyze_query → retrieve_all → fuse_and_filter → rerank
-        rerank → should_expand (condizionale)
-            → expand_citations → fuse_and_filter (ciclo)
-            → grade_documents (evaluator chunk-by-chunk)
-                 → check_relevance (router)
-                     → SI: generate → END
-                     → NO: check_iterations (router)
-                         → SI (iterations < max): rewrite_query → analyze_query (ciclo)
-                         → NO (iterations >= max): fallback_generation → END
-    """
+    """Build the LangGraph StateGraph for hybrid retrieval, generation, and agentic loop."""
     builder = StateGraph(RagState)
 
-    # Registrazione nodi
+    # Node registrations
     builder.add_node("contextualize_query", contextualize_query)
     builder.add_node("analyze_query", analyze_query)
     builder.add_node("retrieve_all", retrieve_all)
@@ -124,14 +106,14 @@ def _build_graph() -> StateGraph:
     builder.add_node("generate", generation_node)
     builder.add_node("fallback_generation", fallback_generation)
 
-    # Flusso iniziale
+    # Initial pipeline flow
     builder.add_edge(START, "contextualize_query")
     builder.add_edge("contextualize_query", "analyze_query")
     builder.add_edge("analyze_query", "retrieve_all")
     builder.add_edge("retrieve_all", "fuse_and_filter")
     builder.add_edge("fuse_and_filter", "rerank")
 
-    # Ciclo condizionale espansione citazioni
+    # Conditional citation expansion loop
     builder.add_conditional_edges(
         "rerank",
         should_expand,
@@ -142,7 +124,7 @@ def _build_graph() -> StateGraph:
     )
     builder.add_edge("expand_citations", "fuse_and_filter")
 
-    # Routing post-grading (Self-Reflective Loop)
+    # Self-reflective grading router
     builder.add_conditional_edges(
         "grade_documents",
         post_grading_router,
@@ -154,7 +136,7 @@ def _build_graph() -> StateGraph:
         }
     )
     
-    # Routing post-espansione
+    # Post-expansion routing
     builder.add_conditional_edges(
         "topological_expand",
         post_expansion_router,
@@ -164,10 +146,10 @@ def _build_graph() -> StateGraph:
         }
     )
     
-    # Rewriter riporta ad analyze_query
+    # Loop rewritten query back to analyzer
     builder.add_edge("rewrite_query", "analyze_query")
 
-    # Nodi finali
+    # Terminal edges
     builder.add_edge("generate", END)
     builder.add_edge("fallback_generation", END)
 
@@ -175,12 +157,10 @@ def _build_graph() -> StateGraph:
 
 
 class RagEngine:
-    """
-    Facciata principale del RAG Engine.
-    """
+    """Main facade for the RAG retrieval and generation engine."""
 
     def __init__(self):
-        # Dipendenze
+        # Dependencies
         self.vector_engine = VectorEngine()
         self.teseo_matcher = TESEOMatcher(settings.TESEO_RDF_PATH)
         self.analyzer = QueryAnalyzer(
@@ -192,14 +172,14 @@ class RagEngine:
         self.grader = RetrievalGrader()
         self.rewriter = QueryRewriter()
 
-        # Compila il grafo
+        # Compile LangGraph graph
         builder = _build_graph()
         self.graph = builder.compile()
         logger.info("RagEngine inizializzato: grafo LangGraph compilato.")
         self._warmed_up = False
 
     async def _warmup(self):
-        """Esegue un embedding dummy per forzare il caricamento del modello Ollama in VRAM."""
+        """Run a dummy embedding to warm up the embedding model and TESEO matcher."""
         if self._warmed_up:
             return
         logger.info("[WARMUP] Avvio warmup del modello di embedding...")
@@ -207,7 +187,7 @@ class RagEngine:
             await self.analyzer.vector_engine.compute_embeddings_batch(["warmup"])
             logger.info("[WARMUP] Modello di embedding caricato in VRAM.")
             
-            # Inizializza la matrice per il matching semantico di TESEO
+            # Precompute semantic matching matrix for TESEO
             await self.teseo_matcher.precompute_embeddings(self.vector_engine)
         except Exception as e:
             logger.warning(f"[WARMUP] Fallito: {e}")
@@ -228,16 +208,14 @@ class RagEngine:
         generator_num_ctx: int | None = None,
         chat_history: list[dict[str, str]] | None = None,
     ) -> RAGResult:
-        """
-        Esegue il retrieval ibrido e la generazione per una data query.
-        """
+        """Execute hybrid retrieval and generation for a given query."""
         if not self._warmed_up:
             await self._warmup()
             
         _topo_max_chars = topo_max_chars if topo_max_chars is not None else settings.TOPOLOGICAL_MAX_CHARS
         _generator_num_ctx = generator_num_ctx if generator_num_ctx is not None else settings.GENERATOR_NUM_CTX
 
-        # Stato iniziale
+        # Initial state
         initial_state: RagState = {
             "query": query,
             "reference_date": reference_date,
@@ -263,7 +241,7 @@ class RagEngine:
             "final_chunks": [],
             "expanded_chunks": [],
             "generation": None,
-            # Dipendenze iniettate
+            # Injected dependencies
             "_analyzer": self.analyzer,
             "_reranker": self.reranker,
             "_llm": self.generator,
@@ -271,7 +249,7 @@ class RagEngine:
             "_rewriter": self.rewriter,
         }
 
-        # Esecuzione del grafo (con driver temporaneo legata al loop corrente)
+        # Execute graph with session-scoped async driver
         import time
         start = time.perf_counter()
         
@@ -285,7 +263,7 @@ class RagEngine:
         elapsed = time.perf_counter() - start
         logger.info(f"[PIPELINE] Esecuzione completa in {elapsed:.1f}s | Iterazioni: {result.get('iterations', 0)}")
 
-        # Ritorna i chunk e l'answer tramite RAGResult
+        # Return chunks and generated answer wrapped in RAGResult
         final = result.get("expanded_chunks") or result.get("final_chunks") or result.get("fused_chunks") or []
         generation = result.get("generation")
         return RAGResult(final, answer=generation)
@@ -306,9 +284,9 @@ class RagEngine:
         skip_generation: bool = False,
         status_callback=None
     ) -> tuple[list[RetrievedChunk], dict, str | None]:
-        """
-        Esegue il retrieval ibrido e ritorna i chunk, la traccia XAI e opzionalmente la generazione.
-        Se skip_generation=True, bypassa il nodo 'generate' per permettere lo streaming esterno.
+        """Execute hybrid retrieval returning chunks, execution trace, and optional generation.
+        
+        If skip_generation is True, generation node is bypassed to allow external streaming.
         """
         if not self._warmed_up:
             await self._warmup()
@@ -347,7 +325,7 @@ class RagEngine:
             "_rewriter": self.rewriter,
         }
 
-        # Esecuzione del grafo con streaming degli eventi
+        # Execute graph with event streaming
         import time
         start = time.perf_counter()
         
@@ -377,15 +355,14 @@ class RagEngine:
             "analyzed_query": result.get("analyzed_query"),
             "enable_graph_search": result.get("enable_graph_search"),
             "enable_multi_hop": result.get("enable_multi_hop"),
-            # The node retrieve_all returns the lists, we should check their lengths
             "vector_results_count": len(result.get("vector_results") or []),
             "bm25_results_count": len(result.get("bm25_results") or []),
             "graph_results_count": len(result.get("graph_results") or []),
-            "query": result.get("query", query) # La query finale riscritta
+            "query": result.get("query", query)
         }
 
         return final_chunks, trace, generation
 
     async def close(self):
-        """Chiude le risorse."""
+        """Release allocated engine resources."""
         logger.info("RagEngine chiuso.")

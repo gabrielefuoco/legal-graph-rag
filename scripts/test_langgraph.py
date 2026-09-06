@@ -1,3 +1,5 @@
+"""Test script for streaming multi-turn interactions through LangGraph supervisor workflow."""
+
 import asyncio
 import logging
 from src.rag.engine import RagEngine
@@ -7,6 +9,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 logging.basicConfig(level=logging.INFO)
 
 async def run_langgraph_directly():
+    """Execute direct message streaming test with SupervisorAgent graph."""
     engine = RagEngine()
     supervisor = SupervisorAgent(engine)
     graph = supervisor.get_graph()

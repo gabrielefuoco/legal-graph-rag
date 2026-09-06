@@ -1,10 +1,8 @@
-"""
-Query Analyzer — Step 1 del Retrieval Engine.
+"""Query Analyzer — Analyzes and enriches user queries prior to retrieval.
 
-Analizza la query dell'utente:
-1. Matching TESEO (Aho-Corasick) per estrarre concetti semantici
-2. Espansione BROADER/NARROWER via Neo4j (se disponibili)
-3. Calcolo dell'embedding della query per la Vector Search
+Extracts semantic concepts via TESEO thesaurus matching, performs taxonomic
+expansion over graph relations, computes query embeddings, and contextualizes
+multi-turn queries.
 """
 import logging
 from typing import List
@@ -20,11 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class QueryAnalyzer:
-    """
-    Analizza e arricchisce la query dell'utente prima del retrieval.
+    """Analyzes and enriches user queries before retrieval.
 
-    Utilizza il TESEOMatcher (Aho-Corasick) per estrarre concetti
-    dal thesaurus del Senato e il VectorEngine per calcolare l'embedding.
+    Leverages TESEOMatcher for semantic concept extraction from the Senate thesaurus
+    and VectorEngine for computing query embeddings.
     """
 
     def __init__(self, teseo_matcher: TESEOMatcher, vector_engine: VectorEngine):
@@ -32,12 +29,10 @@ class QueryAnalyzer:
         self.vector_engine = vector_engine
 
     async def _expand_teseo_concepts(self, driver: AsyncDriver, concept_ids: List[str]) -> tuple[List[str], List[str]]:
-        """
-        Naviga le relazioni BROADER/NARROWER nel grafo Neo4j
-        per espandere i concetti TESEO trovati.
+        """Traverse BROADER/NARROWER relationships in Neo4j to expand TESEO concepts.
 
         Returns:
-            Tuple di (expanded_ids, expanded_labels)
+            Tuple of (expanded_ids, expanded_labels).
         """
         if not concept_ids:
             return [], []
@@ -47,7 +42,7 @@ class QueryAnalyzer:
 
         try:
             async with driver.session() as session:
-                # Cerca i figli (narrower) dei concetti trovati
+                # Find narrower children of matched concepts
                 result = await session.run(
                     """
                     MATCH (child:TESEO_Concept)-[:BROADER]->(parent:TESEO_Concept)
@@ -61,15 +56,13 @@ class QueryAnalyzer:
                     if record.get("label"):
                         expanded_labels.append(record["label"].lower())
         except Exception as e:
-            # Le relazioni BROADER potrebbero non esistere nel grafo
+            # BROADER relationships might be absent in the graph
             logger.debug(f"Espansione TESEO BROADER fallita (probabilmente assente): {e}")
 
-        # Fallback: se BROADER non ha trovato nulla, cerchiamo concetti
-        # con prefLabel simili ai concetti trovati (espansione per label)
+        # Fallback: retrieve prefLabels of matched concepts for lexical expansion
         if not expanded_ids and concept_ids:
             try:
                 async with driver.session() as session:
-                    # Recupera le prefLabel dei concetti trovati
                     result = await session.run(
                         """
                         MATCH (t:TESEO_Concept)
@@ -87,11 +80,7 @@ class QueryAnalyzer:
         return expanded_ids, expanded_labels
 
     async def _resolve_teseo_by_label(self, driver: AsyncDriver, labels: List[str]) -> List[str]:
-        """
-        Cerca concetti TESEO per prefLabel (case-insensitive).
-        Utile quando l'utente scrive parole che corrispondono a un concetto
-        ma l'Aho-Corasick non le trova (es. per differenze di normalizzazione).
-        """
+        """Look up TESEO concepts by prefLabel (case-insensitive) in Neo4j."""
         if not labels:
             return []
 
@@ -112,17 +101,14 @@ class QueryAnalyzer:
             logger.debug(f"Resolve TESEO by label fallito: {e}")
 
         return found_ids
-async def analyze_query(state: RagState) -> dict:
-    """
-    Nodo LangGraph: analizza la query e produce AnalyzedQuery + embedding.
 
-    Legge: state["query"]
-    Scrive: state["analyzed_query"], state["query_embedding"]
-    """
+
+async def analyze_query(state: RagState) -> dict:
+    """LangGraph node: analyze query to produce AnalyzedQuery and query embeddings."""
     import time
     start = time.perf_counter()
     query = state["query"]
-    analyzer: QueryAnalyzer = state["_analyzer"]  # Iniettato dall'engine
+    analyzer: QueryAnalyzer = state["_analyzer"]
     enable_graph_search = state.get("enable_graph_search", True)
 
     all_concept_ids = []
@@ -130,16 +116,15 @@ async def analyze_query(state: RagState) -> dict:
     expanded_query_text = query
 
     if enable_graph_search:
-        # 1. Matching TESEO (Aho-Corasick sulla query)
+        # 1. TESEO topic extraction (Aho-Corasick / semantic)
         topics = await analyzer.teseo_matcher.extract_topics(query, analyzer.vector_engine)
         concept_ids = [t["teseo_id"] for t in topics]
         matched_labels = [t["label"] for t in topics]
 
         logger.info(f"TESEO match sulla query: {len(topics)} concetti trovati: {matched_labels}")
 
-        # 1b. Fallback: se Aho-Corasick non ha trovato nulla, proviamo per prefLabel nel DB
+        # Fallback: database prefLabel lookup if matcher yielded no concepts
         if not concept_ids:
-            # Estrai parole significative dalla query (> 3 caratteri)
             query_words = [w for w in query.lower().split() if len(w) > 3]
             if query_words:
                 db_ids = await analyzer._resolve_teseo_by_label(state["_driver"], query_words)
@@ -148,7 +133,7 @@ async def analyze_query(state: RagState) -> dict:
                     matched_labels = query_words
                     logger.info(f"TESEO fallback (DB lookup): {len(db_ids)} concetti trovati")
 
-        # 2. Espansione BROADER/NARROWER
+        # 2. BROADER/NARROWER taxonomic expansion
         expanded_ids, expanded_labels = await analyzer._expand_teseo_concepts(state["_driver"], concept_ids)
         all_concept_ids = list(set(concept_ids + expanded_ids))
 
@@ -157,15 +142,15 @@ async def analyze_query(state: RagState) -> dict:
         if expanded_labels:
             logger.info(f"Label espanse per BM25: {expanded_labels}")
 
-        # 3. Costruzione query espansa per BM25
+        # 3. Build expanded query text for BM25
         all_labels = list(set(matched_labels + expanded_labels))
         if all_labels:
-            # Aggiungiamo i concetti trovati alla query originale per migliorare il BM25
+            # Append concept labels to enhance BM25 matching
             expanded_query_text += " " + " ".join(all_labels)
     else:
         logger.info("Ricerca semantica via TESEO disabilitata: skip matching ed espansione concetti.")
 
-    # 3b. Istruzione Reranker (Generica per il dominio legale)
+    # Task-aware reranker instruction for legal retrieval
     reranker_instruction = (
         "Sei un assistente legale esperto. Trova i frammenti normativi, le disposizioni di legge "
         "o i passaggi giurisprudenziali che rispondono in modo diretto e fattuale alla query dell'utente."
@@ -179,7 +164,7 @@ async def analyze_query(state: RagState) -> dict:
         reranker_instruction=reranker_instruction,
     )
 
-    # 4. Calcolo embedding della query (riutilizza se già calcolato in extract_topics)
+    # 4. Compute query embedding (reusing if already computed during TESEO matching)
     query_embedding = None
     if hasattr(analyzer.teseo_matcher, 'last_query_embedding') and analyzer.teseo_matcher.last_query_embedding is not None:
         query_embedding = analyzer.teseo_matcher.last_query_embedding
@@ -207,10 +192,7 @@ async def analyze_query(state: RagState) -> dict:
 
 
 async def contextualize_query(state: RagState) -> dict:
-    """
-    Nodo LangGraph: riscrive la query dell'utente alla luce della chat history
-    per produrre una standalone query che racchiude tutto il contesto conversazionale.
-    """
+    """LangGraph node: reformulates conversational query into a standalone query using chat history."""
     query = state["query"]
     chat_history = state.get("chat_history") or []
 
@@ -225,7 +207,7 @@ async def contextualize_query(state: RagState) -> dict:
         from src.rag.llm_factory import get_llm
         llm = get_llm(temperature=0.0, reasoning=False)
 
-    # Formattiamo la chat history in un formato testuale leggibile
+    # Format chat history into readable transcript
     formatted_history = ""
     for turn in chat_history:
         role = turn.get("role", "user").upper()
@@ -264,6 +246,6 @@ async def contextualize_query(state: RagState) -> dict:
         return {"query": standalone_query}
     except Exception as e:
         logger.error(f"Errore nella contestualizzazione della query: {e}")
-        # In caso di errore, fallback alla query originale
+        # Fallback to original query on failure
         return {"query": query}
 

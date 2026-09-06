@@ -1,3 +1,5 @@
+"""Asynchronous scraper and client for Senato della Repubblica data."""
+
 import asyncio
 import logging
 import aiohttp
@@ -5,26 +7,34 @@ import xml.etree.ElementTree as ET
 from typing import List, Dict, Any
 from pathlib import Path
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 SENATO_SPARQL_ENDPOINT = "https://dati.senato.it/sparql"
 
 class AsyncSenatoScraper:
-    """
-    Asynchronous scraper for Senato della Repubblica data.
-    Uses SPARQL to discover documents and aiohttp to download AKN XMLs.
+    """Asynchronous scraper for Senato della Repubblica data.
+
+    Discovers legislative documents via SPARQL and downloads Akoma Ntoso XML files.
     """
 
     def __init__(self, output_dir: str = "data/raw/senato"):
+        """Initialize scraper with target output directory.
+
+        Args:
+            output_dir: Directory where downloaded Senato documents are stored.
+        """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     async def fetch_ids_by_topic(self, topic: str, limit: int = 500) -> List[str]:
-        """
-        Uses SPARQL to find Senato Bill IDs (DDL) related to a specific topic.
-        Returns a list of clean IDs (e.g., '1234' from 'http://dati.senato.it/osr/Ddl/1234')
-        to be matched with the Bulk Data XML files.
+        """Fetch Senato Bill identifiers (DDL) related to a specific topic via SPARQL.
+
+        Args:
+            topic: Keyword or topic name to match in bill titles.
+            limit: Maximum number of bill identifiers to retrieve.
+
+        Returns:
+            List of bill numbers/identifiers to match with bulk data XMLs.
         """
         topic_lower = topic.lower().replace('"', '')
         query = f"""
@@ -62,8 +72,13 @@ class AsyncSenatoScraper:
                 return []
 
     async def fetch_ddl_metadata(self, limit: int = 100) -> List[Dict[str, str]]:
-        """
-        Fetches metadata for recent DDLs (Disegni di Legge) via SPARQL.
+        """Fetch metadata and download URLs for recent bills (Disegni di Legge).
+
+        Args:
+            limit: Maximum number of DDL metadata records to retrieve.
+
+        Returns:
+            List of dictionaries containing URI, number, title, and XML URL.
         """
         query = f"""
         SELECT DISTINCT ?ddl ?titolo ?numero ?url
@@ -111,15 +126,20 @@ class AsyncSenatoScraper:
                 return []
 
     def _construct_xml_url(self, uri: str) -> str | None:
-        """
-        Heuristic to construct XML URL from DDL URI if missing.
-        Example URI: http://dati.senato.it/osr/Ddl/2013-03-15/54
-        """
-        # For now, return None as we don't have a reliable mapping without more data
+        """Construct an XML URL from a DDL URI if missing."""
         return None
 
     async def download_file(self, session: aiohttp.ClientSession, url: str, filename: str) -> bool:
-        """Downloads a single file asynchronously."""
+        """Download a single XML file asynchronously.
+
+        Args:
+            session: Active aiohttp client session.
+            url: Remote file URL to download.
+            filename: Destination file name.
+
+        Returns:
+            True if download succeeded, False otherwise.
+        """
         try:
             async with session.get(url) as response:
                 if response.status == 200:
@@ -137,13 +157,15 @@ class AsyncSenatoScraper:
             return False
 
     async def run(self, limit: int = 50):
-        """Main execution method."""
+        """Discover and download recent Senato DDL XML files.
+
+        Args:
+            limit: Maximum number of records to process.
+        """
         logger.info("Starting Async Senato Scraper...")
         
-        # 1. Get Metadata
         ddls = await self.fetch_ddl_metadata(limit)
         
-        # 2. Download XMLs concurrently
         async with aiohttp.ClientSession() as session:
             tasks = []
             for ddl in ddls:

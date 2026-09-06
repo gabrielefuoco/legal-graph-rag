@@ -1,3 +1,5 @@
+"""Download TESEO thesaurus concepts and labels from Senato SPARQL endpoint into Turtle format."""
+
 import urllib.request
 import urllib.parse
 import json
@@ -5,6 +7,7 @@ import os
 import time
 
 def escape_o(o):
+    """Escape quotation marks and format as an Italian RDF literal string."""
     o_clean = o.replace('"', '\\"')
     return f'"{o_clean}"@it'
 

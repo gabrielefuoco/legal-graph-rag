@@ -1,10 +1,7 @@
-"""
-Citation Expander — Step 4 del Retrieval Engine.
+"""Citation Expander — Recursive multi-hop retrieval over graph citations.
 
-Implementa il multi-hop ricorsivo:
-- Per ogni chunk fuso, cerca archi :CITES verso nodi interni al grafo
-- Se trova norme citate, le aggiunge al contesto
-- Il ciclo è controllato da MAX_CITATION_HOPS (default 1)
+Traverses incoming and outgoing :CITES edges for retrieved chunks to incorporate
+referenced legal provisions into the retrieval context. Controlled by max_citation_hops.
 """
 import logging
 
@@ -18,17 +15,16 @@ logger = logging.getLogger(__name__)
 
 
 def should_expand(state: RagState) -> str:
-    """
-    Routing condizionale LangGraph: decide se espandere le citazioni o terminare.
+    """Conditional router determining whether to expand citations or proceed to grading.
 
-    Ritorna:
-        - "expand_citations" se hop_count < MAX_CITATION_HOPS e ci sono chunk
-        - "__end__" altrimenti
+    Returns:
+        "expand_citations" if hop_count < max_citation_hops and source chunks exist,
+        "__end__" otherwise.
     """
     hop_count = state.get("hop_count", 0)
     fused_chunks = state.get("fused_chunks") or []
 
-    # Salta il multi-hop se disabilitato
+    # Skip multi-hop expansion if disabled
     if not state.get("enable_multi_hop", True):
         logger.info("Multi-hop disabilitato tramite flag (enable_multi_hop=False). Skip espansione.")
         return "__end__"
@@ -37,7 +33,6 @@ def should_expand(state: RagState) -> str:
 
     if hop_count >= max_hops:
         logger.info(f"Multi-hop: raggiunto limite ({hop_count}/{max_hops}), terminazione.")
-        # Copia i chunk fusi nei final_chunks prima di terminare
         return "__end__"
 
     if not fused_chunks:
@@ -48,26 +43,16 @@ def should_expand(state: RagState) -> str:
 
 
 async def expand_citations(state: RagState) -> dict:
-    """
-    Nodo LangGraph: espande i chunk trovati navigando gli archi :CITES.
-
-    Per ogni chunk in fused_chunks, cerca citazioni verso nodi Expression o Work
-    interni al grafo. Se trova testo citato, lo aggiunge come nuovo chunk.
-
-    Legge: state["fused_chunks"], state["hop_count"], state["_driver"]
-    Scrive: state["fused_chunks"] (aggiornato), state["hop_count"] (+1),
-            state["final_chunks"]
-    """
+    """Expand retrieved chunks by querying outbound :CITES edges in Neo4j."""
     driver: AsyncDriver = state["_driver"]
-    # Partiamo dai chunk che sono sopravvissuti al reranker (final_chunks)
-    # per evitare di espandere citazioni di documenti giudicati irrilevanti
+    # Start from chunks surviving the reranker to avoid expanding irrelevant citations
     source_chunks = state.get("final_chunks") or state.get("fused_chunks") or []
     hop_count = state.get("hop_count", 0)
 
-    # Raccogli tutti gli expression_id dei chunk attuali
+    # Collect expression IDs from source chunks
     chunk_ids = [c.expression_id for c in source_chunks if c.expression_id]
     
-    # Per evitare duplicati finali, controlliamo contro i fused_chunks originali
+    # Prevent duplicates against existing fused chunks
     existing_ids = {c.expression_id for c in (state.get("fused_chunks") or [])}
 
     if not chunk_ids:
@@ -79,19 +64,19 @@ async def expand_citations(state: RagState) -> dict:
 
     try:
         async with driver.session() as session:
-            # Cerca citazioni dirette dai chunk attuali
+            # Query direct citations originating from current chunks
             result = await session.run(
                 """
                 UNWIND $chunk_ids AS src_id
                 MATCH (src {id: src_id})-[:CITES]->(target)
                 WHERE (target:Expression OR target:Work)
                 
-                // Se il target è un Work, prendi le Expression figlie
+                // If target is Work, retrieve child Expression nodes
                 WITH target
                 OPTIONAL MATCH (child:Expression)-[:PART_OF*1..2]->(target)
                 WHERE target:Work
 
-                // Unifica: se target è Expression usiamo target, altrimenti child
+                // Unify: use target directly if Expression, otherwise child
                 WITH coalesce(
                     CASE WHEN target:Expression THEN target ELSE null END,
                     child
@@ -114,14 +99,14 @@ async def expand_citations(state: RagState) -> dict:
             )
             async for record in result:
                 expr_id = record.get("expression_id") or ""
-                # Evita duplicati con i chunk già presenti
+                # Avoid duplicates with already present chunks
                 if expr_id and expr_id not in existing_ids:
                     new_chunks.append(RetrievedChunk(
                         text=record.get("text") or "",
                         expression_id=expr_id,
                         work_urn=record.get("work_urn"),
                         structural_context=record.get("structural_tag") or "",
-                        score=0.0,  # Score base per i chunk di espansione
+                        score=0.0,  # Base score for expansion chunks
                         source="citation_hop",
                         vigenza_start=_parse_date(record.get("vigenza_start")),
                         vigenza_end=_parse_date(record.get("vigenza_end")),
@@ -136,8 +121,7 @@ async def expand_citations(state: RagState) -> dict:
     else:
         logger.info(f"Multi-hop {hop_count + 1}: nessuna citazione interna trovata")
 
-    # FIX: Aggiungiamo i nuovi chunk trovati al pool di graph_results
-    # così il successivo nodo fuse_and_filter li integrerà e li valuterà col RRF
+    # Append newly discovered chunks to graph_results for subsequent fusion and RRF ranking
     current_graph_results = state.get("graph_results") or []
     updated_graph_results = current_graph_results + new_chunks
 

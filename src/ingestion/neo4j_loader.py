@@ -1,3 +1,5 @@
+"""Asynchronous Neo4j loader for legal knowledge graph nodes and edges."""
+
 import logging
 from neo4j import AsyncGraphDatabase
 from src.config import settings
@@ -5,9 +7,9 @@ from src.config import settings
 logger = logging.getLogger(__name__)
 
 class AsyncNeo4jLoader:
-    """
-    Handles asynchronous batch loading of legal documents into Neo4j.
-    Implements schema setup and idempotent writing strategies.
+    """Asynchronous batch loader for ingesting legal documents into Neo4j.
+
+    Implements schema initialization, constraint management, and idempotent loading strategies.
     """
 
     def __init__(self):
@@ -22,9 +24,10 @@ class AsyncNeo4jLoader:
         await self.driver.close()
 
     async def setup_schema(self):
-        """
-        Creates mandatory unique constraints and indices.
-        Required for performance and data integrity.
+        """Create mandatory unique constraints and indices for legal graph entities.
+
+        Sets up uniqueness constraints for Work, Expression, StructuralUnit, and
+        TESEO_Concept, as well as full-text and vector search indices.
         """
         queries = [
             # Constraints
@@ -63,7 +66,11 @@ class AsyncNeo4jLoader:
                     raise
 
     async def load_teseo_ontology(self, rdf_path: str):
-        """Loads TESEO concepts and BROADER relations from RDF."""
+        """Load TESEO concepts and BROADER relations from an RDF file.
+
+        Args:
+            rdf_path: Filepath to the RDF ontology (.ttl or .xml).
+        """
         from rdflib import Graph, URIRef, Literal
         from rdflib.namespace import SKOS
         
@@ -127,7 +134,7 @@ class AsyncNeo4jLoader:
             raise
 
     async def _load_works(self, tx, batch: list[dict]):
-        """Batch load Work nodes."""
+        """Batch load Work nodes within an active transaction."""
         query = """
         UNWIND $batch AS row
         MERGE (w:Work {id: row.urn})
@@ -143,7 +150,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_expressions(self, tx, batch: list[dict]):
-        """Batch load Expression nodes with embeddings."""
+        """Batch load Expression nodes with embeddings and link to Works."""
         query = """
         UNWIND $batch AS row
         MATCH (w:Work {id: row.work_urn})
@@ -166,7 +173,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_structural_units(self, tx, batch: list[dict]):
-        """Batch load non-leaf Structural units (Book, Title, etc.)."""
+        """Batch load non-leaf structural units (Book, Title, etc.) and link to Works."""
         query = """
         UNWIND $batch AS row
         MATCH (w:Work {id: row.work_urn})
@@ -184,7 +191,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_judgements(self, tx, batch: list[dict]):
-        """Batch load Judgement nodes."""
+        """Batch load Judgement nodes within an active transaction."""
         query = """
         UNWIND $batch AS row
         MERGE (j:Judgement {id: row.id})
@@ -245,7 +252,7 @@ class AsyncNeo4jLoader:
         await tx.run(alt_query_next, batch=batch)
 
     async def _load_semantic_edges(self, tx, batch: list[dict]):
-        """Batch load semantic edges (HAS_TOPIC)."""
+        """Batch load semantic topic edges (HAS_TOPIC)."""
         query = """
         UNWIND $batch AS row
         MATCH (e:Expression {id: row.expression_id})
@@ -256,7 +263,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_interprets_edges(self, tx, batch: list[dict]):
-        """Batch load INTERPRETS edges."""
+        """Batch load INTERPRETS edges linking Judgements to Works or Expressions."""
         query = """
         UNWIND $batch AS row
         MATCH (j:Judgement {id: row.source_id})
@@ -270,7 +277,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_cites_edges(self, tx, batch: list[dict]):
-        """Batch load CITES edges."""
+        """Batch load CITES edges linking Expressions to referenced targets."""
         query = """
         UNWIND $batch AS row
         MATCH (s:Expression {id: row.source_id})
@@ -281,7 +288,7 @@ class AsyncNeo4jLoader:
             UNION
             WITH row MATCH (u:StructuralUnit {id: row.target_id}) RETURN u AS target
             UNION
-            // Creazione placeholder per citazioni esterne non presenti nel DB
+            // Create placeholder for external citations not present in database
             WITH row 
             WHERE NOT EXISTS { MATCH (n {id: row.target_id}) } AND row.target_id STARTS WITH 'urn:'
             MERGE (w_ext:Work {id: row.target_id})
@@ -293,7 +300,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_modifies_edges(self, tx, batch: list[dict]):
-        """Batch load MODIFIES edges."""
+        """Batch load MODIFIES edges capturing normative modifications."""
         query = """
         UNWIND $batch AS row
         MATCH (s:Expression {id: row.source_id})
@@ -317,7 +324,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_iter_legis(self, tx, batch: list[dict]):
-        """Batch load ITER_LEGIS nodes."""
+        """Batch load parliamentary IterLegisStep nodes."""
         query = """
         UNWIND $batch AS row
         MERGE (i:IterLegisStep {id: row.id})
@@ -329,7 +336,7 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def _load_iter_edges(self, tx, batch: list[dict]):
-        """Batch load ITER_STEP edges."""
+        """Batch load ITER_STEP edges connecting steps to Works."""
         query = """
         UNWIND $batch AS row
         MATCH (i:IterLegisStep {id: row.source_id})
@@ -339,21 +346,23 @@ class AsyncNeo4jLoader:
         await tx.run(query, batch=batch)
 
     async def load_batch(self, nodes_batch: list[dict], edges_batch: list[dict]):
-        """
-        Orchestrate the loading of a complete document batch.
-        Uses a single transaction to ensure consistency.
+        """Orchestrate transactional loading of a complete document batch.
+
+        Args:
+            nodes_batch: List of node specification dictionaries.
+            edges_batch: List of relationship specification dictionaries.
         """
         import time
         start_time = time.time()
         
-        # We split nodes by type for specific query logic
+        # Partition nodes by entity type
         works = [n for n in nodes_batch if n.get('type') == 'WORK']
         expressions = [n for n in nodes_batch if n.get('type') == 'EXPRESSION']
         structural = [n for n in nodes_batch if n.get('type') == 'STRUCTURAL']
         judgements = [n for n in nodes_batch if n.get('type') == 'JUDGEMENT']
         iter_legis = [n for n in nodes_batch if n.get('type') == 'ITER_LEGIS']
         
-        # We split edges by type
+        # Partition edges by relationship type
         structural_edges = [e for e in edges_batch if e.get('type') in ('PART_OF', 'NEXT')]
         semantic_edges = [e for e in edges_batch if e.get('type') == 'HAS_TOPIC']
         interprets_edges = [e for e in edges_batch if e.get('type') == 'INTERPRETS']

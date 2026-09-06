@@ -1,3 +1,5 @@
+"""Supervisor Agent module coordinating LangGraph ReAct agent and retrieval tools."""
+
 import logging
 from typing import TypedDict, Annotated, Any
 from langgraph.prebuilt import create_react_agent, InjectedState
@@ -13,23 +15,22 @@ from src.rag.llm_factory import get_llm
 logger = logging.getLogger(__name__)
 
 class SupervisorState(TypedDict):
-    """Stato del Supervisor Agent arricchito per salvare la traccia del tool."""
+    """Supervisor Agent state schema tracking messages, engine, and tool execution traces."""
     messages: Annotated[list[BaseMessage], add_messages]
     _engine: Any              # RagEngine instance
-    _status_callback: Any     # Callback per la UI
-    _last_chunks: list | None # Ultimi documenti trovati
-    _last_trace: dict | None  # Trace dell'ultimo RAG execution
+    _status_callback: Any     # UI status reporting callback
+    _last_chunks: list | None # Last retrieved document chunks
+    _last_trace: dict | None  # Execution trace of the last retrieval
 
-# Nota: per poter passare variabili esterne (come engine e status_callback) a un @tool,
-# possiamo usare una closure factory function che restituisce il tool compilato.
+
 def build_search_tool(engine: RagEngine, status_callback=None, config: dict = None):
+    """Build and bind the legal database search tool with injected engine and callbacks."""
 
-    # Implementazione robusta del tool senza Command()
     @tool
     async def search_legal_db(query: str, state: Annotated[dict, InjectedState]) -> str:
-        """
-        Usa questo tool ESCLUSIVAMENTE per cercare leggi, sentenze o concetti nel database giuridico italiano.
-        Passa una query string chiara e ricca di parole chiave (es. "limiti subappalto codice contratti").
+        """Search Italian legal sources, legislation, or legal concepts in the database.
+
+        Provide a clear keyword-rich query (e.g. 'limiti subappalto codice contratti').
         """
         if status_callback:
             status_callback("supervisor_tool_rag", {"query": query})
@@ -54,10 +55,7 @@ def build_search_tool(engine: RagEngine, status_callback=None, config: dict = No
             status_callback=status_callback
         )
         
-        # Hack per iniettare i chunk nello stato senza usare Command che potrebbe rompere l'LLM:
-        # Useremo l'oggetto 'engine' come transport layer temporaneo!
-        # ponytail: attributi temporanei su engine, ok single-user seriale (Streamlit);
-        # upgrade path: state_schema=SupervisorState + Command(update={"messages":[ToolMessage], ...}).
+        # Store chunks and trace on engine as a temporary transport layer for single-user execution
         engine._temp_chunks = chunks
         engine._temp_trace = trace
         
@@ -77,11 +75,14 @@ def build_search_tool(engine: RagEngine, status_callback=None, config: dict = No
 
 
 class SupervisorAgent:
+    """Agentic supervisor coordinating user interaction and database tool execution."""
+
     def __init__(self, engine: RagEngine):
         self.engine = engine
         
     def get_graph(self, status_callback=None, config: dict = None):
-        # Estrai il context limit dal config, se presente
+        """Construct and compile the ReAct agent graph."""
+        # Extract context window limit from config if specified
         num_ctx = config.get("supervisor_num_ctx", settings.SUPERVISOR_NUM_CTX) if config else settings.SUPERVISOR_NUM_CTX
         
         llm = get_llm(
