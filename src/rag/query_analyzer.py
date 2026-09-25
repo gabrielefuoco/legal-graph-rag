@@ -171,8 +171,7 @@ async def analyze_query(state: RagState) -> dict:
         logger.debug("Riutilizzato embedding dalla fase TESEO")
     else:
         try:
-            embeddings = await analyzer.vector_engine.compute_embeddings_batch([query])
-            query_embedding = embeddings[0]
+            query_embedding = await analyzer.vector_engine.compute_query_embedding(query)
         except Exception as e:
             logger.error(f"Errore nel calcolo embedding della query: {e}")
             query_embedding = None

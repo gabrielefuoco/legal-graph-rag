@@ -1,0 +1,17 @@
+{
+  "stage1_rank": 2,
+  "weight_vector": 0.8,
+  "weight_bm25": 0.8,
+  "weight_graph": 0.8,
+  "rrf_k": 60,
+  "rerank_top_k": 15,
+  "rerank_min_score": 0.0,
+  "final_k": 10,
+  "generator_num_ctx": 8192,
+  "generator_stuff_threshold": 32000,
+  "topological_max_chars": 6000,
+  "avg_recall": 0.9333,
+  "avg_similarity": 0.7787,
+  "avg_gen_time_s": 0.0,
+  "global_score": 0.856
+}

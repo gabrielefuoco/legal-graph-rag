@@ -19,7 +19,7 @@ from src.rag.models import RagState, RetrievedChunk, AnalyzedQuery
 from src.rag.query_analyzer import QueryAnalyzer, analyze_query, contextualize_query
 from src.rag.retriever import vector_search, bm25_search, graph_search
 from src.rag.fusion import fuse_and_filter
-from src.rag.reranker import Reranker, rerank_node
+from src.rag.reranker import Reranker, build_reranker, rerank_node
 from src.rag.expander import should_expand, expand_citations
 from src.rag.generator import LegalGenerator, generation_node
 from src.rag.topology_expander import topological_expand_node
@@ -167,7 +167,7 @@ class RagEngine:
             teseo_matcher=self.teseo_matcher,
             vector_engine=self.vector_engine,
         )
-        self.reranker = Reranker()
+        self.reranker = build_reranker()
         self.generator = LegalGenerator()
         self.grader = RetrievalGrader()
         self.rewriter = QueryRewriter()

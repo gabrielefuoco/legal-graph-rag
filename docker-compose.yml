@@ -33,13 +33,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1
+#              capabilities: [gpu]
 
   streamlit:
     build: .
@@ -60,13 +60,13 @@ services:
       - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
       - QWEN3_ENDPOINT=http://ollama:11434
       - HF_HOME=/root/.cache/huggingface
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: all
+#              capabilities: [gpu]
     command: >
       streamlit run src/ui/app.py 
       --server.port=8501 

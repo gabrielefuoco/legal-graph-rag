@@ -32,6 +32,9 @@ data/processed/*
 !data/processed/.gitkeep
 data/external/*
 !data/external/.gitkeep
+# Grid search caches (regenerable, large)
+data/cache_*.pkl
+data/cache_*.json
 neo4j/data/
 neo4j/logs/
 neo4j/import/

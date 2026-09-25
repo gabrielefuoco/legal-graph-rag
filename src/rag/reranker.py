@@ -1,9 +1,16 @@
-"""Cross-Encoder reranking module with score thresholding and safety netting."""
+"""Cross-Encoder reranking module with score thresholding and safety netting.
+
+Two interchangeable backends are available (settings.RERANKER_BACKEND):
+  - "local": Qwen3-Reranker CrossEncoder on GPU/CPU (~1.2 GB VRAM, ~3s per query).
+  - "llm":   listwise reranking through a chat model on OpenRouter. OpenRouter exposes no
+             dedicated rerank models, so the LLM judges all candidates in a single call.
+"""
 
 import logging
 import os
 import torch
 from typing import List
+from pydantic import BaseModel, Field
 from sentence_transformers import CrossEncoder
 from src.config import settings
 from src.rag.models import RetrievedChunk, RagState
@@ -12,6 +19,15 @@ from src.rag.models import RetrievedChunk, RagState
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
+
+# Minimum number of chunks kept even when every score falls below the threshold
+MIN_RERANK_KEEP = 3
+
+
+def sigmoid(x: float) -> float:
+    """Map a raw CrossEncoder logit to a [0, 1] relevance probability."""
+    import math
+    return 1 / (1 + math.exp(-x))
 
 class Reranker:
     """Cross-Encoder reranker supporting GPU acceleration and threshold-based filtering."""
@@ -58,10 +74,6 @@ class Reranker:
         try:
             scores = self.model.predict(pairs, convert_to_numpy=True)
             
-            import math
-            def sigmoid(x):
-                return 1 / (1 + math.exp(-x))
-            
             for chunk, score in zip(chunks, scores):
                 # Normalize raw logits to [0, 1] probability
                 prob = sigmoid(float(score))
@@ -82,15 +94,7 @@ class Reranker:
                 else:
                     logger.info(f"✂️ Reranker: Scartato '{c.expression_id}' (Score: {c.score:.4f} < {min_score})")
             
-            # Retain at least MIN_RERANK_KEEP chunks if available to preserve sufficient context
-            MIN_RERANK_KEEP = 3
-            if len(filtered_chunks) < MIN_RERANK_KEEP and len(chunks) >= MIN_RERANK_KEEP:
-                logger.info(f"Rerank Filter: Ripescati i top {MIN_RERANK_KEEP - len(filtered_chunks)} chunk sotto soglia per garantire un minimo di contesto all'LLM.")
-                filtered_chunks = chunks[:MIN_RERANK_KEEP]
-            elif len(filtered_chunks) < MIN_RERANK_KEEP and len(chunks) < MIN_RERANK_KEEP:
-                filtered_chunks = chunks
-
-            chunks = filtered_chunks
+            chunks = apply_rerank_threshold(filtered_chunks, chunks, min_score)
             
             if len(chunks) < before_filter:
                 logger.info(f"Rerank Filter: scartati totali {before_filter - len(chunks)} chunk sotto soglia {min_score}")
@@ -104,6 +108,133 @@ class Reranker:
         except Exception as e:
             logger.error(f"Errore durante il reranking: {e}")
             return chunks
+
+
+def apply_rerank_threshold(filtered_chunks: List[RetrievedChunk], ranked_chunks: List[RetrievedChunk], min_score: float) -> List[RetrievedChunk]:
+    """Keep threshold-passing chunks, restoring the top candidates when too few survive."""
+    if len(filtered_chunks) < MIN_RERANK_KEEP and len(ranked_chunks) >= MIN_RERANK_KEEP:
+        logger.info(
+            f"Rerank Filter: Ripescati i top {MIN_RERANK_KEEP - len(filtered_chunks)} chunk "
+            f"sotto soglia per garantire un minimo di contesto all'LLM."
+        )
+        return ranked_chunks[:MIN_RERANK_KEEP]
+    if len(filtered_chunks) < MIN_RERANK_KEEP and len(ranked_chunks) < MIN_RERANK_KEEP:
+        return ranked_chunks
+    return filtered_chunks
+
+
+class RerankItem(BaseModel):
+    """Relevance judgement for a single candidate chunk (1-based index)."""
+
+    index: int = Field(description="Indice 1-based del documento nell'elenco fornito")
+    relevance: float = Field(description="Pertinenza da 0.0 (irrilevante) a 1.0 (perfettamente pertinente)")
+
+
+class RerankOutput(BaseModel):
+    """Listwise relevance ranking of the candidate chunks."""
+
+    items: List[RerankItem] = Field(description="Tutti i documenti valutati, dal più al meno pertinente")
+
+
+class LLMReranker:
+    """Listwise reranker backed by an OpenRouter chat model.
+
+    Exposes the same interface as the local CrossEncoder reranker so the two backends are
+    interchangeable: `rerank(query, chunks, instruction)` returns chunks with `score` in
+    [0, 1], sorted by descending relevance and already thresholded.
+    """
+
+    MAX_DOC_CHARS = 1200
+
+    def __init__(self, model_name: str = None):
+        from src.rag.llm_factory import get_llm
+
+        self.model_name = model_name or settings.RERANKER_LLM_MODEL or settings.OPENROUTER_MODEL_NAME
+        logger.info(f"LLMReranker: modello '{self.model_name}' su {settings.OPENROUTER_BASE_URL}")
+        self.llm = get_llm(temperature=0.0, reasoning=False, model_name=self.model_name)
+        self.structured_llm = self.llm.with_structured_output(RerankOutput)
+        self.system_prompt = (
+            "Sei un giudice di pertinenza per la ricerca giuridica italiana. Ricevi una domanda e un "
+            "elenco di documenti normativi/giurisprudenziali numerati. Valuta OGNI documento e assegna "
+            "un punteggio di pertinenza da 0.0 a 1.0 rispetto alla domanda, poi restituisci l'elenco "
+            "ordinato dal più al meno pertinente. Valuta la pertinenza sostanziale: un documento che "
+            "risponde alla domanda, che ne definisce un termine o che ne disciplina un'eccezione è "
+            "pertinente; un testo con parole chiave simili ma oggetto diverso non lo è."
+        )
+
+    def _build_messages(self, query: str, chunks: List[RetrievedChunk], instruction: str = None):
+        from langchain_core.messages import SystemMessage, HumanMessage
+
+        docs_text = ""
+        for i, chunk in enumerate(chunks, 1):
+            text = getattr(chunk, "expanded_text", None) or chunk.text or ""
+            if len(text) > self.MAX_DOC_CHARS:
+                text = text[: self.MAX_DOC_CHARS] + "..."
+            source = chunk.structural_context or chunk.work_urn or "Fonte sconosciuta"
+            docs_text += f"Documento {i} (Fonte: {source}):\n{text}\n\n"
+
+        task = f"Istruzione: {instruction}\n" if instruction else ""
+        user_message = f"{task}Domanda: {query}\n\nDocumenti:\n{docs_text}"
+        return [SystemMessage(content=self.system_prompt), HumanMessage(content=user_message)]
+
+    async def rerank(self, query: str, chunks: List[RetrievedChunk], instruction: str = None) -> List[RetrievedChunk]:
+        """Score and reorder candidate chunks with a single listwise LLM call."""
+        if not chunks:
+            return chunks
+        from copy import copy
+
+        candidates = [copy(c) for c in chunks]
+        messages = self._build_messages(query, candidates, instruction)
+
+        try:
+            response: RerankOutput = await self.structured_llm.ainvoke(messages)
+        except Exception as e:
+            logger.error(f"Errore durante il reranking LLM ({e}): ordine originale mantenuto.")
+            return candidates
+
+        # Guard against hallucinated indices: default missing items to 0.0
+        relevance = {}
+        for item in response.items:
+            if 1 <= item.index <= len(candidates):
+                relevance[item.index - 1] = max(0.0, min(1.0, float(item.relevance)))
+
+        for idx, chunk in enumerate(candidates):
+            chunk.score = relevance.get(idx, 0.0)
+            chunk.source += "+rerank_llm"
+
+        candidates.sort(key=lambda x: x.score, reverse=True)
+
+        min_score = settings.RERANK_MIN_SCORE
+        filtered = [c for c in candidates if c.score >= min_score]
+        before_filter = len(filtered)
+        kept = apply_rerank_threshold(filtered, candidates, min_score)
+
+        logger.info(
+            f"Rerank LLM: {len(candidates)} → {len(kept)} chunk "
+            f"(scartati {len(candidates) - before_filter} sotto soglia {min_score})"
+        )
+        if kept:
+            logger.info(f"Reranking LLM completato. Miglior score: {kept[0].score:.4f}")
+        return kept
+
+
+def build_reranker():
+    """Instantiate the reranker backend configured in settings.
+
+    Falls back to the local CrossEncoder when the LLM backend is requested but the active
+    provider is not OpenRouter (no chat API available for the listwise judgement).
+    """
+    backend = (getattr(settings, "RERANKER_BACKEND", "local") or "local").strip().lower()
+    provider = (settings.LLM_PROVIDER or "").strip().lower()
+
+    if backend == "llm":
+        if provider != "openrouter":
+            logger.warning(
+                f"RERANKER_BACKEND=llm richiesto ma LLM_PROVIDER='{provider}': uso il reranker locale."
+            )
+        else:
+            return LLMReranker()
+    return Reranker()
 
 async def rerank_node(state: RagState) -> dict:
     """LangGraph node to apply cross-encoder reranking, slicing, and safety netting."""

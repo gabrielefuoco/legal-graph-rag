@@ -241,9 +241,9 @@ class TESEOMatcher:
             
         # 2. Dense on-the-fly semantic matching
         try:
-            embeddings = await vector_engine.compute_embeddings_batch([text])
-            if embeddings:
-                self.last_query_embedding = embeddings[0]
+            query_embedding = await vector_engine.compute_query_embedding(text)
+            if query_embedding:
+                self.last_query_embedding = query_embedding
             else:
                 return sparse_matches
             

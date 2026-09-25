@@ -14,6 +14,11 @@ from src.rag.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
 
+# Hard timeout for the LLM relevance judge: stalled provider responses would otherwise
+# block the retrieval pipeline forever. Kept above the per-call retry budget in llm_factory
+# so that stalled calls are retried before falling back to "keep all documents".
+GRADER_TIMEOUT_S = 180
+
 class GraderOutput(BaseModel):
     """Structured output schema for chunk relevance grading."""
     reasoning: str = Field(
@@ -62,7 +67,9 @@ class RetrievalGrader:
         ]
         
         try:
-            response: GraderOutput = await self.structured_llm.ainvoke(messages)
+            response: GraderOutput = await asyncio.wait_for(
+                self.structured_llm.ainvoke(messages), timeout=GRADER_TIMEOUT_S
+            )
             relevant = response.relevant_chunks if response.relevant_chunks else []
             logger.info(f"[GRADE] Output strutturato LLM: documenti pertinenti {relevant}")
             logger.info(f"👨‍⚖️ Evaluator reasoning: {response.reasoning}")
@@ -71,7 +78,16 @@ class RetrievalGrader:
             for i in range(1, len(chunks) + 1):
                 results.append(i in relevant)
             return results
-            
+        
+        except asyncio.TimeoutError:
+            # Some provider responses stall after the HTTP headers: without this guard the
+            # whole agentic loop (and any batch job on top of it) would hang indefinitely.
+            logger.warning(
+                f"[GRADE] Timeout ({GRADER_TIMEOUT_S}s) nella chiamata al giudice: "
+                f"mantengo tutti i {len(chunks)} documenti."
+            )
+            return [True] * len(chunks)
+
         except Exception as e:
             logger.error(f"Errore durante il grading batch strutturato dei chunk: {e}")
             # Fallback: keep all documents

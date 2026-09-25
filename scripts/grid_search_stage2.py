@@ -20,13 +20,20 @@ import json
 import logging
 import math
 import os
+import pickle
 import re
 import time
 from dataclasses import dataclass, asdict
 from itertools import product
 from typing import List, Dict, Any, Optional
 
+import sys
+from pathlib import Path
+
 import numpy as np
+
+# Ensure project root is in sys.path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.config import settings
 from src.logging_config import setup_logging
@@ -109,6 +116,67 @@ class Stage2Config:
     generator_num_ctx: int
     generator_stuff_threshold: int
     topological_max_chars: int
+    rag_top_k: int = 15
+    vector_min_score: float = 0.3
+
+
+# In-memory cache of retrieval outputs keyed by query + Stage 1 retrieval signature.
+# Prevents re-running identical retrievals across Stage 2 context configurations.
+_RETRIEVAL_CACHE: Dict[str, List[RetrievedChunk]] = {}
+
+# Similarity scores are fully determined by (golden answer, generated answer), and cached
+# generations produce identical pairs across configurations: memoize to avoid thousands of
+# redundant embedding calls.
+_SIMILARITY_CACHE: Dict[str, float] = {}
+
+# Hard supervisor-level timeouts: the HTTP client does not always honour read timeouts on
+# stalled OpenRouter responses, so every network operation is wrapped by asyncio.wait_for.
+# These are last-resort guards: per-call retries are handled in src/rag/llm_factory.py.
+RETRIEVAL_TIMEOUT_S = 240
+GENERATION_TIMEOUT_S = 600
+_CALL_ATTEMPTS = 2
+_RETRIEVAL_CACHE_FILE = "data/cache_stage2_retrievals.pkl"
+
+
+async def await_with_timeout(coro_factory, timeout_s: float, label: str):
+    """Await a coroutine with a hard timeout, retrying once on stalls.
+
+    Guards against OpenRouter responses that return headers but never deliver the body
+    (observed stalls of 15+ minutes despite a 120s client timeout).
+    """
+    last_error = ""
+    for attempt in range(1, _CALL_ATTEMPTS + 1):
+        try:
+            return await asyncio.wait_for(coro_factory(), timeout=timeout_s)
+        except asyncio.TimeoutError:
+            last_error = f"nessuna risposta entro {timeout_s:.0f}s"
+            logger.warning(f"[TIMEOUT] {label}: {last_error} (tentativo {attempt}/{_CALL_ATTEMPTS}).")
+    raise TimeoutError(f"{label}: {last_error} dopo {_CALL_ATTEMPTS} tentativi")
+
+
+def load_retrieval_cache(path: str = None) -> int:
+    """Restore persisted retrieval results so interrupted runs resume without redoing work."""
+    path = path or _RETRIEVAL_CACHE_FILE
+    if not os.path.exists(path):
+        return 0
+    try:
+        with open(path, "rb") as f:
+            _RETRIEVAL_CACHE.update(pickle.load(f))
+        return len(_RETRIEVAL_CACHE)
+    except Exception as e:
+        logger.warning(f"Impossibile leggere la cache retrieval ({path}): {e}")
+        return 0
+
+
+def save_retrieval_cache(path: str = None):
+    """Persist retrieval results to disk (best effort)."""
+    path = path or _RETRIEVAL_CACHE_FILE
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)
+        with open(path, "wb") as f:
+            pickle.dump(dict(_RETRIEVAL_CACHE), f)
+    except Exception as e:
+        logger.warning(f"Impossibile salvare la cache retrieval ({path}): {e}")
 
 
 class GenerationCache:
@@ -124,9 +192,14 @@ class GenerationCache:
             except Exception as e:
                 logger.warning(f"Impossibile leggere cache: {e}")
 
-    def get_key(self, query: str, context_text: str, num_ctx: int, model: str) -> str:
-        """Derive deterministic SHA256 cache key from query, context, and generator parameters."""
-        payload = f"{query}::{context_text}::{num_ctx}::{model}"
+    def get_key(self, query: str, context_text: str, num_ctx: int, model: str, gen_mode: str = "stuff") -> str:
+        """Derive deterministic SHA256 cache key from query, context, and generator parameters.
+
+        `gen_mode` distinguishes direct stuffing from map-reduce generation so that
+        configurations sharing the same prompt but different generation pipelines
+        never reuse each other's cached answer.
+        """
+        payload = f"{query}::{context_text}::{num_ctx}::{model}::{gen_mode}"
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
     def get(self, key: str) -> Optional[str]:
@@ -144,11 +217,16 @@ class GenerationCache:
             logger.warning(f"Errore scrittura cache: {e}")
 
 
-def build_default_stage2_grid(stage1_top_configs: List[dict]) -> List[Stage2Config]:
+def build_default_stage2_grid(
+    stage1_top_configs: List[dict],
+    num_ctx_options: List[int] = None,
+    stuff_thresholds: List[int] = None,
+    topo_max_chars_options: List[int] = None,
+) -> List[Stage2Config]:
     """Combine top Stage 1 retrieval configurations with Stage 2 context parameters."""
-    num_ctx_options = [8192, 16384, 32768]
-    stuff_thresholds = [16000, 32000, 64000]
-    topo_max_chars_options = [6000, 12000, 20000]
+    num_ctx_options = num_ctx_options or [8192, 16384, 32768]
+    stuff_thresholds = stuff_thresholds or [16000, 32000, 64000]
+    topo_max_chars_options = topo_max_chars_options or [6000, 12000, 20000]
 
     stage2_configs = []
     for rank, s1 in enumerate(stage1_top_configs, 1):
@@ -164,7 +242,9 @@ def build_default_stage2_grid(stage1_top_configs: List[dict]) -> List[Stage2Conf
                 final_k=s1.get("final_k", 10),
                 generator_num_ctx=n_ctx,
                 generator_stuff_threshold=stuff_t,
-                topological_max_chars=topo_c
+                topological_max_chars=topo_c,
+                rag_top_k=int(s1.get("rag_top_k", settings.RAG_TOP_K)),
+                vector_min_score=float(s1.get("vector_min_score", 0.3)),
             ))
     return stage2_configs
 
@@ -183,25 +263,65 @@ async def evaluate_stage2_query(
     expected_ids = query_item.get("expected_ids", [])
     golden_answer = query_item.get("golden_answer", "")
 
-    # Retrieve chunks using Stage 1 and Stage 2 configuration parameters
-    chunks, trace, _ = await engine.retrieve_with_trace(
-        query=query,
-        top_k=cfg.rerank_top_k,
-        final_k=cfg.final_k,
-        enable_graph_search=True,
-        enable_multi_hop=True,
-        enable_topological_expansion=True,
-        topo_max_chars=cfg.topological_max_chars,
-        generator_num_ctx=cfg.generator_num_ctx,
+    # Retrieval depends only on query + Stage 1 parameters (not on num_ctx/stuff threshold),
+    # so identical retrieval signatures are evaluated once and reused.
+    retrieval_sig = (
+        f"{query}|{cfg.weight_vector}|{cfg.weight_bm25}|{cfg.weight_graph}|{cfg.rrf_k}"
+        f"|{cfg.rerank_top_k}|{cfg.rerank_min_score}|{cfg.final_k}|{cfg.topological_max_chars}"
+        f"|{cfg.rag_top_k}|{cfg.vector_min_score}|{settings.RERANKER_BACKEND}"
+        f"|{(settings.EMBEDDING_QUERY_INSTRUCTION or '')[:24]}"
     )
+    chunks = _RETRIEVAL_CACHE.get(retrieval_sig)
+    if chunks is None:
+        # Temporarily apply Stage 1 retrieval hyperparameters via settings overrides
+        overrides = {
+            "RRF_WEIGHT_VECTOR": cfg.weight_vector,
+            "RRF_WEIGHT_BM25": cfg.weight_bm25,
+            "RRF_WEIGHT_GRAPH": cfg.weight_graph,
+            "RRF_K": cfg.rrf_k,
+            "RERANK_TOP_K": cfg.rerank_top_k,
+            "RERANK_MIN_SCORE": cfg.rerank_min_score,
+            "RAG_TOP_K": cfg.rag_top_k,
+            "RAG_VECTOR_MIN_SCORE": cfg.vector_min_score,
+        }
+        previous_values = {key: getattr(settings, key) for key in overrides}
+        try:
+            for key, value in overrides.items():
+                setattr(settings, key, value)
+            # skip_generation avoids a discarded double generation: Stage 2 generates explicitly below
+            chunks, _trace, _ = await await_with_timeout(
+                lambda: engine.retrieve_with_trace(
+                    query=query,
+                    top_k=cfg.rerank_top_k,
+                    final_k=cfg.final_k,
+                    enable_graph_search=True,
+                    enable_multi_hop=True,
+                    enable_topological_expansion=True,
+                    topo_max_chars=cfg.topological_max_chars,
+                    generator_num_ctx=cfg.generator_num_ctx,
+                    skip_generation=True,
+                ),
+                RETRIEVAL_TIMEOUT_S,
+                f"retrieval '{query[:40]}...'",
+            )
+        finally:
+            for key, value in previous_values.items():
+                setattr(settings, key, value)
+        _RETRIEVAL_CACHE[retrieval_sig] = chunks
+        save_retrieval_cache()
+    else:
+        logger.info("⚡ Retrieval riutilizzato dalla cache (stessa firma Stage 1).")
 
     from scripts.grid_search_stage1 import calculate_recall
     recall = calculate_recall(chunks, expected_ids)
 
-    # Build formatted context and derive cache key
+    # Build formatted context and derive cache key. The effective generation pipeline
+    # (stuffing vs map-reduce) is part of the key to keep cached answers comparable.
     context_str = generator._format_context(chunks)
-    model_name = settings.OPENROUTER_MODEL_NAME if settings.is_openrouter else settings.GENERATIVE_MODEL_NAME
-    cache_key = cache.get_key(query, context_str, cfg.generator_num_ctx, model_name)
+    total_chars = sum(len(getattr(c, "expanded_text", None) or c.text) for c in chunks)
+    gen_mode = "stuff" if total_chars <= cfg.generator_stuff_threshold else "map_reduce"
+    model_name = settings.OPENROUTER_MODEL_NAME if settings.LLM_PROVIDER.strip().lower() == "openrouter" else settings.GENERATIVE_MODEL_NAME
+    cache_key = cache.get_key(query, context_str, cfg.generator_num_ctx, model_name, gen_mode)
 
     cached_gen = cache.get(cache_key)
     gen_time = 0.0
@@ -222,14 +342,23 @@ async def evaluate_stage2_query(
         old_stuff = getattr(settings, "GENERATOR_STUFF_THRESHOLD", 8000)
         settings.GENERATOR_STUFF_THRESHOLD = cfg.generator_stuff_threshold
         try:
-            res = await generator.generate(state)
+            res = await await_with_timeout(
+                lambda: generator.generate(state),
+                GENERATION_TIMEOUT_S,
+                f"generazione '{query[:40]}...'",
+            )
             answer = res.get("generation", "")
             cache.set(cache_key, answer)
         finally:
             settings.GENERATOR_STUFF_THRESHOLD = old_stuff
         gen_time = time.perf_counter() - start_t
 
-    sim_score = await compute_similarity(golden_answer, answer, vector_engine)
+    sim_key = hashlib.sha256(f"{golden_answer}::{answer}".encode("utf-8")).hexdigest()
+    if sim_key in _SIMILARITY_CACHE:
+        sim_score = _SIMILARITY_CACHE[sim_key]
+    else:
+        sim_score = await compute_similarity(golden_answer, answer, vector_engine)
+        _SIMILARITY_CACHE[sim_key] = sim_score
 
     return {
         "recall": recall,
@@ -269,7 +398,9 @@ def generate_stage2_report(results: List[dict], output_md: str):
         f.write(f"| `RRF_K` | `{best['rrf_k']}` | Costante K di Rank Fusion |\n")
         f.write(f"| `RERANK_TOP_K` | `{best['rerank_top_k']}` | Cutoff pre-reranking |\n")
         f.write(f"| `RERANK_MIN_SCORE` | `{best['rerank_min_score']}` | Soglia minima Reranker |\n")
-        f.write(f"| `FINAL_K` | `{best['final_k']}` | Numero finale di chunk alimentati al generatore |\n\n")
+        f.write(f"| `FINAL_K` | `{best['final_k']}` | Numero finale di chunk alimentati al generatore |\n")
+        f.write(f"| `RAG_TOP_K` | `{best.get('rag_top_k')}` | Candidati per canale pre-fusione |\n")
+        f.write(f"| `RAG_VECTOR_MIN_SCORE` | `{best.get('vector_min_score')}` | Soglia minima similarità vettoriale |\n\n")
 
         f.write("## 📊 Top 10 Configurazioni di Generazione\n\n")
         f.write("| Rank | Num Ctx | Stuff Thresh | Topo Chars | S1 Rank | Recall | Sim Score | Global Score |\n")
@@ -291,6 +422,28 @@ async def main():
     parser.add_argument("--output", type=str, default="grid_search_stage2_results.csv", help="CSV di output")
     parser.add_argument("--best-output", type=str, default="best_global_config.json", help="Configurazione globale ottimale")
     parser.add_argument("--cache-generations", type=str, default="data/cache_stage2_generations.json", help="Cache per generazioni OpenRouter")
+    parser.add_argument("--retrieval-cache", type=str, default=None, help="Cache retrieval persistita (default: derivata da --cache-generations)")
+    parser.add_argument(
+        "--stuff-thresholds",
+        nargs="+",
+        type=int,
+        default=None,
+        help="Soglie GENERATOR_STUFF_THRESHOLD da valutare (default: 16000 32000 64000)",
+    )
+    parser.add_argument(
+        "--num-ctx-options",
+        nargs="+",
+        type=int,
+        default=None,
+        help="Valori di GENERATOR_NUM_CTX da valutare (default: 8192 16384 32768)",
+    )
+    parser.add_argument(
+        "--topo-options",
+        nargs="+",
+        type=int,
+        default=None,
+        help="Valori di TOPOLOGICAL_MAX_CHARS da valutare (default: 6000 12000 20000)",
+    )
     parser.add_argument("--queries", nargs="+", type=int, default=None, help="Indici query da testare (1-indexed)")
     parser.add_argument("--dry-run", action="store_true", help="Esegui senza chiamare realmente le API LLM")
     args = parser.parse_args()
@@ -321,10 +474,21 @@ async def main():
 
     dataset = [full_dataset[i - 1] for i in args.queries if 1 <= i <= len(full_dataset)] if args.queries else full_dataset
 
-    configs = build_default_stage2_grid(stage1_top)
+    configs = build_default_stage2_grid(
+        stage1_top,
+        num_ctx_options=args.num_ctx_options,
+        stuff_thresholds=args.stuff_thresholds,
+        topo_max_chars_options=args.topo_options,
+    )
     logger.info(f"Generata griglia Stadio 2: {len(configs)} configurazioni su {len(dataset)} query.")
 
     cache = GenerationCache(args.cache_generations)
+
+    global _RETRIEVAL_CACHE_FILE
+    _RETRIEVAL_CACHE_FILE = args.retrieval_cache or args.cache_generations.replace("generations", "retrievals")
+    restored = load_retrieval_cache()
+    if restored:
+        logger.info(f"Ripristinati {restored} retrieval dalla cache su disco ({_RETRIEVAL_CACHE_FILE}).")
 
     from src.rag.engine import RagEngine
     from src.parsing.vector_engine import VectorEngine

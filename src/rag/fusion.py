@@ -13,6 +13,46 @@ from src.rag.models import RagState, RetrievedChunk
 logger = logging.getLogger(__name__)
 
 
+def _deduplicate_channel(results: list[RetrievedChunk]) -> list[RetrievedChunk]:
+    """Collapse duplicated rows of a single retrieval channel into one entry per expression.
+
+    The dense channel fans out over `PART_OF` paths, so the same expression can be returned
+    several times (measured: ~8 rows per expression). Left as-is, those duplicates accumulate
+    extra RRF score for the same expression, silently multiplying that channel's weight by the
+    fan-out factor and making the configured weights meaningless.
+
+    The first occurrence keeps its rank; metadata is merged and the longest text wins.
+    """
+    if len(results) <= 1:
+        return results
+
+    deduped: list[RetrievedChunk] = []
+    seen: dict[str, RetrievedChunk] = {}
+    for chunk in results:
+        existing = seen.get(chunk.expression_id)
+        if existing is None:
+            seen[chunk.expression_id] = chunk
+            deduped.append(chunk)
+            continue
+
+        # Merge metadata (union of matched concepts) without losing information
+        if chunk.metadata:
+            for key, value in chunk.metadata.items():
+                if key == "matched_concepts" and key in existing.metadata:
+                    existing.metadata[key] = list(set(existing.metadata[key] + value))
+                elif key not in existing.metadata:
+                    existing.metadata[key] = value
+
+        # Keep the most informative text representation
+        if len(chunk.text) > len(existing.text):
+            existing.text = chunk.text
+            existing.structural_context = chunk.structural_context or existing.structural_context
+
+    if len(deduped) < len(results):
+        logger.info(f"Dedup canale: {len(results)} righe → {len(deduped)} chunk distinti")
+    return deduped
+
+
 def _reciprocal_rank_fusion(
     channels: list[tuple[list[RetrievedChunk], float]],
     k: int = 60,
@@ -23,6 +63,9 @@ def _reciprocal_rank_fusion(
         RRF_score = sum(weight / (k + rank))
     where rank is the 1-indexed position in the channel and weight is the channel weight.
     Chunks are identified uniquely by `expression_id`.
+
+    Each channel is deduplicated first: RRF must rank *distinct* items, otherwise duplicated
+    rows inflate the score of the channel that produced them.
 
     Args:
         channels: List of (results, weight) tuples for each retrieval channel.
@@ -39,7 +82,7 @@ def _reciprocal_rank_fusion(
     sources: dict[str, set[str]] = defaultdict(set)
 
     for results, weight in channels:
-        for rank_0, chunk in enumerate(results):
+        for rank_0, chunk in enumerate(_deduplicate_channel(results)):
             rank = rank_0 + 1  # 1-indexed
             rrf_score = weight / (k + rank)
             scores[chunk.expression_id] += rrf_score

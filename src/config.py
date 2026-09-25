@@ -2,6 +2,14 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
+# Instruction prefix prepended to the QUERY embedding only (document embeddings are
+# instruction-free by design for Qwen3-Embedding). Keeping it here lets scripts reference
+# the built-in default even when .env disables or overrides it.
+DEFAULT_EMBEDDING_QUERY_INSTRUCTION = (
+    "Instruct: Dato un quesito giuridico, recupera le disposizioni normative e i "
+    "passaggi giurisprudenziali che rispondono alla domanda.\nQuery: "
+)
+
 class Settings(BaseSettings):
     """Application settings loaded from environment variables.
 
@@ -20,6 +28,10 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL_NAME: str = "qwen3-embedding:0.6b"
     EMBEDDING_DIMENSIONS: int = 1024  # Embedding dimension for the selected model
     GENERATIVE_MODEL_NAME: str = "qwen3.5:4b"
+    # Instruction prefix prepended to the QUERY embedding only (document embeddings are
+    # instruction-free by design for Qwen3-Embedding). Set to "" to disable. Ingestion is
+    # unaffected: no re-indexing is required to change this value.
+    EMBEDDING_QUERY_INSTRUCTION: str = DEFAULT_EMBEDDING_QUERY_INSTRUCTION
 
     # OpenRouter Settings
     OPENROUTER_API_KEY: Optional[str] = None
@@ -40,6 +52,8 @@ class Settings(BaseSettings):
 
     # Reranker
     RERANKER_MODEL_NAME: str = "Qwen/Qwen3-Reranker-0.6B"
+    RERANKER_BACKEND: str = "local"  # "local" (CrossEncoder on GPU/CPU) or "llm" (OpenRouter listwise)
+    RERANKER_LLM_MODEL: Optional[str] = None  # Defaults to OPENROUTER_MODEL_NAME when using the LLM backend
     RERANK_TOP_K: int = 20  # Number of candidate chunks passed to reranker after fusion
     RERANK_MIN_SCORE: float = 0.05  # Minimum relevance score threshold (post-sigmoid)
 
