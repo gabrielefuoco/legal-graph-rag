@@ -61,6 +61,16 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def configure_stdio():
+    """Force UTF-8 output: child processes emit UTF-8 (progress bars, accents, emoji) while
+    legacy Windows consoles default to cp1252 and would raise UnicodeEncodeError."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
 def run_streamed(cmd, log_path: Path, env) -> int:
     """Run a command streaming output to the console and to a log file."""
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -88,6 +98,7 @@ def run_streamed(cmd, log_path: Path, env) -> int:
 
 
 def main():
+    configure_stdio()
     args = build_parser().parse_args()
     python = sys.executable
     env = dict(os.environ)

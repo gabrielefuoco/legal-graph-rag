@@ -182,6 +182,25 @@ def _mark_abrogated_chunks(
     return chunks
 
 
+def _strip_graph_fields(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
+    """Remove every graph-derived field so the pipeline sees plain text only.
+
+    Used by the strict text-only baseline: the structural breadcrumb (PART_OF), the act URN,
+    the vigenza window and the graph annotations (TESEO concepts, citation traces, topological
+    expansions) all come from the knowledge graph and must not reach the reranker or the
+    generator if the claim is "text retrieval without the graph".
+    """
+    for chunk in chunks:
+        chunk.structural_context = ""
+        chunk.work_urn = None
+        chunk.vigenza_start = None
+        chunk.vigenza_end = None
+        chunk.expansion_trace = None
+        chunk.expanded_text = None
+        chunk.metadata = {}
+    return chunks
+
+
 def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
     """Merge structurally adjacent chunks belonging to the same legal act (Work)."""
     if not chunks:
@@ -297,6 +316,12 @@ def fuse_and_filter(state: RagState) -> dict:
 
     # Text overlap deduplication
     fused = _deduplicate_by_text(fused)
+
+    # Strict text-only baseline: drop graph fields *before* merging/marking so those stages
+    # cannot silently rely on the graph either.
+    if getattr(settings, "PURE_TEXT_BASELINE", False):
+        fused = _strip_graph_fields(fused)
+        logger.info("Baseline testo-puro: rimossi breadcrumb, URN, vigenza e annotazioni del grafo")
 
     # Mark abrogated provisions relative to reference date
     ref_date_str = state.get("reference_date")

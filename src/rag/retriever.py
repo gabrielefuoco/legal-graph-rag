@@ -245,6 +245,7 @@ async def graph_search(state: RagState) -> dict:
                 WITH e, w, u,
                      MAX(r.score) AS score,
                      COLLECT(DISTINCT t.id) AS matched_concepts,
+                     COLLECT(DISTINCT coalesce(t.prefLabel, t.normalizedLabel, t.id)) AS matched_concept_labels,
                      [n IN nodes(path) WHERE n:StructuralUnit | n.tag_name] AS breadcrumb_path
                 RETURN e.text_display AS text,
                        e.id AS expression_id,
@@ -255,7 +256,8 @@ async def graph_search(state: RagState) -> dict:
                        e.vigenza_end AS vigenza_end,
                        breadcrumb_path,
                        score,
-                       matched_concepts
+                       matched_concepts,
+                       matched_concept_labels
                 ORDER BY score DESC
                 LIMIT $top_k
                 """,

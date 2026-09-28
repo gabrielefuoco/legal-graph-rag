@@ -1,0 +1,3 @@
+config,graph_search,multi_hop,topological,grader_mode,min_keep,teseo_threshold,teseo_concepts,weight_graph,rerank_top_k,final_k,citation_limit,queries,avg_recall,avg_mrr,avg_hit_at_1,avg_chunks,avg_context_chars,avg_hops,avg_similarity,avg_gen_time_s
+1. dense+BM25 (query nuda),False,False,False,on,0,0.45,10,1.2,15,10,10,20,0.0,0.0,0.0,1.65,29888,0,0.521,9.47
+3. + espansione citazioni (multi-hop),True,True,False,on,0,0.45,10,1.2,15,10,10,20,0.05,0.05,0.05,1.5,28544,1,0.5113,10.75

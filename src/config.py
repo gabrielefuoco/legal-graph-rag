@@ -64,6 +64,14 @@ class Settings(BaseSettings):
 
     # Topological Expansion
     TOPOLOGICAL_MAX_CHARS: int = 6000           # Maximum character limit for expanded super-chunk
+    CITATION_EXPANSION_LIMIT: int = 10          # Max chunks pulled in per citation hop (global budget)
+    CITATION_EXPANSION_PER_ACT: int = 3         # Max chunks taken from each single cited act
+    CITATION_HOP_SOURCE_TOP_K: int = 5          # Expand citations of the N best fused chunks only
+    RESOLVE_QUERY_CITATIONS: bool = True        # Resolve acts/articles named in the question via the graph
+    GRAPH_METADATA_IN_CONTEXT: bool = False     # Surface TESEO institutes / citation links to the
+                                                # generator (measured neutral: keep off)
+    PURE_TEXT_BASELINE: bool = False            # Strip every graph-derived field (breadcrumb, URN,
+                                                # vigenza, traces) before reranking/generation
     TOPOLOGICAL_EXPAND_NEXT: bool = True        # Expand via :NEXT relationships (+-1 comma)
     TOPOLOGICAL_EXPAND_PARENT: bool = True      # Expand via :PART_OF relationship (parent article)
     TOPOLOGICAL_EXPAND_CITES: bool = True       # Expand via :CITES/:MODIFIES relationships

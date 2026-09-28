@@ -1,0 +1,6 @@
+config,graph_search,multi_hop,topological,grader_mode,min_keep,teseo_threshold,teseo_concepts,weight_graph,queries,avg_recall,avg_mrr,avg_hit_at_1,avg_chunks,avg_context_chars,avg_hops,avg_similarity,avg_gen_time_s
+"A. GraphRAG, grader attivo",True,True,True,on,0,0.45,10,1.2,15,0.8667,0.75,0.6667,1.73,13507,1,0.7619,2.7
+"B. GraphRAG, grader off (tieni tutti)",True,True,True,off,0,0.45,10,1.2,15,0.8667,0.5403,0.4,8.07,59655,1,0.7461,
+"C. GraphRAG, grader min_keep=3",True,True,True,min_keep,3,0.45,10,1.2,15,0.8667,0.5889,0.4,3,20875,1,0.7675,5.34
+"D. GraphRAG, grader min_keep=5",True,True,True,min_keep,5,0.45,10,1.2,15,0.8667,0.5567,0.4,4.93,33789,1,0.7516,10.01
+"E. GraphRAG, grader min_keep=8",True,True,True,min_keep,8,0.45,10,1.2,15,0.8667,0.5429,0.4,7.13,55117,1,0.751,13.5

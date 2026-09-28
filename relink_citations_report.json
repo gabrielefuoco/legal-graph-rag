@@ -1,0 +1,4354 @@
+{
+  "dry_run": false,
+  "pairs": [
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2005;7",
+      "stub_urn": "urn:nir:stato:decreto.legge:2005;7",
+      "stub_title": "Riferimento Esterno (decreto legge 31 gennaio 2005, n. 7)",
+      "real_id": "urn:nir:stato:decreto.legge:2005-01-31;7",
+      "real_urn": "urn:nir:stato:decreto.legge:2005-01-31;7",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;103",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;103",
+      "stub_title": "Riferimento Esterno (D.LGS. 12 LUGLIO 2024, N. 103)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-07-12;103",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-07-12;103",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2012;74",
+      "stub_urn": "urn:nir:stato:decreto.legge:2012;74",
+      "stub_title": "Riferimento Esterno (decreto legge 6 giugno 2012, n. 74)",
+      "real_id": "urn:nir:stato:decreto.legge:2012-06-06;74",
+      "real_urn": "urn:nir:stato:decreto.legge:2012-06-06;74",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2019;35",
+      "stub_urn": "urn:nir:stato:decreto.legge:2019;35",
+      "stub_title": "Riferimento Esterno (D.L. 30 aprile 2019, n. 35)",
+      "real_id": "urn:nir:stato:decreto.legge:2019-04-30;35",
+      "real_urn": "urn:nir:stato:decreto.legge:2019-04-30;35",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2021;111",
+      "stub_urn": "urn:nir:stato:decreto.legge:2021;111",
+      "stub_title": "Riferimento Esterno (D.L. 6 agosto 2021, n. 111)",
+      "real_id": "urn:nir:stato:decreto.legge:2021-08-06;111",
+      "real_urn": "urn:nir:stato:decreto.legge:2021-08-06;111",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2012;17",
+      "stub_urn": "urn:nir:stato:legge:2012;17",
+      "stub_title": "Riferimento Esterno (legge 18 ottobre 2012, n. 17)",
+      "real_id": "urn:nir:stato:legge:2012-02-29;17",
+      "real_urn": "urn:nir:stato:legge:2012-02-29;17",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2021;133",
+      "stub_urn": "urn:nir:stato:legge:2021;133",
+      "stub_title": "Riferimento Esterno (legge 24 settembre 2021, n. 133)",
+      "real_id": "urn:nir:stato:legge:2021-09-24;133",
+      "real_urn": "urn:nir:stato:legge:2021-09-24;133",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2025;79",
+      "stub_urn": "urn:nir:stato:legge:2025;79",
+      "stub_title": "Riferimento Esterno (legge 5 giugno 2025, n. 79)",
+      "real_id": "urn:nir:stato:legge:2025-06-05;79",
+      "real_urn": "urn:nir:stato:legge:2025-06-05;79",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1993;529",
+      "stub_urn": "urn:nir:stato:decreto.legge:1993;529",
+      "stub_title": "Riferimento Esterno (D.L. n. 529/1993)",
+      "real_id": "urn:nir:stato:decreto.legge:1993-12-20;529",
+      "real_urn": "urn:nir:stato:decreto.legge:1993-12-20;529",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1905;413",
+      "stub_urn": "urn:nir:stato:legge:1905;413",
+      "stub_title": "Riferimento Esterno (legge 9 luglio 1905, n. 413)",
+      "real_id": "urn:nir:stato:legge:1905-07-09;413",
+      "real_urn": "urn:nir:stato:legge:1905-07-09;413",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1907;429",
+      "stub_urn": "urn:nir:stato:legge:1907;429",
+      "stub_title": "Riferimento Esterno (legge 7 luglio 1907, n. 429)",
+      "real_id": "urn:nir:stato:legge:1907-07-07;429",
+      "real_urn": "urn:nir:stato:legge:1907-07-07;429",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1907;549",
+      "stub_urn": "urn:nir:stato:legge:1907;549",
+      "stub_title": "Riferimento Esterno (legge 19 luglio 1907, n. 549)",
+      "real_id": "urn:nir:stato:legge:1907-07-19;549",
+      "real_urn": "urn:nir:stato:legge:1907-07-19;549",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1919;877",
+      "stub_urn": "urn:nir:stato:legge:1919;877",
+      "stub_title": "Riferimento Esterno (legge 8 maggio 1919, n. 877)",
+      "real_id": "urn:nir:stato:legge:1919-05-08;877",
+      "real_urn": "urn:nir:stato:legge:1919-05-08;877",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1965;124",
+      "stub_urn": "urn:nir:stato:decreto.legge:1965;124",
+      "stub_title": "Riferimento Esterno (D.L. 15 marzo 1965, n. 124)",
+      "real_id": "urn:nir:stato:decreto.legge:1965-03-15;124",
+      "real_urn": "urn:nir:stato:decreto.legge:1965-03-15;124",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1968;1232",
+      "stub_urn": "urn:nir:stato:decreto.legge:1968;1232",
+      "stub_title": "Riferimento Esterno (D.L. 18 dicembre 1968, n. 1232)",
+      "real_id": "urn:nir:stato:decreto.legge:1968-12-18;1232",
+      "real_urn": "urn:nir:stato:decreto.legge:1968-12-18;1232",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1964;664",
+      "stub_urn": "urn:nir:stato:legge:1964;664",
+      "stub_title": "Riferimento Esterno (legge 10 agosto 1964, n. 664)",
+      "real_id": "urn:nir:stato:legge:1964-08-10;664",
+      "real_urn": "urn:nir:stato:legge:1964-08-10;664",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1971;491",
+      "stub_urn": "urn:nir:stato:legge:1971;491",
+      "stub_title": "Riferimento Esterno (legge 30 luglio 1971, n. 491)",
+      "real_id": "urn:nir:stato:legge:1971-07-30;491",
+      "real_urn": "urn:nir:stato:legge:1971-07-30;491",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1970;76",
+      "stub_urn": "urn:nir:stato:legge:1970;76",
+      "stub_title": "Riferimento Esterno (legge 19 febbraio 1970, n. 76)",
+      "real_id": "urn:nir:stato:legge:1970-02-19;76",
+      "real_urn": "urn:nir:stato:legge:1970-02-19;76",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1970;1048",
+      "stub_urn": "urn:nir:stato:legge:1970;1048",
+      "stub_title": "Riferimento Esterno (legge 7 dicembre 1970, n. 1048)",
+      "real_id": "urn:nir:stato:legge:1970-12-07;1048",
+      "real_urn": "urn:nir:stato:legge:1970-12-07;1048",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1967;700",
+      "stub_urn": "urn:nir:stato:legge:1967;700",
+      "stub_title": "Riferimento Esterno (legge 6 agosto 1967, n. 700)",
+      "real_id": "urn:nir:stato:legge:1967-08-06;700",
+      "real_urn": "urn:nir:stato:legge:1967-08-06;700",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1978;503",
+      "stub_urn": "urn:nir:stato:legge:1978;503",
+      "stub_title": "Riferimento Esterno (legge 18 agosto 1978, n. 503)",
+      "real_id": "urn:nir:stato:legge:1978-08-18;503",
+      "real_urn": "urn:nir:stato:legge:1978-08-18;503",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1978;49",
+      "stub_urn": "urn:nir:stato:legge:1978;49",
+      "stub_title": "Riferimento Esterno (legge 27 febbraio 1978, n. 49)",
+      "real_id": "urn:nir:stato:legge:1978-02-27;49",
+      "real_urn": "urn:nir:stato:legge:1978-02-27;49",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1989;155",
+      "stub_urn": "urn:nir:stato:legge:1989;155",
+      "stub_title": "Riferimento Esterno (legge 26 aprile 1989, n. 155)",
+      "real_id": "urn:nir:stato:legge:1989-04-26;155",
+      "real_urn": "urn:nir:stato:legge:1989-04-26;155",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1993;40",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1993;40",
+      "stub_title": "Riferimento Esterno (decreto legislativo 13 febbraio 1993, n. 40)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1993-02-13;40",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1993-02-13;40",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1998;6",
+      "stub_urn": "urn:nir:stato:decreto.legge:1998;6",
+      "stub_title": "Riferimento Esterno (D.L. 30 gennaio 1998, n. 6)",
+      "real_id": "urn:nir:stato:decreto.legge:1998-01-30;6",
+      "real_urn": "urn:nir:stato:decreto.legge:1998-01-30;6",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1953;24",
+      "stub_urn": "urn:nir:stato:legge:1953;24",
+      "stub_title": "Riferimento Esterno (legge 5 gennaio 1953, n. 24)",
+      "real_id": "urn:nir:stato:legge:1953-01-05;24",
+      "real_urn": "urn:nir:stato:legge:1953-01-05;24",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2000;149",
+      "stub_urn": "urn:nir:stato:legge:2000;149",
+      "stub_title": "Riferimento Esterno (legge 8 giugno 2000, n. 149)",
+      "real_id": "urn:nir:stato:legge:2000-06-08;149",
+      "real_urn": "urn:nir:stato:legge:2000-06-08;149",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1992;454",
+      "stub_urn": "urn:nir:stato:legge:1992;454",
+      "stub_title": "Riferimento Esterno (legge 3 novembre 1992, n. 454)",
+      "real_id": "urn:nir:stato:legge:1992-11-03;454",
+      "real_urn": "urn:nir:stato:legge:1992-11-03;454",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2004;168",
+      "stub_urn": "urn:nir:stato:decreto.legge:2004;168",
+      "stub_title": "Riferimento Esterno (D.L. 21 luglio 2004, n. 168)",
+      "real_id": "urn:nir:stato:decreto.legge:2004-07-12;168",
+      "real_urn": "urn:nir:stato:decreto.legge:2004-07-12;168",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2025;96",
+      "stub_urn": "urn:nir:stato:decreto.legge:2025;96",
+      "stub_title": "Riferimento Esterno (D.L. 30 giugno 2025, n. 96)",
+      "real_id": "urn:nir:stato:decreto.legge:2025-06-30;96",
+      "real_urn": "urn:nir:stato:decreto.legge:2025-06-30;96",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2003;306",
+      "stub_urn": "urn:nir:stato:legge:2003;306",
+      "stub_title": "Riferimento Esterno (legge 31 ottobre 2003, n. 306)",
+      "real_id": "urn:nir:stato:legge:2003-10-31;306",
+      "real_urn": "urn:nir:stato:legge:2003-10-31;306",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2007;10",
+      "stub_urn": "urn:nir:stato:decreto.legge:2007;10",
+      "stub_title": "Riferimento Esterno (D.L. 15 FEBBRAIO 2007, N. 10)",
+      "real_id": "urn:nir:stato:decreto.legge:2007-02-15;10",
+      "real_urn": "urn:nir:stato:decreto.legge:2007-02-15;10",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2007;113",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2007;113",
+      "stub_title": "Riferimento Esterno (D.LGS. 31 LUGLIO 2007, N. 113)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2007-07-31;113",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2007-07-31;113",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;50",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;50",
+      "stub_title": "Riferimento Esterno (D.LGS. 25 MARZO 2024, N. 50)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-03-25;50",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-03-25;50",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1986;81",
+      "stub_urn": "urn:nir:stato:legge:1986;81",
+      "stub_title": "Riferimento Esterno (legge 15 marzo 1986, n. 81)",
+      "real_id": "urn:nir:stato:legge:1986-03-15;81",
+      "real_urn": "urn:nir:stato:legge:1986-03-15;81",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2006;277",
+      "stub_urn": "urn:nir:stato:legge:2006;277",
+      "stub_title": "Riferimento Esterno (legge 27 ottobre 2006, n. 277)",
+      "real_id": "urn:nir:stato:legge:2006-10-27;277",
+      "real_urn": "urn:nir:stato:legge:2006-10-27;277",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;108",
+      "stub_urn": "urn:nir:stato:legge:2009;108",
+      "stub_title": "Riferimento Esterno (legge 3 agosto 2009, n. 108)",
+      "real_id": "urn:nir:stato:legge:2009-08-03;108",
+      "real_urn": "urn:nir:stato:legge:2009-08-03;108",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2008;132",
+      "stub_urn": "urn:nir:stato:legge:2008;132",
+      "stub_title": "Riferimento Esterno (legge 4 agosto 2008, n. 132)",
+      "real_id": "urn:nir:stato:legge:2008-08-04;132",
+      "real_urn": "urn:nir:stato:legge:2008-08-04;132",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1989;203",
+      "stub_urn": "urn:nir:stato:legge:1989;203",
+      "stub_title": "Riferimento Esterno (legge 18 maggio 1989, n. 203)",
+      "real_id": "urn:nir:stato:legge:1989-05-18;203",
+      "real_urn": "urn:nir:stato:legge:1989-05-18;203",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2016;21",
+      "stub_urn": "urn:nir:stato:legge:2016;21",
+      "stub_title": "Riferimento Esterno (legge 25 febbraio 2016, n. 21)",
+      "real_id": "urn:nir:stato:legge:2016-02-25;21",
+      "real_urn": "urn:nir:stato:legge:2016-02-25;21",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;41",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;41",
+      "stub_title": "Riferimento Esterno (D.LGS. 25 MARZO 2024, N. 41)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-03-25;41",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-03-25;41",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2023;61",
+      "stub_urn": "urn:nir:stato:decreto.legge:2023;61",
+      "stub_title": "Riferimento Esterno (D.L. 1 giugno 2023, n. 61)",
+      "real_id": "urn:nir:stato:decreto.legge:2023-06-01;61",
+      "real_urn": "urn:nir:stato:decreto.legge:2023-06-01;61",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2026;10",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2026;10",
+      "stub_title": "Riferimento Esterno (D.Lgs. 19 gennaio 2026, n. 10)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2026-01-19;10",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2026-01-19;10",
+      "citations": 1,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2017;205",
+      "stub_urn": "urn:nir:stato:legge:2017;205",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 2017, n. 205)",
+      "real_id": "urn:nir:stato:legge:2017-12-27;205",
+      "real_urn": "urn:nir:stato:legge:2017-12-27;205",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2021;156",
+      "stub_urn": "urn:nir:stato:legge:2021;156",
+      "stub_title": "Riferimento Esterno (legge 9 novembre 2021, n. 156)",
+      "real_id": "urn:nir:stato:legge:2021-11-09;156",
+      "real_urn": "urn:nir:stato:legge:2021-11-09;156",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2022;79",
+      "stub_urn": "urn:nir:stato:legge:2022;79",
+      "stub_title": "Riferimento Esterno (legge 29 giugno 2022 n. 79)",
+      "real_id": "urn:nir:stato:legge:2022-06-29;79",
+      "real_urn": "urn:nir:stato:legge:2022-06-29;79",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2023;41",
+      "stub_urn": "urn:nir:stato:legge:2023;41",
+      "stub_title": "Riferimento Esterno (legge 21 aprile 2023, n. 41)",
+      "real_id": "urn:nir:stato:legge:2023-04-21;41",
+      "real_urn": "urn:nir:stato:legge:2023-04-21;41",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1991;317",
+      "stub_urn": "urn:nir:stato:legge:1991;317",
+      "stub_title": "Riferimento Esterno (legge 5 ottobre 1991, n. 317)",
+      "real_id": "urn:nir:stato:legge:1991-10-05;317",
+      "real_urn": "urn:nir:stato:legge:1991-10-05;317",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1994;84",
+      "stub_urn": "urn:nir:stato:legge:1994;84",
+      "stub_title": "Riferimento Esterno (legge 28 gennaio 1994, n. 84)",
+      "real_id": "urn:nir:stato:legge:1994-01-28;84",
+      "real_urn": "urn:nir:stato:legge:1994-01-28;84",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2016;169",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2016;169",
+      "stub_title": "Riferimento Esterno (decreto legislativo 4 agosto 2016, n. 169)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2016-08-04;169",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2016-08-04;169",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2006;152",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2006;152",
+      "stub_title": "Riferimento Esterno (decreto legislativo 3 aprile 2006, n. 152)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2006-04-03;152",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2006-04-03;152",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2004;42",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2004;42",
+      "stub_title": "Riferimento Esterno (decreto legislativo 22 gennaio 2004, n. 42)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2004-01-22;42",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2004-01-22;42",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2023;36",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2023;36",
+      "stub_title": "Riferimento Esterno (decreto legislativo 31 marzo 2023, n. 36)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2023-03-31;36",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2023-03-31;36",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;59",
+      "stub_urn": "urn:nir:stato:legge:1997;59",
+      "stub_title": "Riferimento Esterno (legge 15 marzo 1997, n. 59)",
+      "real_id": "urn:nir:stato:legge:1997-03-15;59",
+      "real_urn": "urn:nir:stato:legge:1997-03-15;59",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2002;137",
+      "stub_urn": "urn:nir:stato:legge:2002;137",
+      "stub_title": "Riferimento Esterno (legge 6 luglio 2002, n. 137)",
+      "real_id": "urn:nir:stato:legge:2002-07-06;137",
+      "real_urn": "urn:nir:stato:legge:2002-07-06;137",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1996;662",
+      "stub_urn": "urn:nir:stato:legge:1996;662",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 1996, n. 662)",
+      "real_id": "urn:nir:stato:legge:1996-12-23;662",
+      "real_urn": "urn:nir:stato:legge:1996-12-23;662",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1999;144",
+      "stub_urn": "urn:nir:stato:legge:1999;144",
+      "stub_title": "Riferimento Esterno (legge 17 maggio 1999, n. 144)",
+      "real_id": "urn:nir:stato:legge:1999-05-17;144",
+      "real_urn": "urn:nir:stato:legge:1999-05-17;144",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2005;82",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2005;82",
+      "stub_title": "Riferimento Esterno (decreto legislativo 7 marzo 2005, n. 82)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2005-03-07;82",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2005-03-07;82",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2003;196",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2003;196",
+      "stub_title": "Riferimento Esterno (decreto legislativo 30 giugno 2003, n. 196)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2003-06-30;196",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2003-06-30;196",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2017;96",
+      "stub_urn": "urn:nir:stato:legge:2017;96",
+      "stub_title": "Riferimento Esterno (legge 21 giugno 2017, n. 96)",
+      "real_id": "urn:nir:stato:legge:2017-06-21;96",
+      "real_urn": "urn:nir:stato:legge:2017-06-21;96",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;127",
+      "stub_urn": "urn:nir:stato:legge:1997;127",
+      "stub_title": "Riferimento Esterno (legge 15 maggio 1997, n. 127)",
+      "real_id": "urn:nir:stato:legge:1997-05-15;127",
+      "real_urn": "urn:nir:stato:legge:1997-05-15;127",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2016;175",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2016;175",
+      "stub_title": "Riferimento Esterno (decreto legislativo 19 agosto 2016, n. 175)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2016-08-19;175",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2016-08-19;175",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2011;214",
+      "stub_urn": "urn:nir:stato:legge:2011;214",
+      "stub_title": "Riferimento Esterno (legge 22 dicembre 2011, n. 214)",
+      "real_id": "urn:nir:stato:legge:2011-12-22;214",
+      "real_urn": "urn:nir:stato:legge:2011-12-22;214",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2014;89",
+      "stub_urn": "urn:nir:stato:legge:2014;89",
+      "stub_title": "Riferimento Esterno (legge 23 giugno 2014, n. 89)",
+      "real_id": "urn:nir:stato:legge:2014-06-23;89",
+      "real_urn": "urn:nir:stato:legge:2014-06-23;89",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2021;234",
+      "stub_urn": "urn:nir:stato:legge:2021;234",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 2021, n. 234)",
+      "real_id": "urn:nir:stato:legge:2021-12-30;234",
+      "real_urn": "urn:nir:stato:legge:2021-12-30;234",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2008;133",
+      "stub_urn": "urn:nir:stato:legge:2008;133",
+      "stub_title": "Riferimento Esterno (legge 6 agosto 2008, n. 133)",
+      "real_id": "urn:nir:stato:legge:2008-08-06;133",
+      "real_urn": "urn:nir:stato:legge:2008-08-06;133",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2017;45",
+      "stub_urn": "urn:nir:stato:legge:2017;45",
+      "stub_title": "Riferimento Esterno (legge 7 aprile 2017, n. 45)",
+      "real_id": "urn:nir:stato:legge:2017-04-07;45",
+      "real_urn": "urn:nir:stato:legge:2017-04-07;45",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2020;120",
+      "stub_urn": "urn:nir:stato:legge:2020;120",
+      "stub_title": "Riferimento Esterno (legge 11 settembre 2020, n. 120)",
+      "real_id": "urn:nir:stato:legge:2020-09-11;120",
+      "real_urn": "urn:nir:stato:legge:2020-09-11;120",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2023;213",
+      "stub_urn": "urn:nir:stato:legge:2023;213",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 2023, n. 213)",
+      "real_id": "urn:nir:stato:legge:2023-12-30;213",
+      "real_urn": "urn:nir:stato:legge:2023-12-30;213",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2021;233",
+      "stub_urn": "urn:nir:stato:legge:2021;233",
+      "stub_title": "Riferimento Esterno (legge 29 dicembre 2021, n. 233)",
+      "real_id": "urn:nir:stato:legge:2021-12-29;233",
+      "real_urn": "urn:nir:stato:legge:2021-12-29;233",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2012;190",
+      "stub_urn": "urn:nir:stato:legge:2012;190",
+      "stub_title": "Riferimento Esterno (legge 6 novembre 2012, n. 190)",
+      "real_id": "urn:nir:stato:legge:2012-11-06;190",
+      "real_urn": "urn:nir:stato:legge:2012-11-06;190",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;106",
+      "stub_urn": "urn:nir:stato:legge:2024;106",
+      "stub_title": "Riferimento Esterno (legge 29 luglio 2024, n. 106)",
+      "real_id": "urn:nir:stato:legge:2024-07-29;106",
+      "real_urn": "urn:nir:stato:legge:2024-07-29;106",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2022;78",
+      "stub_urn": "urn:nir:stato:legge:2022;78",
+      "stub_title": "Riferimento Esterno (legge 21 giugno 2022, n. 78)",
+      "real_id": "urn:nir:stato:legge:2022-06-21;78",
+      "real_urn": "urn:nir:stato:legge:2022-06-21;78",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;121",
+      "stub_urn": "urn:nir:stato:legge:2024;121",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2024, n. 121)",
+      "real_id": "urn:nir:stato:legge:2024-08-08;121",
+      "real_urn": "urn:nir:stato:legge:2024-08-08;121",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;112",
+      "stub_urn": "urn:nir:stato:legge:2024;112",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2024, n. 112)",
+      "real_id": "urn:nir:stato:legge:2024-08-08;112",
+      "real_urn": "urn:nir:stato:legge:2024-08-08;112",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;138",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;138",
+      "stub_title": "Riferimento Esterno (decreto legislativo 4 settembre 2024, n. 138)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-04;138",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-04;138",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1991;240",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1991;240",
+      "stub_title": "Riferimento Esterno (decreto legislativo 23 luglio 1991, n. 240)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1991-07-23;240",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1991-07-23;240",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1990;428",
+      "stub_urn": "urn:nir:stato:legge:1990;428",
+      "stub_title": "Riferimento Esterno (legge 29 dicembre 1990, n. 428)",
+      "real_id": "urn:nir:stato:legge:1990-12-29;428",
+      "real_urn": "urn:nir:stato:legge:1990-12-29;428",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2019;14",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2019;14",
+      "stub_title": "Riferimento Esterno (decreto legislativo 12 gennaio 2019, n. 14)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2019-01-12;14",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2019-01-12;14",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2019;160",
+      "stub_urn": "urn:nir:stato:legge:2019;160",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 2019, n. 160)",
+      "real_id": "urn:nir:stato:legge:2019-12-27;160",
+      "real_urn": "urn:nir:stato:legge:2019-12-27;160",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2008;81",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2008;81",
+      "stub_title": "Riferimento Esterno (decreto legislativo 9 aprile 2008, n. 81)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2008-04-09;81",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2008-04-09;81",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2007;123",
+      "stub_urn": "urn:nir:stato:legge:2007;123",
+      "stub_title": "Riferimento Esterno (legge 3 agosto 2007, n. 123)",
+      "real_id": "urn:nir:stato:legge:2007-08-03;123",
+      "real_urn": "urn:nir:stato:legge:2007-08-03;123",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2015;124",
+      "stub_urn": "urn:nir:stato:legge:2015;124",
+      "stub_title": "Riferimento Esterno (legge 7 agosto 2015, n. 124)",
+      "real_id": "urn:nir:stato:legge:2015-08-07;124",
+      "real_urn": "urn:nir:stato:legge:2015-08-07;124",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2020;178",
+      "stub_urn": "urn:nir:stato:legge:2020;178",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 2020, n. 178)",
+      "real_id": "urn:nir:stato:legge:2020-12-30;178",
+      "real_urn": "urn:nir:stato:legge:2020-12-30;178",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1999;68",
+      "stub_urn": "urn:nir:stato:legge:1999;68",
+      "stub_title": "Riferimento Esterno (legge 12 marzo 1999, n. 68)",
+      "real_id": "urn:nir:stato:legge:1999-03-12;68",
+      "real_urn": "urn:nir:stato:legge:1999-03-12;68",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;56",
+      "stub_urn": "urn:nir:stato:legge:2024;56",
+      "stub_title": "Riferimento Esterno (legge 29 aprile 2024, n. 56)",
+      "real_id": "urn:nir:stato:legge:2024-04-29;56",
+      "real_urn": "urn:nir:stato:legge:2024-04-29;56",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2022;197",
+      "stub_urn": "urn:nir:stato:legge:2022;197",
+      "stub_title": "Riferimento Esterno (legge 29 dicembre 2022, n. 197)",
+      "real_id": "urn:nir:stato:legge:2022-12-29;197",
+      "real_urn": "urn:nir:stato:legge:2022-12-29;197",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2019;157",
+      "stub_urn": "urn:nir:stato:legge:2019;157",
+      "stub_title": "Riferimento Esterno (legge 19 dicembre 2019, n. 157)",
+      "real_id": "urn:nir:stato:legge:2019-12-19;157",
+      "real_urn": "urn:nir:stato:legge:2019-12-19;157",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1990;287",
+      "stub_urn": "urn:nir:stato:legge:1990;287",
+      "stub_title": "Riferimento Esterno (legge 10 ottobre 1990, n. 287)",
+      "real_id": "urn:nir:stato:legge:1990-10-10;287",
+      "real_urn": "urn:nir:stato:legge:1990-10-10;287",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1996;52",
+      "stub_urn": "urn:nir:stato:legge:1996;52",
+      "stub_title": "Riferimento Esterno (legge 6 febbraio 1996, n. 52)",
+      "real_id": "urn:nir:stato:legge:1996-02-06;52",
+      "real_urn": "urn:nir:stato:legge:1996-02-06;52",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2023;206",
+      "stub_urn": "urn:nir:stato:legge:2023;206",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 2023, n. 206)",
+      "real_id": "urn:nir:stato:legge:2023-12-27;206",
+      "real_urn": "urn:nir:stato:legge:2023-12-27;206",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1997;241",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1997;241",
+      "stub_title": "Riferimento Esterno (decreto legislativo 9 luglio 1997, n. 241)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1997-07-09;241",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1997-07-09;241",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2013;98",
+      "stub_urn": "urn:nir:stato:legge:2013;98",
+      "stub_title": "Riferimento Esterno (legge 9 agosto 2013, n. 98)",
+      "real_id": "urn:nir:stato:legge:2013-08-09;98",
+      "real_urn": "urn:nir:stato:legge:2013-08-09;98",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2006;296",
+      "stub_urn": "urn:nir:stato:legge:2006;296",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 2006, n. 296)",
+      "real_id": "urn:nir:stato:legge:2006-12-27;296",
+      "real_urn": "urn:nir:stato:legge:2006-12-27;296",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2010;104",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2010;104",
+      "stub_title": "Riferimento Esterno (decreto legislativo 2 luglio 2010, n. 104)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2010-07-02;104",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2010-07-02;104",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;69",
+      "stub_urn": "urn:nir:stato:legge:2009;69",
+      "stub_title": "Riferimento Esterno (legge 18 giugno 2009, n. 69)",
+      "real_id": "urn:nir:stato:legge:2009-06-18;69",
+      "real_urn": "urn:nir:stato:legge:2009-06-18;69",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1997;472",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1997;472",
+      "stub_title": "Riferimento Esterno (decreto legislativo 18 dicembre 1997, n. 472)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1997-12-18;472",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1997-12-18;472",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;2",
+      "stub_urn": "urn:nir:stato:legge:2009;2",
+      "stub_title": "Riferimento Esterno (legge 28 gennaio 2009, n. 2)",
+      "real_id": "urn:nir:stato:legge:2009-01-28;2",
+      "real_urn": "urn:nir:stato:legge:2009-01-28;2",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2011;183",
+      "stub_urn": "urn:nir:stato:legge:2011;183",
+      "stub_title": "Riferimento Esterno (legge 12 novembre 2011, n. 183)",
+      "real_id": "urn:nir:stato:legge:2011-11-12;183",
+      "real_urn": "urn:nir:stato:legge:2011-11-12;183",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;108",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;108",
+      "stub_title": "Riferimento Esterno (D.Lgs. 5 agosto 2024, n. 108)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-08-05;108",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-08-05;108",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;143",
+      "stub_urn": "urn:nir:stato:legge:2024;143",
+      "stub_title": "Riferimento Esterno (legge 7 ottobre 2024, n. 143)",
+      "real_id": "urn:nir:stato:legge:2024-10-07;143",
+      "real_urn": "urn:nir:stato:legge:2024-10-07;143",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2016;106",
+      "stub_urn": "urn:nir:stato:legge:2016;106",
+      "stub_title": "Riferimento Esterno (legge 6 giugno 2016, n. 106)",
+      "real_id": "urn:nir:stato:legge:2016-06-06;106",
+      "real_urn": "urn:nir:stato:legge:2016-06-06;106",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2021;197",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2021;197",
+      "stub_title": "Riferimento Esterno (decreto legislativo 8 novembre 2021, n. 197)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2021-11-08;197",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2021-11-08;197",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1997;422",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1997;422",
+      "stub_title": "Riferimento Esterno (decreto legislativo 19 novembre 1997, n. 422)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1997-11-19;422",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1997-11-19;422",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2000;267",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2000;267",
+      "stub_title": "Riferimento Esterno (decreto legislativo 18 luglio 2000, n. 267)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2000-08-18;267",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2000-08-18;267",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2015;81",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2015;81",
+      "stub_title": "Riferimento Esterno (decreto legislativo 15 giugno 2015, n. 81)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2015-06-15;81",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2015-06-15;81",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2003;276",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2003;276",
+      "stub_title": "Riferimento Esterno (decreto legislativo 10 settembre 2003, n. 276)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2003-09-10;276",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2003-09-10;276",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2018;101",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2018;101",
+      "stub_title": "Riferimento Esterno (decreto legislativo 10 agosto 2018, n. 101)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2018-08-10;101",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2018-08-10;101",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2007;244",
+      "stub_urn": "urn:nir:stato:legge:2007;244",
+      "stub_title": "Riferimento Esterno (legge 24 dicembre 2007, n. 244)",
+      "real_id": "urn:nir:stato:legge:2007-12-24;244",
+      "real_urn": "urn:nir:stato:legge:2007-12-24;244",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2019;55",
+      "stub_urn": "urn:nir:stato:legge:2019;55",
+      "stub_title": "Riferimento Esterno (legge 14 giugno 2019, n. 55)",
+      "real_id": "urn:nir:stato:legge:2019-06-14;55",
+      "real_urn": "urn:nir:stato:legge:2019-06-14;55",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2021;200",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2021;200",
+      "stub_title": "Riferimento Esterno (decreto legislativo 8 novembre 2021, n. 200)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2021-11-08;200",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2021-11-08;200",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2014;114",
+      "stub_urn": "urn:nir:stato:legge:2014;114",
+      "stub_title": "Riferimento Esterno (legge 11 agosto 2014, n. 114)",
+      "real_id": "urn:nir:stato:legge:2014-08-11;114",
+      "real_urn": "urn:nir:stato:legge:2014-08-11;114",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2011;159",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2011;159",
+      "stub_title": "Riferimento Esterno (decreto legislativo 6 settembre 2011, n. 159)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2011-09-06;159",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2011-09-06;159",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2010;136",
+      "stub_urn": "urn:nir:stato:legge:2010;136",
+      "stub_title": "Riferimento Esterno (legge 13 agosto 2010, n. 136)",
+      "real_id": "urn:nir:stato:legge:2010-08-13;136",
+      "real_urn": "urn:nir:stato:legge:2010-08-13;136",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;26",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;26",
+      "stub_title": "Riferimento Esterno (decreto legislativo 22 febbraio 2024, n. 26)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-02-22;26",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-02-22;26",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;20",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;20",
+      "stub_title": "Riferimento Esterno (decreto legislativo 5 febbraio 2024, n. 20)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-02-05;20",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-02-05;20",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;29",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;29",
+      "stub_title": "Riferimento Esterno (decreto legislativo 15 marzo 2024, n. 29)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-03-15;29",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-03-15;29",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;62",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;62",
+      "stub_title": "Riferimento Esterno (decreto legislativo 3 maggio 2024, n. 62)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-05-03;62",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-05-03;62",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1993;537",
+      "stub_urn": "urn:nir:stato:legge:1993;537",
+      "stub_title": "Riferimento Esterno (legge 24 dicembre 1993, n. 537)",
+      "real_id": "urn:nir:stato:legge:1993-12-24;537",
+      "real_urn": "urn:nir:stato:legge:1993-12-24;537",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2015;208",
+      "stub_urn": "urn:nir:stato:legge:2015;208",
+      "stub_title": "Riferimento Esterno (legge 28 dicembre 2015, n. 208)",
+      "real_id": "urn:nir:stato:legge:2015-12-28;208",
+      "real_urn": "urn:nir:stato:legge:2015-12-28;208",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2010;122",
+      "stub_urn": "urn:nir:stato:legge:2010;122",
+      "stub_title": "Riferimento Esterno (legge 30 luglio 2010, n. 122)",
+      "real_id": "urn:nir:stato:legge:2010-07-30;122",
+      "real_urn": "urn:nir:stato:legge:2010-07-30;122",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;18",
+      "stub_urn": "urn:nir:stato:legge:2024;18",
+      "stub_title": "Riferimento Esterno (legge 23 febbraio 2024, n. 18)",
+      "real_id": "urn:nir:stato:legge:2024-02-23;18",
+      "real_urn": "urn:nir:stato:legge:2024-02-23;18",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1993;427",
+      "stub_urn": "urn:nir:stato:legge:1993;427",
+      "stub_title": "Riferimento Esterno (legge 29 ottobre 1993, n. 427)",
+      "real_id": "urn:nir:stato:legge:1993-10-29;427",
+      "real_urn": "urn:nir:stato:legge:1993-10-29;427",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;15",
+      "stub_urn": "urn:nir:stato:legge:2024;15",
+      "stub_title": "Riferimento Esterno (legge 21 febbraio 2024, n. 15)",
+      "real_id": "urn:nir:stato:legge:2024-02-21;15",
+      "real_urn": "urn:nir:stato:legge:2024-02-21;15",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1986;317",
+      "stub_urn": "urn:nir:stato:legge:1986;317",
+      "stub_title": "Riferimento Esterno (legge 21 giugno 1986, n. 317)",
+      "real_id": "urn:nir:stato:legge:1986-06-21;317",
+      "real_urn": "urn:nir:stato:legge:1986-06-21;317",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2011;180",
+      "stub_urn": "urn:nir:stato:legge:2011;180",
+      "stub_title": "Riferimento Esterno (legge 11 novembre 2011, n. 180)",
+      "real_id": "urn:nir:stato:legge:2011-11-11;180",
+      "real_urn": "urn:nir:stato:legge:2011-11-11;180",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1990;185",
+      "stub_urn": "urn:nir:stato:legge:1990;185",
+      "stub_title": "Riferimento Esterno (legge 9 luglio 1990, n. 185)",
+      "real_id": "urn:nir:stato:legge:1990-07-09;185",
+      "real_urn": "urn:nir:stato:legge:1990-07-09;185",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2012;35",
+      "stub_urn": "urn:nir:stato:legge:2012;35",
+      "stub_title": "Riferimento Esterno (legge 4 aprile 2012, n. 35)",
+      "real_id": "urn:nir:stato:legge:2012-04-04;35",
+      "real_urn": "urn:nir:stato:legge:2012-04-04;35",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2012;228",
+      "stub_urn": "urn:nir:stato:legge:2012;228",
+      "stub_title": "Riferimento Esterno (legge 24 dicembre 2012, n. 228)",
+      "real_id": "urn:nir:stato:legge:2012-12-24;228",
+      "real_urn": "urn:nir:stato:legge:2012-12-24;228",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;13",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;13",
+      "stub_title": "Riferimento Esterno (decreto legislativo 12 febbraio 2024 n. 13)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-02-12;13",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-02-12;13",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2007;124",
+      "stub_urn": "urn:nir:stato:legge:2007;124",
+      "stub_title": "Riferimento Esterno (legge 3 agosto 2007, n. 124)",
+      "real_id": "urn:nir:stato:legge:2007-08-03;124",
+      "real_urn": "urn:nir:stato:legge:2007-08-03;124",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2011;118",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2011;118",
+      "stub_title": "Riferimento Esterno (decreto legislativo 23 giugno 2011, n. 118)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2011-06-23;118",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2011-06-23;118",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;90",
+      "stub_urn": "urn:nir:stato:legge:2024;90",
+      "stub_title": "Riferimento Esterno (legge 28 giugno 2024, n. 90)",
+      "real_id": "urn:nir:stato:legge:2024-06-28;90",
+      "real_urn": "urn:nir:stato:legge:2024-06-28;90",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2021;82",
+      "stub_urn": "urn:nir:stato:decreto.legge:2021;82",
+      "stub_title": "Riferimento Esterno (decreto legge 14 giugno 2021, n. 82)",
+      "real_id": "urn:nir:stato:decreto.legge:2021-06-14;82",
+      "real_urn": "urn:nir:stato:decreto.legge:2021-06-14;82",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2023;24",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2023;24",
+      "stub_title": "Riferimento Esterno (decreto legislativo 10 marzo 2023, n. 24)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2023-03-10;24",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2023-03-10;24",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;129",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;129",
+      "stub_title": "Riferimento Esterno (decreto legislativo 5 settembre 2024, n. 129)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-05;129",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-05;129",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2019;58",
+      "stub_urn": "urn:nir:stato:legge:2019;58",
+      "stub_title": "Riferimento Esterno (legge 28 giugno 2019, n. 58)",
+      "real_id": "urn:nir:stato:legge:2019-06-28;58",
+      "real_urn": "urn:nir:stato:legge:2019-06-28;58",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2025;95",
+      "stub_urn": "urn:nir:stato:decreto.legge:2025;95",
+      "stub_title": "Riferimento Esterno (D.L. 30 GIUGNO 2025, N. 95)",
+      "real_id": "urn:nir:stato:decreto.legge:2025-06-30;95",
+      "real_urn": "urn:nir:stato:decreto.legge:2025-06-30;95",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1991;223",
+      "stub_urn": "urn:nir:stato:legge:1991;223",
+      "stub_title": "Riferimento Esterno (legge 23 luglio 1991, n. 223)",
+      "real_id": "urn:nir:stato:legge:1991-07-23;223",
+      "real_urn": "urn:nir:stato:legge:1991-07-23;223",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1970;300",
+      "stub_urn": "urn:nir:stato:legge:1970;300",
+      "stub_title": "Riferimento Esterno (legge 20 maggio 1970, n. 300)",
+      "real_id": "urn:nir:stato:legge:1970-05-20;300",
+      "real_urn": "urn:nir:stato:legge:1970-05-20;300",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2012;92",
+      "stub_urn": "urn:nir:stato:legge:2012;92",
+      "stub_title": "Riferimento Esterno (legge 28 giugno 2012, n. 92)",
+      "real_id": "urn:nir:stato:legge:2012-06-28;92",
+      "real_urn": "urn:nir:stato:legge:2012-06-28;92",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;178",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;178",
+      "stub_title": "Riferimento Esterno (D.L. 29 novembre 2024, n. 178)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-11-29;178",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-11-29;178",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;136",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;136",
+      "stub_title": "Riferimento Esterno (decreto legislativo 13 settembre 2024, n. 136)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-13;136",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-13;136",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;449",
+      "stub_urn": "urn:nir:stato:legge:1997;449",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 1997, n. 449)",
+      "real_id": "urn:nir:stato:legge:1997-12-27;449",
+      "real_urn": "urn:nir:stato:legge:1997-12-27;449",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2006;36",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2006;36",
+      "stub_title": "Riferimento Esterno (decreto legislativo 24 gennaio 2006, n. 36)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2006-01-24;36",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2006-01-24;36",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;122",
+      "stub_urn": "urn:nir:stato:legge:2024;122",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2024, n. 122)",
+      "real_id": "urn:nir:stato:legge:2024-08-08;122",
+      "real_urn": "urn:nir:stato:legge:2024-08-08;122",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1999;79",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1999;79",
+      "stub_title": "Riferimento Esterno (decreto legislativo 16 marzo 1999, n. 79)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1999-03-16;79",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1999-03-16;79",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2021;199",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2021;199",
+      "stub_title": "Riferimento Esterno (decreto legislativo 8 novembre 2021, n. 199)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2021-11-08;199",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2021-11-08;199",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;11",
+      "stub_urn": "urn:nir:stato:legge:2024;11",
+      "stub_title": "Riferimento Esterno (legge 2 febbraio 2024, n. 11)",
+      "real_id": "urn:nir:stato:legge:2024-02-02;11",
+      "real_urn": "urn:nir:stato:legge:2024-02-02;11",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;190",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;190",
+      "stub_title": "Riferimento Esterno (decreto legislativo 25 novembre 2024, n. 190)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-11-25;190",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-11-25;190",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;141",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;141",
+      "stub_title": "Riferimento Esterno (decreto legislativo 26 settembre 2024, n. 141)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-26;141",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-26;141",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2016;50",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2016;50",
+      "stub_title": "Riferimento Esterno (decreto legislativo 18 aprile 2016, n. 50)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2016-04-18;50",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2016-04-18;50",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1991;381",
+      "stub_urn": "urn:nir:stato:legge:1991;381",
+      "stub_title": "Riferimento Esterno (legge 8 novembre 1991, n. 381)",
+      "real_id": "urn:nir:stato:legge:1991-11-08;381",
+      "real_urn": "urn:nir:stato:legge:1991-11-08;381",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;202",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;202",
+      "stub_title": "Riferimento Esterno (D.L. 27 dicembre 2024, n. 202)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-12-27;202",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-12-27;202",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1981;154",
+      "stub_urn": "urn:nir:stato:legge:1981;154",
+      "stub_title": "Riferimento Esterno (legge 23 aprile 1981, n. 154)",
+      "real_id": "urn:nir:stato:legge:1981-04-23;154",
+      "real_urn": "urn:nir:stato:legge:1981-04-23;154",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2018;145",
+      "stub_urn": "urn:nir:stato:legge:2018;145",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 2018, n. 145)",
+      "real_id": "urn:nir:stato:legge:2018-12-30;145",
+      "real_urn": "urn:nir:stato:legge:2018-12-30;145",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1988;67",
+      "stub_urn": "urn:nir:stato:legge:1988;67",
+      "stub_title": "Riferimento Esterno (legge 11 marzo 1988, n. 67)",
+      "real_id": "urn:nir:stato:legge:1988-03-11;67",
+      "real_urn": "urn:nir:stato:legge:1988-03-11;67",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;88",
+      "stub_urn": "urn:nir:stato:legge:2009;88",
+      "stub_title": "Riferimento Esterno (legge 7 luglio 2009, n. 88)",
+      "real_id": "urn:nir:stato:legge:2009-07-07;88",
+      "real_urn": "urn:nir:stato:legge:2009-07-07;88",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;60",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;60",
+      "stub_title": "Riferimento Esterno (D.L. 7 maggio 2024, n. 60)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-05-07;60",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-05-07;60",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2022;108",
+      "stub_urn": "urn:nir:stato:legge:2022;108",
+      "stub_title": "Riferimento Esterno (legge 5 agosto 2022, n. 108)",
+      "real_id": "urn:nir:stato:legge:2022-08-05;108",
+      "real_urn": "urn:nir:stato:legge:2022-08-05;108",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2006;198",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2006;198",
+      "stub_title": "Riferimento Esterno (decreto legislativo 11 aprile 2006, n. 198)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2006-04-11;198",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2006-04-11;198",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2000;388",
+      "stub_urn": "urn:nir:stato:legge:2000;388",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 2000, n. 388)",
+      "real_id": "urn:nir:stato:legge:2000-12-23;388",
+      "real_urn": "urn:nir:stato:legge:2000-12-23;388",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2014;9",
+      "stub_urn": "urn:nir:stato:legge:2014;9",
+      "stub_title": "Riferimento Esterno (legge 21 febbraio 2014, n. 9)",
+      "real_id": "urn:nir:stato:legge:2014-02-21;9",
+      "real_urn": "urn:nir:stato:legge:2014-02-21;9",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;14",
+      "stub_urn": "urn:nir:stato:legge:2024;14",
+      "stub_title": "Riferimento Esterno (legge 21 febbraio 2024, n. 14)",
+      "real_id": "urn:nir:stato:legge:2024-02-21;14",
+      "real_urn": "urn:nir:stato:legge:2024-02-21;14",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;95",
+      "stub_urn": "urn:nir:stato:legge:2024;95",
+      "stub_title": "Riferimento Esterno (legge 4 luglio 2024, n. 95)",
+      "real_id": "urn:nir:stato:legge:2024-07-04;95",
+      "real_urn": "urn:nir:stato:legge:2024-07-04;95",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2013;64",
+      "stub_urn": "urn:nir:stato:legge:2013;64",
+      "stub_title": "Riferimento Esterno (legge 6 giugno 2013, n. 64)",
+      "real_id": "urn:nir:stato:legge:2013-06-06;64",
+      "real_urn": "urn:nir:stato:legge:2013-06-06;64",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;17",
+      "stub_urn": "urn:nir:stato:legge:2024;17",
+      "stub_title": "Riferimento Esterno (legge 22 febbraio 2024, n. 17)",
+      "real_id": "urn:nir:stato:legge:2024-02-22;17",
+      "real_urn": "urn:nir:stato:legge:2024-02-22;17",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2014;164",
+      "stub_urn": "urn:nir:stato:legge:2014;164",
+      "stub_title": "Riferimento Esterno (legge 11 novembre 2014, n. 164)",
+      "real_id": "urn:nir:stato:legge:2014-11-11;164",
+      "real_urn": "urn:nir:stato:legge:2014-11-11;164",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;67",
+      "stub_urn": "urn:nir:stato:legge:2024;67",
+      "stub_title": "Riferimento Esterno (legge 23 maggio 2024, n. 67)",
+      "real_id": "urn:nir:stato:legge:2024-05-23;67",
+      "real_urn": "urn:nir:stato:legge:2024-05-23;67",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;28",
+      "stub_urn": "urn:nir:stato:legge:2024;28",
+      "stub_title": "Riferimento Esterno (legge 15 marzo 2024, n. 28)",
+      "real_id": "urn:nir:stato:legge:2024-03-15;28",
+      "real_urn": "urn:nir:stato:legge:2024-03-15;28",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2015;91",
+      "stub_urn": "urn:nir:stato:legge:2015;91",
+      "stub_title": "Riferimento Esterno (legge 2 luglio 2015, n. 91)",
+      "real_id": "urn:nir:stato:legge:2015-07-02;91",
+      "real_urn": "urn:nir:stato:legge:2015-07-02;91",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1999;488",
+      "stub_urn": "urn:nir:stato:legge:1999;488",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 1999, n. 488)",
+      "real_id": "urn:nir:stato:legge:1999-12-23;488",
+      "real_urn": "urn:nir:stato:legge:1999-12-23;488",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1963;1457",
+      "stub_urn": "urn:nir:stato:legge:1963;1457",
+      "stub_title": "Riferimento Esterno (legge 4 novembre 1963, n. 1457)",
+      "real_id": "urn:nir:stato:legge:1963-11-04;1457",
+      "real_urn": "urn:nir:stato:legge:1963-11-04;1457",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;107",
+      "stub_urn": "urn:nir:stato:legge:2024;107",
+      "stub_title": "Riferimento Esterno (legge 29 luglio 2024, n. 107)",
+      "real_id": "urn:nir:stato:legge:2024-07-29;107",
+      "real_urn": "urn:nir:stato:legge:2024-07-29;107",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;111",
+      "stub_urn": "urn:nir:stato:legge:2024;111",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2024, n. 111)",
+      "real_id": "urn:nir:stato:legge:2024-08-08;111",
+      "real_urn": "urn:nir:stato:legge:2024-08-08;111",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;208",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;208",
+      "stub_title": "Riferimento Esterno (D.L. 31 dicembre 2024, n. 208)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-12-31;208",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-12-31;208",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1971;1158",
+      "stub_urn": "urn:nir:stato:legge:1971;1158",
+      "stub_title": "Riferimento Esterno (legge 17 dicembre 1971, n. 1158)",
+      "real_id": "urn:nir:stato:legge:1971-12-17;1158",
+      "real_urn": "urn:nir:stato:legge:1971-12-17;1158",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;135",
+      "stub_urn": "urn:nir:stato:legge:1997;135",
+      "stub_title": "Riferimento Esterno (legge 23 maggio 1997, n. 135)",
+      "real_id": "urn:nir:stato:legge:1997-05-23;135",
+      "real_urn": "urn:nir:stato:legge:1997-05-23;135",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2023;101",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2023;101",
+      "stub_title": "Riferimento Esterno (decreto legislativo 10 luglio 2023, n. 101)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2023-07-10;101",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2023-07-10;101",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;2",
+      "stub_urn": "urn:nir:stato:legge:2024;2",
+      "stub_title": "Riferimento Esterno (legge 11 gennaio 2024, n. 2)",
+      "real_id": "urn:nir:stato:legge:2024-01-11;2",
+      "real_urn": "urn:nir:stato:legge:2024-01-11;2",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1992;59",
+      "stub_urn": "urn:nir:stato:legge:1992;59",
+      "stub_title": "Riferimento Esterno (legge 31 gennaio 1992, n. 59)",
+      "real_id": "urn:nir:stato:legge:1992-01-31;59",
+      "real_urn": "urn:nir:stato:legge:1992-01-31;59",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2022;142",
+      "stub_urn": "urn:nir:stato:legge:2022;142",
+      "stub_title": "Riferimento Esterno (legge 21 settembre 2022, n. 142)",
+      "real_id": "urn:nir:stato:legge:2022-09-21;142",
+      "real_urn": "urn:nir:stato:legge:2022-09-21;142",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2002;289",
+      "stub_urn": "urn:nir:stato:legge:2002;289",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 2002, n. 289)",
+      "real_id": "urn:nir:stato:legge:2002-12-27;289",
+      "real_urn": "urn:nir:stato:legge:2002-12-27;289",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;191",
+      "stub_urn": "urn:nir:stato:legge:2009;191",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 2009, n. 191)",
+      "real_id": "urn:nir:stato:legge:2009-12-23;191",
+      "real_urn": "urn:nir:stato:legge:2009-12-23;191",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2005;43",
+      "stub_urn": "urn:nir:stato:legge:2005;43",
+      "stub_title": "Riferimento Esterno (legge 31 marzo 2005, n. 43)",
+      "real_id": "urn:nir:stato:legge:2005-03-31;43",
+      "real_urn": "urn:nir:stato:legge:2005-03-31;43",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;120",
+      "stub_urn": "urn:nir:stato:legge:2024;120",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2024, n. 120)",
+      "real_id": "urn:nir:stato:legge:2024-08-08;120",
+      "real_urn": "urn:nir:stato:legge:2024-08-08;120",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;31",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;31",
+      "stub_title": "Riferimento Esterno (decreto legislativo 19 marzo 2024, n. 31)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-03-19;31",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-03-19;31",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2015;221",
+      "stub_urn": "urn:nir:stato:legge:2015;221",
+      "stub_title": "Riferimento Esterno (legge 28 dicembre 2015, n. 221)",
+      "real_id": "urn:nir:stato:legge:2015-12-28;221",
+      "real_urn": "urn:nir:stato:legge:2015-12-28;221",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1996;625",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1996;625",
+      "stub_title": "Riferimento Esterno (decreto legislativo 25 novembre 1996, n. 625)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1996-11-25;625",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1996-11-25;625",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;101",
+      "stub_urn": "urn:nir:stato:legge:2024;101",
+      "stub_title": "Riferimento Esterno (legge 12 luglio 2024, n. 101)",
+      "real_id": "urn:nir:stato:legge:2024-07-12;101",
+      "real_urn": "urn:nir:stato:legge:2024-07-12;101",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2000;285",
+      "stub_urn": "urn:nir:stato:legge:2000;285",
+      "stub_title": "Riferimento Esterno (legge 9 ottobre 2000, n. 285)",
+      "real_id": "urn:nir:stato:legge:2000-10-09;285",
+      "real_urn": "urn:nir:stato:legge:2000-10-09;285",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;187",
+      "stub_urn": "urn:nir:stato:legge:2024;187",
+      "stub_title": "Riferimento Esterno (Legge 9 dicembre 2024, n. 187)",
+      "real_id": "urn:nir:stato:legge:2024-12-09;187",
+      "real_urn": "urn:nir:stato:legge:2024-12-09;187",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;12",
+      "stub_urn": "urn:nir:stato:legge:2024;12",
+      "stub_title": "Riferimento Esterno (legge 13 febbraio 2024, n. 12)",
+      "real_id": "urn:nir:stato:legge:2024-02-13;12",
+      "real_urn": "urn:nir:stato:legge:2024-02-13;12",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2017;158",
+      "stub_urn": "urn:nir:stato:legge:2017;158",
+      "stub_title": "Riferimento Esterno (legge 6 ottobre 2017, n. 158)",
+      "real_id": "urn:nir:stato:legge:2017-10-06;158",
+      "real_urn": "urn:nir:stato:legge:2017-10-06;158",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;207",
+      "stub_urn": "urn:nir:stato:legge:2024;207",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 2024, n. 207)",
+      "real_id": "urn:nir:stato:legge:2024-12-30;207",
+      "real_urn": "urn:nir:stato:legge:2024-12-30;207",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2020;40",
+      "stub_urn": "urn:nir:stato:legge:2020;40",
+      "stub_title": "Riferimento Esterno (legge 5 giugno 2020, n. 40)",
+      "real_id": "urn:nir:stato:legge:2020-06-05;40",
+      "real_urn": "urn:nir:stato:legge:2020-06-05;40",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;30",
+      "stub_urn": "urn:nir:stato:legge:2024;30",
+      "stub_title": "Riferimento Esterno (legge 13 marzo 2024, n. 30)",
+      "real_id": "urn:nir:stato:legge:2024-03-13;30",
+      "real_urn": "urn:nir:stato:legge:2024-03-13;30",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;125",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;125",
+      "stub_title": "Riferimento Esterno (decreto legislativo 6 settembre 2024, n. 125)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-06;125",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-06;125",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2025;65",
+      "stub_urn": "urn:nir:stato:decreto.legge:2025;65",
+      "stub_title": "Riferimento Esterno (D.L. 7 maggio 2025, n. 65)",
+      "real_id": "urn:nir:stato:decreto.legge:2025-05-07;65",
+      "real_urn": "urn:nir:stato:decreto.legge:2025-05-07;65",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;96",
+      "stub_urn": "urn:nir:stato:legge:2024;96",
+      "stub_title": "Riferimento Esterno (legge 4 luglio 2024, n. 96)",
+      "real_id": "urn:nir:stato:legge:2024-07-04;96",
+      "real_urn": "urn:nir:stato:legge:2024-07-04;96",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;55",
+      "stub_urn": "urn:nir:stato:legge:2024;55",
+      "stub_title": "Riferimento Esterno (legge 15 aprile 2024, n. 55)",
+      "real_id": "urn:nir:stato:legge:2024-04-15;55",
+      "real_urn": "urn:nir:stato:legge:2024-04-15;55",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;193",
+      "stub_urn": "urn:nir:stato:legge:2024;193",
+      "stub_title": "Riferimento Esterno (legge 16 dicembre 2024, n. 193)",
+      "real_id": "urn:nir:stato:legge:2024-12-16;193",
+      "real_urn": "urn:nir:stato:legge:2024-12-16;193",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;191",
+      "stub_urn": "urn:nir:stato:legge:2024;191",
+      "stub_title": "Riferimento Esterno (legge 13 dicembre 2024, n. 191)",
+      "real_id": "urn:nir:stato:legge:2024-12-13;191",
+      "real_urn": "urn:nir:stato:legge:2024-12-13;191",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2010;96",
+      "stub_urn": "urn:nir:stato:legge:2010;96",
+      "stub_title": "Riferimento Esterno (legge 4 giugno 2010, n. 96)",
+      "real_id": "urn:nir:stato:legge:2010-06-04;96",
+      "real_urn": "urn:nir:stato:legge:2010-06-04;96",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1988;521",
+      "stub_urn": "urn:nir:stato:legge:1988;521",
+      "stub_title": "Riferimento Esterno (legge 5 dicembre 1988, n. 521)",
+      "real_id": "urn:nir:stato:legge:1988-12-05;521",
+      "real_urn": "urn:nir:stato:legge:1988-12-05;521",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2008;112",
+      "stub_urn": "urn:nir:stato:decreto.legge:2008;112",
+      "stub_title": "Riferimento Esterno (decreto legge 25 giugno 2008, n. 112)",
+      "real_id": "urn:nir:stato:decreto.legge:2008-06-25;112",
+      "real_urn": "urn:nir:stato:decreto.legge:2008-06-25;112",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;145",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;145",
+      "stub_title": "Riferimento Esterno (D.L. 11 ottobre 2024, n. 145)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-10-11;145",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-10-11;145",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;86",
+      "stub_urn": "urn:nir:stato:legge:2024;86",
+      "stub_title": "Riferimento Esterno (legge 26 giugno 2024, n. 86)",
+      "real_id": "urn:nir:stato:legge:2024-06-26;86",
+      "real_urn": "urn:nir:stato:legge:2024-06-26;86",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1991;203",
+      "stub_urn": "urn:nir:stato:legge:1991;203",
+      "stub_title": "Riferimento Esterno (legge 12 luglio 1991, n. 203)",
+      "real_id": "urn:nir:stato:legge:1991-07-12;203",
+      "real_urn": "urn:nir:stato:legge:1991-07-12;203",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2017;81",
+      "stub_urn": "urn:nir:stato:legge:2017;81",
+      "stub_title": "Riferimento Esterno (legge 22 maggio 2017, n. 81)",
+      "real_id": "urn:nir:stato:legge:2017-05-22;81",
+      "real_urn": "urn:nir:stato:legge:2017-05-22;81",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2014;102",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2014;102",
+      "stub_title": "Riferimento Esterno (decreto legislativo 4 luglio 2014, n. 102)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2014-07-04;102",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2014-07-04;102",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;174",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;174",
+      "stub_title": "Riferimento Esterno (decreto legislativo 5 novembre 2024, n. 174)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-11-05;174",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-11-05;174",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;139",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;139",
+      "stub_title": "Riferimento Esterno (decreto legislativo 18 settembre 2024, n. 139)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-18;139",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-18;139",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;118",
+      "stub_urn": "urn:nir:stato:legge:2024;118",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2024, n. 118)",
+      "real_id": "urn:nir:stato:legge:2024-08-08;118",
+      "real_urn": "urn:nir:stato:legge:2024-08-08;118",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;175",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;175",
+      "stub_title": "Riferimento Esterno (decreto legislativo 14 novembre 2024, n. 175)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-11-14;175",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-11-14;175",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2005;80",
+      "stub_urn": "urn:nir:stato:legge:2005;80",
+      "stub_title": "Riferimento Esterno (legge 14 maggio 2005, n. 80)",
+      "real_id": "urn:nir:stato:legge:2005-05-14;80",
+      "real_urn": "urn:nir:stato:legge:2005-05-14;80",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2006;163",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2006;163",
+      "stub_title": "Riferimento Esterno (D.LGS. 12 APRILE 2006, N. 163)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2006-04-12;163",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2006-04-12;163",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1992;358",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1992;358",
+      "stub_title": "Riferimento Esterno (decreto legislativo 24 luglio 1992, n. 358)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1992-07-24;358",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1992-07-24;358",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2011;70",
+      "stub_urn": "urn:nir:stato:decreto.legge:2011;70",
+      "stub_title": "Riferimento Esterno (D.L. 13 maggio 2011, n. 70)",
+      "real_id": "urn:nir:stato:decreto.legge:2011-05-13;70",
+      "real_urn": "urn:nir:stato:decreto.legge:2011-05-13;70",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2002;231",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2002;231",
+      "stub_title": "Riferimento Esterno (decreto legislativo 9 ottobre 2002, n. 231)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2002-10-09;231",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2002-10-09;231",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1990;55",
+      "stub_urn": "urn:nir:stato:legge:1990;55",
+      "stub_title": "Riferimento Esterno (legge 19 marzo 1990, n. 55)",
+      "real_id": "urn:nir:stato:legge:1990-03-19;55",
+      "real_urn": "urn:nir:stato:legge:1990-03-19;55",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;266",
+      "stub_urn": "urn:nir:stato:legge:1997;266",
+      "stub_title": "Riferimento Esterno (legge 7 agosto 1997, n. 266)",
+      "real_id": "urn:nir:stato:legge:1997-08-07;266",
+      "real_urn": "urn:nir:stato:legge:1997-08-07;266",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2022;82",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2022;82",
+      "stub_title": "Riferimento Esterno (decreto legislativo 27 maggio 2022, n. 82)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2022-05-27;82",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2022-05-27;82",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2022;201",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2022;201",
+      "stub_title": "Riferimento Esterno (decreto legislativo 23 dicembre 2022, n. 201)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2022-12-23;201",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2022-12-23;201",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;209",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;209",
+      "stub_title": "Riferimento Esterno (decreto legislativo 31 dicembre 2024, n. 209)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-12-31;209",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-12-31;209",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2025;105",
+      "stub_urn": "urn:nir:stato:legge:2025;105",
+      "stub_title": "Riferimento Esterno (legge 18 luglio 2025, n. 105)",
+      "real_id": "urn:nir:stato:legge:2025-07-18;105",
+      "real_urn": "urn:nir:stato:legge:2025-07-18;105",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1909;422",
+      "stub_urn": "urn:nir:stato:legge:1909;422",
+      "stub_title": "Riferimento Esterno (legge 25 giugno 1909, n. 422)",
+      "real_id": "urn:nir:stato:legge:1909-06-25;422",
+      "real_urn": "urn:nir:stato:legge:1909-06-25;422",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1960;1369",
+      "stub_urn": "urn:nir:stato:legge:1960;1369",
+      "stub_title": "Riferimento Esterno (legge 23 ottobre 1960, n. 1369)",
+      "real_id": "urn:nir:stato:legge:1960-10-23;1369",
+      "real_urn": "urn:nir:stato:legge:1960-10-23;1369",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1951;302",
+      "stub_urn": "urn:nir:stato:legge:1951;302",
+      "stub_title": "Riferimento Esterno (legge 2 aprile 1951, n. 302)",
+      "real_id": "urn:nir:stato:legge:1951-04-02;302",
+      "real_urn": "urn:nir:stato:legge:1951-04-02;302",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1950;646",
+      "stub_urn": "urn:nir:stato:legge:1950;646",
+      "stub_title": "Riferimento Esterno (legge 10 agosto 1950, n. 646)",
+      "real_id": "urn:nir:stato:legge:1950-08-10;646",
+      "real_urn": "urn:nir:stato:legge:1950-08-10;646",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2011;98",
+      "stub_urn": "urn:nir:stato:decreto.legge:2011;98",
+      "stub_title": "Riferimento Esterno (D.L. 6 luglio 2011, n. 98)",
+      "real_id": "urn:nir:stato:decreto.legge:2011-07-06;98",
+      "real_urn": "urn:nir:stato:decreto.legge:2011-07-06;98",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2012;5",
+      "stub_urn": "urn:nir:stato:decreto.legge:2012;5",
+      "stub_title": "Riferimento Esterno (D.L. 9 FEBBRAIO 2012, N. 5)",
+      "real_id": "urn:nir:stato:decreto.legge:2012-02-09;5",
+      "real_urn": "urn:nir:stato:decreto.legge:2012-02-09;5",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1971;825",
+      "stub_urn": "urn:nir:stato:legge:1971;825",
+      "stub_title": "Riferimento Esterno (legge 9 ottobre 1971, n. 825)",
+      "real_id": "urn:nir:stato:legge:1971-10-09;825",
+      "real_urn": "urn:nir:stato:legge:1971-10-09;825",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;192",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;192",
+      "stub_title": "Riferimento Esterno (D.Lgs. 13 dicembre 2024, n. 192)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-12-13;192",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-12-13;192",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1988;70",
+      "stub_urn": "urn:nir:stato:decreto.legge:1988;70",
+      "stub_title": "Riferimento Esterno (D.L. 14 marzo 1988, n.70)",
+      "real_id": "urn:nir:stato:decreto.legge:1988-03-14;70",
+      "real_urn": "urn:nir:stato:decreto.legge:1988-03-14;70",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1990;142",
+      "stub_urn": "urn:nir:stato:legge:1990;142",
+      "stub_title": "Riferimento Esterno (legge 8 giugno 1990, n. 142)",
+      "real_id": "urn:nir:stato:legge:1990-06-08;142",
+      "real_urn": "urn:nir:stato:legge:1990-06-08;142",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1995;415",
+      "stub_urn": "urn:nir:stato:decreto.legge:1995;415",
+      "stub_title": "Riferimento Esterno (D.L. 2 ottobre 1995, n. 415)",
+      "real_id": "urn:nir:stato:decreto.legge:1995-10-02;415",
+      "real_urn": "urn:nir:stato:decreto.legge:1995-10-02;415",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2020;76",
+      "stub_urn": "urn:nir:stato:decreto.legge:2020;76",
+      "stub_title": "Riferimento Esterno (D.L. 16 luglio 2020, n. 76)",
+      "real_id": "urn:nir:stato:decreto.legge:2020-07-16;76",
+      "real_urn": "urn:nir:stato:decreto.legge:2020-07-16;76",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;180",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;180",
+      "stub_title": "Riferimento Esterno (D.Lgs. 13 novembre 2024, n. 180)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-11-13;180",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-11-13;180",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1996;669",
+      "stub_urn": "urn:nir:stato:decreto.legge:1996;669",
+      "stub_title": "Riferimento Esterno (D.L. 31 DICEMBRE 1996, N.669)",
+      "real_id": "urn:nir:stato:decreto.legge:1996-12-31;669",
+      "real_urn": "urn:nir:stato:decreto.legge:1996-12-31;669",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2017;50",
+      "stub_urn": "urn:nir:stato:decreto.legge:2017;50",
+      "stub_title": "Riferimento Esterno (D.L. 24 aprile 2017, n. 50)",
+      "real_id": "urn:nir:stato:decreto.legge:2017-04-24;50",
+      "real_urn": "urn:nir:stato:decreto.legge:2017-04-24;50",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2019;124",
+      "stub_urn": "urn:nir:stato:decreto.legge:2019;124",
+      "stub_title": "Riferimento Esterno (D.L. 26 ottobre 2019, n. 124)",
+      "real_id": "urn:nir:stato:decreto.legge:2019-10-26;124",
+      "real_urn": "urn:nir:stato:decreto.legge:2019-10-26;124",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2022;50",
+      "stub_urn": "urn:nir:stato:decreto.legge:2022;50",
+      "stub_title": "Riferimento Esterno (D.L. 17 maggio 2022, n. 50)",
+      "real_id": "urn:nir:stato:decreto.legge:2022-05-17;50",
+      "real_urn": "urn:nir:stato:decreto.legge:2022-05-17;50",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2025;199",
+      "stub_urn": "urn:nir:stato:legge:2025;199",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 2025, n. 199)",
+      "real_id": "urn:nir:stato:legge:2025-12-30;199",
+      "real_urn": "urn:nir:stato:legge:2025-12-30;199",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2011;138",
+      "stub_urn": "urn:nir:stato:decreto.legge:2011;138",
+      "stub_title": "Riferimento Esterno (D.L. 13 agosto 2011, n. 138)",
+      "real_id": "urn:nir:stato:decreto.legge:2011-08-13;138",
+      "real_urn": "urn:nir:stato:decreto.legge:2011-08-13;138",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2015;210",
+      "stub_urn": "urn:nir:stato:decreto.legge:2015;210",
+      "stub_title": "Riferimento Esterno (D.L. 30 dicembre 2015, n. 210)",
+      "real_id": "urn:nir:stato:decreto.legge:2015-12-30;210",
+      "real_urn": "urn:nir:stato:decreto.legge:2015-12-30;210",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2019;34",
+      "stub_urn": "urn:nir:stato:decreto.legge:2019;34",
+      "stub_title": "Riferimento Esterno (D.L. 30 aprile 2019, n. 34)",
+      "real_id": "urn:nir:stato:decreto.legge:2019-04-30;34",
+      "real_urn": "urn:nir:stato:decreto.legge:2019-04-30;34",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2021;73",
+      "stub_urn": "urn:nir:stato:decreto.legge:2021;73",
+      "stub_title": "Riferimento Esterno (D.L. 25 maggio 2021, n. 73)",
+      "real_id": "urn:nir:stato:decreto.legge:2021-05-25;73",
+      "real_urn": "urn:nir:stato:decreto.legge:2021-05-25;73",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2023;13",
+      "stub_urn": "urn:nir:stato:decreto.legge:2023;13",
+      "stub_title": "Riferimento Esterno (D.L. 24 febbraio 2023, n. 13)",
+      "real_id": "urn:nir:stato:decreto.legge:2023-02-24;13",
+      "real_urn": "urn:nir:stato:decreto.legge:2023-02-24;13",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2005;35",
+      "stub_urn": "urn:nir:stato:decreto.legge:2005;35",
+      "stub_title": "Riferimento Esterno (D.L. 14 MARZO 2005, N.35)",
+      "real_id": "urn:nir:stato:decreto.legge:2005-03-14;35",
+      "real_urn": "urn:nir:stato:decreto.legge:2005-03-14;35",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2010;78",
+      "stub_urn": "urn:nir:stato:decreto.legge:2010;78",
+      "stub_title": "Riferimento Esterno (D.L. 31 maggio 2010, n. 78)",
+      "real_id": "urn:nir:stato:decreto.legge:2010-05-31;78",
+      "real_urn": "urn:nir:stato:decreto.legge:2010-05-31;78",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1993;331",
+      "stub_urn": "urn:nir:stato:decreto.legge:1993;331",
+      "stub_title": "Riferimento Esterno (D.L. 30 agosto 1993, n.331)",
+      "real_id": "urn:nir:stato:decreto.legge:1993-08-30;331",
+      "real_urn": "urn:nir:stato:decreto.legge:1993-08-30;331",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2009;78",
+      "stub_urn": "urn:nir:stato:decreto.legge:2009;78",
+      "stub_title": "Riferimento Esterno (D.L. 1 luglio 2009, n. 78)",
+      "real_id": "urn:nir:stato:decreto.legge:2009-07-01;78",
+      "real_urn": "urn:nir:stato:decreto.legge:2009-07-01;78",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2011;201",
+      "stub_urn": "urn:nir:stato:decreto.legge:2011;201",
+      "stub_title": "Riferimento Esterno (D.L. 6 dicembre 2011, n. 201)",
+      "real_id": "urn:nir:stato:decreto.legge:2011-12-06;201",
+      "real_urn": "urn:nir:stato:decreto.legge:2011-12-06;201",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;113",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;113",
+      "stub_title": "Riferimento Esterno (D.L. 9 agosto 2024, n. 113)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-08-09;113",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-08-09;113",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2025;33",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2025;33",
+      "stub_title": "Riferimento Esterno (D.LGS. 24 MARZO 2025, N. 33)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2025-03-24;33",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2025-03-24;33",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;173",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;173",
+      "stub_title": "Riferimento Esterno (D.Lgs. 5 novembre 2024, n. 173)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-11-05;173",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-11-05;173",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2013;69",
+      "stub_urn": "urn:nir:stato:decreto.legge:2013;69",
+      "stub_title": "Riferimento Esterno (D.L. 21 giugno 2013, n. 69)",
+      "real_id": "urn:nir:stato:decreto.legge:2013-06-21;69",
+      "real_urn": "urn:nir:stato:decreto.legge:2013-06-21;69",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1940;2",
+      "stub_urn": "urn:nir:stato:legge:1940;2",
+      "stub_title": "Riferimento Esterno (legge 9 gennaio 1940, n. 2)",
+      "real_id": "urn:nir:stato:legge:1940-01-09;2",
+      "real_urn": "urn:nir:stato:legge:1940-01-09;2",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1952;703",
+      "stub_urn": "urn:nir:stato:legge:1952;703",
+      "stub_title": "Riferimento Esterno (legge 2 luglio 1952, n. 703)",
+      "real_id": "urn:nir:stato:legge:1952-07-02;703",
+      "real_urn": "urn:nir:stato:legge:1952-07-02;703",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1977;227",
+      "stub_urn": "urn:nir:stato:legge:1977;227",
+      "stub_title": "Riferimento Esterno (legge 24 maggio 1977, n. 227)",
+      "real_id": "urn:nir:stato:legge:1977-05-24;227",
+      "real_urn": "urn:nir:stato:legge:1977-05-24;227",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;87",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;87",
+      "stub_title": "Riferimento Esterno (D.Lgs. 14 giugno 2024, n. 87)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-06-14;87",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-06-14;87",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1967;131",
+      "stub_urn": "urn:nir:stato:legge:1967;131",
+      "stub_title": "Riferimento Esterno (legge 28 febbraio 1967, n. 131)",
+      "real_id": "urn:nir:stato:legge:1967-02-28;131",
+      "real_urn": "urn:nir:stato:legge:1967-02-28;131",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;110",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;110",
+      "stub_title": "Riferimento Esterno (D.LGS. 29 LUGLIO 2024, N. 110)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-07-29;110",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-07-29;110",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2020;34",
+      "stub_urn": "urn:nir:stato:decreto.legge:2020;34",
+      "stub_title": "Riferimento Esterno (D.L. 19 maggio 2020, n. 34)",
+      "real_id": "urn:nir:stato:decreto.legge:2020-05-19;34",
+      "real_urn": "urn:nir:stato:decreto.legge:2020-05-19;34",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2022;73",
+      "stub_urn": "urn:nir:stato:decreto.legge:2022;73",
+      "stub_title": "Riferimento Esterno (D.L. 21 giugno 2022, n. 73)",
+      "real_id": "urn:nir:stato:decreto.legge:2022-06-21;73",
+      "real_urn": "urn:nir:stato:decreto.legge:2022-06-21;73",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2008;185",
+      "stub_urn": "urn:nir:stato:decreto.legge:2008;185",
+      "stub_title": "Riferimento Esterno (D.L. 29 novembre 2008, n.185)",
+      "real_id": "urn:nir:stato:decreto.legge:2008-11-29;185",
+      "real_urn": "urn:nir:stato:decreto.legge:2008-11-29;185",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1994;36",
+      "stub_urn": "urn:nir:stato:legge:1994;36",
+      "stub_title": "Riferimento Esterno (legge 5 gennaio 1994, n. 36)",
+      "real_id": "urn:nir:stato:legge:1994-01-05;36",
+      "real_urn": "urn:nir:stato:legge:1994-01-05;36",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1971;865",
+      "stub_urn": "urn:nir:stato:legge:1971;865",
+      "stub_title": "Riferimento Esterno (legge 22 ottobre 1971, n. 865)",
+      "real_id": "urn:nir:stato:legge:1971-10-22;865",
+      "real_urn": "urn:nir:stato:legge:1971-10-22;865",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1983;747",
+      "stub_urn": "urn:nir:stato:decreto.legge:1983;747",
+      "stub_title": "Riferimento Esterno (D.L. 29 dicembre 1983, n. 747)",
+      "real_id": "urn:nir:stato:decreto.legge:1983-12-29;747",
+      "real_urn": "urn:nir:stato:decreto.legge:1983-12-29;747",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1982;42",
+      "stub_urn": "urn:nir:stato:legge:1982;42",
+      "stub_title": "Riferimento Esterno (legge 9 febbraio 1982, n. 42)",
+      "real_id": "urn:nir:stato:legge:1982-02-09;42",
+      "real_urn": "urn:nir:stato:legge:1982-02-09;42",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1977;584",
+      "stub_urn": "urn:nir:stato:legge:1977;584",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 1977, n. 584)",
+      "real_id": "urn:nir:stato:legge:1977-08-08;584",
+      "real_urn": "urn:nir:stato:legge:1977-08-08;584",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1971;127",
+      "stub_urn": "urn:nir:stato:legge:1971;127",
+      "stub_title": "Riferimento Esterno (legge 17 febbraio 1971, n. 127)",
+      "real_id": "urn:nir:stato:legge:1971-02-17;127",
+      "real_urn": "urn:nir:stato:legge:1971-02-17;127",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1903;103",
+      "stub_urn": "urn:nir:stato:legge:1903;103",
+      "stub_title": "Riferimento Esterno (legge 29 marzo 1903, n. 103)",
+      "real_id": "urn:nir:stato:legge:1903-03-29;103",
+      "real_urn": "urn:nir:stato:legge:1903-03-29;103",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1994;490",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1994;490",
+      "stub_title": "Riferimento Esterno (decreto legislativo 8 agosto 1994, n. 490)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1994-08-08;490",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1994-08-08;490",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2012;218",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2012;218",
+      "stub_title": "Riferimento Esterno (D.Lgs. 15 novembre 2012, n. 218)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2012-11-15;218",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2012-11-15;218",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1988;486",
+      "stub_urn": "urn:nir:stato:legge:1988;486",
+      "stub_title": "Riferimento Esterno (legge 15 novembre 1988, n. 486)",
+      "real_id": "urn:nir:stato:legge:1988-11-15;486",
+      "real_urn": "urn:nir:stato:legge:1988-11-15;486",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1994;109",
+      "stub_urn": "urn:nir:stato:legge:1994;109",
+      "stub_title": "Riferimento Esterno (legge 11 febbraio 1994, n. 109)",
+      "real_id": "urn:nir:stato:legge:1994-02-11;109",
+      "real_urn": "urn:nir:stato:legge:1994-02-11;109",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1995;157",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1995;157",
+      "stub_title": "Riferimento Esterno (decreto legislativo 17 marzo 1995, n. 157)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1995-03-17;157",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1995-03-17;157",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2000;65",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2000;65",
+      "stub_title": "Riferimento Esterno (decreto legislativo 25 febbraio 2000, n. 65)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2000-02-25;65",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2000-02-25;65",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1999;50",
+      "stub_urn": "urn:nir:stato:legge:1999;50",
+      "stub_title": "Riferimento Esterno (legge 8 marzo 1999, n. 50)",
+      "real_id": "urn:nir:stato:legge:1999-03-08;50",
+      "real_urn": "urn:nir:stato:legge:1999-03-08;50",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1999;490",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1999;490",
+      "stub_title": "Riferimento Esterno (decreto legislativo 29 ottobre 1999, n. 490)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1999-10-29;490",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1999-10-29;490",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1996;663",
+      "stub_urn": "urn:nir:stato:legge:1996;663",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 1996, n. 663)",
+      "real_id": "urn:nir:stato:legge:1996-12-23;663",
+      "real_urn": "urn:nir:stato:legge:1996-12-23;663",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2001;443",
+      "stub_urn": "urn:nir:stato:legge:2001;443",
+      "stub_title": "Riferimento Esterno (legge 21 dicembre 2001, n. 443)",
+      "real_id": "urn:nir:stato:legge:2001-12-21;443",
+      "real_urn": "urn:nir:stato:legge:2001-12-21;443",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1998;496",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1998;496",
+      "stub_title": "Riferimento Esterno (decreto legislativo 28 dicembre 1998, n. 496)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1998-12-28;496",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1998-12-28;496",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1932;1958",
+      "stub_urn": "urn:nir:stato:legge:1932;1958",
+      "stub_title": "Riferimento Esterno (legge 22 dicembre 1932, n. 1958)",
+      "real_id": "urn:nir:stato:legge:1932-12-22;1958",
+      "real_urn": "urn:nir:stato:legge:1932-12-22;1958",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1992;142",
+      "stub_urn": "urn:nir:stato:legge:1992;142",
+      "stub_title": "Riferimento Esterno (legge 19 febbraio 1992, n. 142)",
+      "real_id": "urn:nir:stato:legge:1992-02-19;142",
+      "real_urn": "urn:nir:stato:legge:1992-02-19;142",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1994;146",
+      "stub_urn": "urn:nir:stato:legge:1994;146",
+      "stub_title": "Riferimento Esterno (legge 22 febbraio 1994, n. 146)",
+      "real_id": "urn:nir:stato:legge:1994-02-22;146",
+      "real_urn": "urn:nir:stato:legge:1994-02-22;146",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;94",
+      "stub_urn": "urn:nir:stato:legge:2009;94",
+      "stub_title": "Riferimento Esterno (legge 15 luglio 2009, n. 94)",
+      "real_id": "urn:nir:stato:legge:2009-07-15;94",
+      "real_urn": "urn:nir:stato:legge:2009-07-15;94",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2014;47",
+      "stub_urn": "urn:nir:stato:decreto.legge:2014;47",
+      "stub_title": "Riferimento Esterno (D.L. 28 marzo 2014, n. 47)",
+      "real_id": "urn:nir:stato:decreto.legge:2014-03-28;47",
+      "real_urn": "urn:nir:stato:decreto.legge:2014-03-28;47",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2011;208",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2011;208",
+      "stub_title": "Riferimento Esterno (decreto legislativo 15 novembre 2011, n. 208)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2011-11-15;208",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2011-11-15;208",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2008;115",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2008;115",
+      "stub_title": "Riferimento Esterno (decreto legislativo 30 maggio 2008, n. 115)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2008-05-30;115",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2008-05-30;115",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1941;685",
+      "stub_urn": "urn:nir:stato:legge:1941;685",
+      "stub_title": "Riferimento Esterno (legge 11 luglio 1941, n. 685)",
+      "real_id": "urn:nir:stato:legge:1941-07-11;685",
+      "real_urn": "urn:nir:stato:legge:1941-07-11;685",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1943;449",
+      "stub_urn": "urn:nir:stato:legge:1943;449",
+      "stub_title": "Riferimento Esterno (legge 12 aprile 1943, n. 449)",
+      "real_id": "urn:nir:stato:legge:1943-04-12;449",
+      "real_urn": "urn:nir:stato:legge:1943-04-12;449",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2008;200",
+      "stub_urn": "urn:nir:stato:decreto.legge:2008;200",
+      "stub_title": "Riferimento Esterno (D.L. 22 DICEMBRE 2008, N. 200)",
+      "real_id": "urn:nir:stato:decreto.legge:2008-12-22;200",
+      "real_urn": "urn:nir:stato:decreto.legge:2008-12-22;200",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1925;473",
+      "stub_urn": "urn:nir:stato:legge:1925;473",
+      "stub_title": "Riferimento Esterno (legge 17 aprile 1925, n. 473)",
+      "real_id": "urn:nir:stato:legge:1925-04-17;473",
+      "real_urn": "urn:nir:stato:legge:1925-04-17;473",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1948;185",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1948;185",
+      "stub_title": "Riferimento Esterno (decreto legislativo 25 marzo 1948, n. 185)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1948-03-25;185",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1948-03-25;185",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1948;547",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1948;547",
+      "stub_title": "Riferimento Esterno (decreto legislativo 17 aprile 1948, n. 547)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1948-04-17;547",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1948-04-17;547",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2010;212",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2010;212",
+      "stub_title": "Riferimento Esterno (D.LGS. 13 DICEMBRE 2010, N. 212)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2010-12-13;212",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2010-12-13;212",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1987;80",
+      "stub_urn": "urn:nir:stato:legge:1987;80",
+      "stub_title": "Riferimento Esterno (legge 17 febbraio 1987, n. 80)",
+      "real_id": "urn:nir:stato:legge:1987-02-17;80",
+      "real_urn": "urn:nir:stato:legge:1987-02-17;80",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1978;196",
+      "stub_urn": "urn:nir:stato:legge:1978;196",
+      "stub_title": "Riferimento Esterno (legge 16 maggio 1978, n. 196)",
+      "real_id": "urn:nir:stato:legge:1978-05-16;196",
+      "real_urn": "urn:nir:stato:legge:1978-05-16;196",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1981;690",
+      "stub_urn": "urn:nir:stato:legge:1981;690",
+      "stub_title": "Riferimento Esterno (legge 26 novembre 1981, n. 690)",
+      "real_id": "urn:nir:stato:legge:1981-11-26;690",
+      "real_urn": "urn:nir:stato:legge:1981-11-26;690",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1995;158",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1995;158",
+      "stub_title": "Riferimento Esterno (decreto legislativo 17 marzo 1995, n.158)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1995-03-17;158",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1995-03-17;158",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2018;135",
+      "stub_urn": "urn:nir:stato:decreto.legge:2018;135",
+      "stub_title": "Riferimento Esterno (D.L. 14 dicembre 2018, n. 135)",
+      "real_id": "urn:nir:stato:decreto.legge:2018-12-14;135",
+      "real_urn": "urn:nir:stato:decreto.legge:2018-12-14;135",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2012;83",
+      "stub_urn": "urn:nir:stato:decreto.legge:2012;83",
+      "stub_title": "Riferimento Esterno (D.L. 22 giugno 2012, n. 83)",
+      "real_id": "urn:nir:stato:decreto.legge:2012-06-22;83",
+      "real_urn": "urn:nir:stato:decreto.legge:2012-06-22;83",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1998;204",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1998;204",
+      "stub_title": "Riferimento Esterno (decreto legislativo 5 giugno 1998, n. 204)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1998-06-05;204",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1998-06-05;204",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1999;296",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1999;296",
+      "stub_title": "Riferimento Esterno (decreto legislativo 23 luglio 1999, n. 296)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1999-07-23;296",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1999-07-23;296",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1998;213",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1998;213",
+      "stub_title": "Riferimento Esterno (decreto legislativo 24 giugno 1998, n. 213)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1998-06-24;213",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1998-06-24;213",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1998;128",
+      "stub_urn": "urn:nir:stato:legge:1998;128",
+      "stub_title": "Riferimento Esterno (legge 24 aprile 1998, n. 128)",
+      "real_id": "urn:nir:stato:legge:1998-04-24;128",
+      "real_urn": "urn:nir:stato:legge:1998-04-24;128",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2012;95",
+      "stub_urn": "urn:nir:stato:decreto.legge:2012;95",
+      "stub_title": "Riferimento Esterno (D.L. 6 luglio 2012, n. 95)",
+      "real_id": "urn:nir:stato:decreto.legge:2012-07-06;95",
+      "real_urn": "urn:nir:stato:decreto.legge:2012-07-06;95",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1999;297",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1999;297",
+      "stub_title": "Riferimento Esterno (decreto legislativo 27 luglio 1999, n. 297)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1999-07-27;297",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1999-07-27;297",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;196",
+      "stub_urn": "urn:nir:stato:legge:1997;196",
+      "stub_title": "Riferimento Esterno (legge 24 giugno 1997, n. 196)",
+      "real_id": "urn:nir:stato:legge:1997-06-24;196",
+      "real_urn": "urn:nir:stato:legge:1997-06-24;196",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1994;626",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1994;626",
+      "stub_title": "Riferimento Esterno (decreto legislativo 19 settembre 1994, n. 626)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1994-09-19;626",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1994-09-19;626",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1999;165",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1999;165",
+      "stub_title": "Riferimento Esterno (decreto legislativo 27 maggio 1999, n. 165)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1999-05-27;165",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1999-05-27;165",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1991;125",
+      "stub_urn": "urn:nir:stato:legge:1991;125",
+      "stub_title": "Riferimento Esterno (legge 10 aprile 1991, n. 125)",
+      "real_id": "urn:nir:stato:legge:1991-04-10;125",
+      "real_urn": "urn:nir:stato:legge:1991-04-10;125",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2013;35",
+      "stub_urn": "urn:nir:stato:decreto.legge:2013;35",
+      "stub_title": "Riferimento Esterno (D.L. 8 aprile 2013, n. 35)",
+      "real_id": "urn:nir:stato:decreto.legge:2013-04-08;35",
+      "real_urn": "urn:nir:stato:decreto.legge:2013-04-08;35",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;7",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;7",
+      "stub_title": "Riferimento Esterno (D.L. 29 gennaio 2024, n. 7)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-01-29;7",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-01-29;7",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1951;122",
+      "stub_urn": "urn:nir:stato:legge:1951;122",
+      "stub_title": "Riferimento Esterno (legge 8 marzo 1951, n. 122)",
+      "real_id": "urn:nir:stato:legge:1951-03-08;122",
+      "real_urn": "urn:nir:stato:legge:1951-03-08;122",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2016;189",
+      "stub_urn": "urn:nir:stato:decreto.legge:2016;189",
+      "stub_title": "Riferimento Esterno (D.L. 17 ottobre 2016, n. 189)",
+      "real_id": "urn:nir:stato:decreto.legge:2016-10-17;189",
+      "real_urn": "urn:nir:stato:decreto.legge:2016-10-17;189",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2017;8",
+      "stub_urn": "urn:nir:stato:decreto.legge:2017;8",
+      "stub_title": "Riferimento Esterno (D.L. 9 febbraio 2017, n. 8)",
+      "real_id": "urn:nir:stato:decreto.legge:2017-02-09;8",
+      "real_urn": "urn:nir:stato:decreto.legge:2017-02-09;8",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2014;126",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2014;126",
+      "stub_title": "Riferimento Esterno (D.Lgs. 10 agosto 2014, n. 126)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2014-08-10;126",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2014-08-10;126",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2018;109",
+      "stub_urn": "urn:nir:stato:decreto.legge:2018;109",
+      "stub_title": "Riferimento Esterno (D.L. 28 settembre 2018, n. 109)",
+      "real_id": "urn:nir:stato:decreto.legge:2018-09-28;109",
+      "real_urn": "urn:nir:stato:decreto.legge:2018-09-28;109",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2019;32",
+      "stub_urn": "urn:nir:stato:decreto.legge:2019;32",
+      "stub_title": "Riferimento Esterno (D.L. 18 aprile 2019, n. 32)",
+      "real_id": "urn:nir:stato:decreto.legge:2019-04-18;32",
+      "real_urn": "urn:nir:stato:decreto.legge:2019-04-18;32",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1998;415",
+      "stub_urn": "urn:nir:stato:legge:1998;415",
+      "stub_title": "Riferimento Esterno (legge 18 novembre 1998, n. 415)",
+      "real_id": "urn:nir:stato:legge:1998-11-18;415",
+      "real_urn": "urn:nir:stato:legge:1998-11-18;415",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2023;18",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2023;18",
+      "stub_title": "Riferimento Esterno (D.LGS. 23 FEBBRAIO 2023, N. 18)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2023-02-23;18",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2023-02-23;18",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2002;39",
+      "stub_urn": "urn:nir:stato:legge:2002;39",
+      "stub_title": "Riferimento Esterno (legge 1 marzo 2002, n. 39)",
+      "real_id": "urn:nir:stato:legge:2002-03-01;39",
+      "real_urn": "urn:nir:stato:legge:2002-03-01;39",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1998;402",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1998;402",
+      "stub_title": "Riferimento Esterno (decreto legislativo 20 ottobre 1998, n. 402)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1998-10-20;402",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1998-10-20;402",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1999;525",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1999;525",
+      "stub_title": "Riferimento Esterno (decreto legislativo 25 novembre 1999, n. 525)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1999-11-25;525",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1999-11-25;525",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2000;340",
+      "stub_urn": "urn:nir:stato:legge:2000;340",
+      "stub_title": "Riferimento Esterno (legge 24 novembre 2000, n. 340)",
+      "real_id": "urn:nir:stato:legge:2000-11-24;340",
+      "real_urn": "urn:nir:stato:legge:2000-11-24;340",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2002;190",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2002;190",
+      "stub_title": "Riferimento Esterno (decreto legislativo 20 agosto 2002, n. 190)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2002-08-20;190",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2002-08-20;190",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1982;646",
+      "stub_urn": "urn:nir:stato:legge:1982;646",
+      "stub_title": "Riferimento Esterno (legge 13 settembre 1982, n. 646)",
+      "real_id": "urn:nir:stato:legge:1982-09-13;646",
+      "real_urn": "urn:nir:stato:legge:1982-09-13;646",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2017;25",
+      "stub_urn": "urn:nir:stato:decreto.legge:2017;25",
+      "stub_title": "Riferimento Esterno (D.L. 17 MARZO 2017, N. 25)",
+      "real_id": "urn:nir:stato:decreto.legge:2017-03-17;25",
+      "real_urn": "urn:nir:stato:decreto.legge:2017-03-17;25",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2013;76",
+      "stub_urn": "urn:nir:stato:decreto.legge:2013;76",
+      "stub_title": "Riferimento Esterno (D.L. 28 giugno 2013, n. 76)",
+      "real_id": "urn:nir:stato:decreto.legge:2013-06-28;76",
+      "real_urn": "urn:nir:stato:decreto.legge:2013-06-28;76",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2013;91",
+      "stub_urn": "urn:nir:stato:decreto.legge:2013;91",
+      "stub_title": "Riferimento Esterno (D.L. 8 agosto 2013, n. 91)",
+      "real_id": "urn:nir:stato:decreto.legge:2013-08-08;91",
+      "real_urn": "urn:nir:stato:decreto.legge:2013-08-08;91",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2014;133",
+      "stub_urn": "urn:nir:stato:decreto.legge:2014;133",
+      "stub_title": "Riferimento Esterno (D.L. 12 SETTEMBRE 2014, N. 133)",
+      "real_id": "urn:nir:stato:decreto.legge:2014-09-12;133",
+      "real_urn": "urn:nir:stato:decreto.legge:2014-09-12;133",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2000;427",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2000;427",
+      "stub_title": "Riferimento Esterno (decreto legislativo 23 novembre 2000, n. 427)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2000-11-23;427",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2000-11-23;427",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2012;179",
+      "stub_urn": "urn:nir:stato:decreto.legge:2012;179",
+      "stub_title": "Riferimento Esterno (D.L. 18 ottobre 2012, n. 179)",
+      "real_id": "urn:nir:stato:decreto.legge:2012-10-18;179",
+      "real_urn": "urn:nir:stato:decreto.legge:2012-10-18;179",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2021;152",
+      "stub_urn": "urn:nir:stato:decreto.legge:2021;152",
+      "stub_title": "Riferimento Esterno (D.L. 6 NOVEMBRE 2021, N. 152)",
+      "real_id": "urn:nir:stato:decreto.legge:2021-11-06;152",
+      "real_urn": "urn:nir:stato:decreto.legge:2021-11-06;152",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2018;148",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2018;148",
+      "stub_title": "Riferimento Esterno (decreto legislativo 27 dicembre 2018, n. 148)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2018-12-27;148",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2018-12-27;148",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2006;159",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2006;159",
+      "stub_title": "Riferimento Esterno (D.Lgs. 4 aprile 2006, n. 159)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2006-04-04;159",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2006-04-04;159",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2005;62",
+      "stub_urn": "urn:nir:stato:legge:2005;62",
+      "stub_title": "Riferimento Esterno (legge 18 aprile 2005, n. 62)",
+      "real_id": "urn:nir:stato:legge:2005-04-18;62",
+      "real_urn": "urn:nir:stato:legge:2005-04-18;62",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1994;747",
+      "stub_urn": "urn:nir:stato:legge:1994;747",
+      "stub_title": "Riferimento Esterno (legge 29 dicembre 1994, n. 747)",
+      "real_id": "urn:nir:stato:legge:1994-12-29;747",
+      "real_urn": "urn:nir:stato:legge:1994-12-29;747",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;153",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;153",
+      "stub_title": "Riferimento Esterno (D.L. 17 OTTOBRE 2024, N. 153)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-10-17;153",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-10-17;153",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1923;3267",
+      "stub_urn": "urn:nir:stato:legge:1923;3267",
+      "stub_title": "Riferimento Esterno (legge 30 dicembre 1923, n. 3267)",
+      "real_id": "urn:nir:stato:legge:1923-12-30;3267",
+      "real_urn": "urn:nir:stato:legge:1923-12-30;3267",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2001;31",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2001;31",
+      "stub_title": "Riferimento Esterno (decreto legislativo 2 febbraio 2001, n. 31)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2001-02-02;31",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2001-02-02;31",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2020;116",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2020;116",
+      "stub_title": "Riferimento Esterno (D.LGS. 3 SETTEMBRE 2020, N. 116)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2020-09-03;116",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2020-09-03;116",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2010;205",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2010;205",
+      "stub_title": "Riferimento Esterno (D.LGS. 3 DICEMBRE 2010, N. 205)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2010-12-03;205",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2010-12-03;205",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1994;82",
+      "stub_urn": "urn:nir:stato:legge:1994;82",
+      "stub_title": "Riferimento Esterno (legge 25 gennaio 1994, n. 82)",
+      "real_id": "urn:nir:stato:legge:1994-01-25;82",
+      "real_urn": "urn:nir:stato:legge:1994-01-25;82",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2022;36",
+      "stub_urn": "urn:nir:stato:decreto.legge:2022;36",
+      "stub_title": "Riferimento Esterno (D.L. 30 APRILE 2022, N. 36)",
+      "real_id": "urn:nir:stato:decreto.legge:2022-04-30;36",
+      "real_urn": "urn:nir:stato:decreto.legge:2022-04-30;36",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1941;366",
+      "stub_urn": "urn:nir:stato:legge:1941;366",
+      "stub_title": "Riferimento Esterno (legge 20 marzo 1941, n. 366)",
+      "real_id": "urn:nir:stato:legge:1941-03-20;366",
+      "real_urn": "urn:nir:stato:legge:1941-03-20;366",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2000;196",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2000;196",
+      "stub_title": "Riferimento Esterno (decreto legislativo 23 maggio 2000, n. 196)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2000-05-23;196",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2000-05-23;196",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2017;56",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2017;56",
+      "stub_title": "Riferimento Esterno (D.Lgs. 19 aprile 2017, n. 56)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2017-04-19;56",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2017-04-19;56",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2010;53",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2010;53",
+      "stub_title": "Riferimento Esterno (decreto legislativo 20 marzo 2010, n. 53)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2010-03-20;53",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2010-03-20;53",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2009;106",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2009;106",
+      "stub_title": "Riferimento Esterno (D.LGS. 3 AGOSTO 2009, N.106)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2009-08-03;106",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2009-08-03;106",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;135",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;135",
+      "stub_title": "Riferimento Esterno (D.Lgs. 4 settembre 2024, n. 135)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-09-04;135",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-09-04;135",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2021;187",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2021;187",
+      "stub_title": "Riferimento Esterno (D.LGS. 8 NOVEMBRE 2021, N. 187)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2021-11-08;187",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2021-11-08;187",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2015;23",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2015;23",
+      "stub_title": "Riferimento Esterno (decreto legislativo 4 marzo 2015, n. 23)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2015-03-04;23",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2015-03-04;23",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2020;23",
+      "stub_urn": "urn:nir:stato:decreto.legge:2020;23",
+      "stub_title": "Riferimento Esterno (D.L. 8 aprile 2020, n. 23)",
+      "real_id": "urn:nir:stato:decreto.legge:2020-04-08;23",
+      "real_urn": "urn:nir:stato:decreto.legge:2020-04-08;23",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;131",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;131",
+      "stub_title": "Riferimento Esterno (D.L. 16 SETTEMBRE 2024, N. 131)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-09-16;131",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-09-16;131",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;19",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;19",
+      "stub_title": "Riferimento Esterno (D.L. 2 MARZO 2024, N. 19)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-03-02;19",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-03-02;19",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2025;73",
+      "stub_urn": "urn:nir:stato:decreto.legge:2025;73",
+      "stub_title": "Riferimento Esterno (D.L. 21 maggio 2025, n. 73)",
+      "real_id": "urn:nir:stato:decreto.legge:2025-05-21;73",
+      "real_urn": "urn:nir:stato:decreto.legge:2025-05-21;73",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2015;114",
+      "stub_urn": "urn:nir:stato:legge:2015;114",
+      "stub_title": "Riferimento Esterno (legge 9 luglio 2015, n. 114)",
+      "real_id": "urn:nir:stato:legge:2015-07-09;114",
+      "real_urn": "urn:nir:stato:legge:2015-07-09;114",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2016;11",
+      "stub_urn": "urn:nir:stato:legge:2016;11",
+      "stub_title": "Riferimento Esterno (legge 28 gennaio 2016, n. 11)",
+      "real_id": "urn:nir:stato:legge:2016-01-28;11",
+      "real_urn": "urn:nir:stato:legge:2016-01-28;11",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1865;2248",
+      "stub_urn": "urn:nir:stato:legge:1865;2248",
+      "stub_title": "Riferimento Esterno (legge 20 marzo 1865, n. 2248)",
+      "real_id": "urn:nir:stato:legge:1865-03-20;2248",
+      "real_urn": "urn:nir:stato:legge:1865-03-20;2248",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2011;24",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2011;24",
+      "stub_title": "Riferimento Esterno (decreto legislativo 3 marzo 2011, n. 24)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2011-03-03;24",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2011-03-03;24",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2016;257",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2016;257",
+      "stub_title": "Riferimento Esterno (decreto legislativo 16 dicembre 2016, n. 257)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2016-12-16;257",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2016-12-16;257",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;46",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;46",
+      "stub_title": "Riferimento Esterno (D.LGS. 8 MARZO 2024, N. 46)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-03-08;46",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-03-08;46",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2026;5",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2026;5",
+      "stub_title": "Riferimento Esterno (D.LGS. 9 GENNAIO 2026, N. 5)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2026-01-09;5",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2026-01-09;5",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2025;102",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2025;102",
+      "stub_title": "Riferimento Esterno (D.LGS. 19 GIUGNO 2025, N. 102)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2025-06-19;102",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2025-06-19;102",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1962;57",
+      "stub_urn": "urn:nir:stato:legge:1962;57",
+      "stub_title": "Riferimento Esterno (legge 10 febbraio 1962, n. 57)",
+      "real_id": "urn:nir:stato:legge:1962-02-10;57",
+      "real_urn": "urn:nir:stato:legge:1962-02-10;57",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1978;1",
+      "stub_urn": "urn:nir:stato:legge:1978;1",
+      "stub_title": "Riferimento Esterno (legge 3 gennaio 1978, n. 1)",
+      "real_id": "urn:nir:stato:legge:1978-01-03;1",
+      "real_urn": "urn:nir:stato:legge:1978-01-03;1",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1981;741",
+      "stub_urn": "urn:nir:stato:legge:1981;741",
+      "stub_title": "Riferimento Esterno (legge 10 dicembre 1981, n. 741)",
+      "real_id": "urn:nir:stato:legge:1981-12-10;741",
+      "real_urn": "urn:nir:stato:legge:1981-12-10;741",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1984;687",
+      "stub_urn": "urn:nir:stato:legge:1984;687",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 1984, n. 687)",
+      "real_id": "urn:nir:stato:legge:1984-10-08;687",
+      "real_urn": "urn:nir:stato:legge:1984-10-08;687",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1964;357",
+      "stub_urn": "urn:nir:stato:legge:1964;357",
+      "stub_title": "Riferimento Esterno (legge 31 maggio 1964, n. 357)",
+      "real_id": "urn:nir:stato:legge:1964-05-31;357",
+      "real_urn": "urn:nir:stato:legge:1964-05-31;357",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1971;289",
+      "stub_urn": "urn:nir:stato:decreto.legge:1971;289",
+      "stub_title": "Riferimento Esterno (D.L. 1 giugno 1971, n. 289)",
+      "real_id": "urn:nir:stato:decreto.legge:1971-06-01;289",
+      "real_urn": "urn:nir:stato:decreto.legge:1971-06-01;289",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1968;79",
+      "stub_urn": "urn:nir:stato:decreto.legge:1968;79",
+      "stub_title": "Riferimento Esterno (D.L. 27 febbraio 1968, n. 79)",
+      "real_id": "urn:nir:stato:decreto.legge:1968-02-27;79",
+      "real_urn": "urn:nir:stato:decreto.legge:1968-02-27;79",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1967;641",
+      "stub_urn": "urn:nir:stato:legge:1967;641",
+      "stub_title": "Riferimento Esterno (legge 28 luglio 1967, n. 641)",
+      "real_id": "urn:nir:stato:legge:1967-07-28;641",
+      "real_urn": "urn:nir:stato:legge:1967-07-28;641",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1965;431",
+      "stub_urn": "urn:nir:stato:legge:1965;431",
+      "stub_title": "Riferimento Esterno (legge 13 maggio 1965, n. 431)",
+      "real_id": "urn:nir:stato:legge:1965-05-13;431",
+      "real_urn": "urn:nir:stato:legge:1965-05-13;431",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1952;3136",
+      "stub_urn": "urn:nir:stato:legge:1952;3136",
+      "stub_title": "Riferimento Esterno (legge 18 dicembre 1952, n. 3136)",
+      "real_id": "urn:nir:stato:legge:1952-12-18;3136",
+      "real_urn": "urn:nir:stato:legge:1952-12-18;3136",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1966;499",
+      "stub_urn": "urn:nir:stato:legge:1966;499",
+      "stub_title": "Riferimento Esterno (legge 4 luglio 1966, n. 499)",
+      "real_id": "urn:nir:stato:legge:1966-07-04;499",
+      "real_urn": "urn:nir:stato:legge:1966-07-04;499",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1961;59",
+      "stub_urn": "urn:nir:stato:legge:1961;59",
+      "stub_title": "Riferimento Esterno (legge 7 febbraio 1961, n. 59)",
+      "real_id": "urn:nir:stato:legge:1961-02-07;59",
+      "real_urn": "urn:nir:stato:legge:1961-02-07;59",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1969;6",
+      "stub_urn": "urn:nir:stato:legge:1969;6",
+      "stub_title": "Riferimento Esterno (legge 12 febbraio 1969, n. 6)",
+      "real_id": "urn:nir:stato:legge:1969-02-12;6",
+      "real_urn": "urn:nir:stato:legge:1969-02-12;6",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1968;403",
+      "stub_urn": "urn:nir:stato:legge:1968;403",
+      "stub_title": "Riferimento Esterno (legge 18 marzo 1968, n. 403)",
+      "real_id": "urn:nir:stato:legge:1968-03-18;403",
+      "real_urn": "urn:nir:stato:legge:1968-03-18;403",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1974;115",
+      "stub_urn": "urn:nir:stato:decreto.legge:1974;115",
+      "stub_title": "Riferimento Esterno (d.l. 2 maggio 1974, n. 115)",
+      "real_id": "urn:nir:stato:decreto.legge:1974-05-02;115",
+      "real_urn": "urn:nir:stato:decreto.legge:1974-05-02;115",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1974;658",
+      "stub_urn": "urn:nir:stato:decreto.legge:1974;658",
+      "stub_title": "Riferimento Esterno (D.L. 14 dicembre 1974, n. 658)",
+      "real_id": "urn:nir:stato:decreto.legge:1974-12-14;658",
+      "real_urn": "urn:nir:stato:decreto.legge:1974-12-14;658",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1981;113",
+      "stub_urn": "urn:nir:stato:legge:1981;113",
+      "stub_title": "Riferimento Esterno (legge 30 marzo 1981, n. 113)",
+      "real_id": "urn:nir:stato:legge:1981-03-30;113",
+      "real_urn": "urn:nir:stato:legge:1981-03-30;113",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1973;14",
+      "stub_urn": "urn:nir:stato:legge:1973;14",
+      "stub_title": "Riferimento Esterno (legge 2 febbraio 1973, n. 14)",
+      "real_id": "urn:nir:stato:legge:1973-02-02;14",
+      "real_urn": "urn:nir:stato:legge:1973-02-02;14",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1987;67",
+      "stub_urn": "urn:nir:stato:legge:1987;67",
+      "stub_title": "Riferimento Esterno (legge 25 febbraio 1987, n. 67)",
+      "real_id": "urn:nir:stato:legge:1987-02-25;67",
+      "real_urn": "urn:nir:stato:legge:1987-02-25;67",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2008;152",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2008;152",
+      "stub_title": "Riferimento Esterno (D.LGS. 11 SETTEMBRE 2008, N. 152)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2008-09-11;152",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2008-09-11;152",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1991;406",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1991;406",
+      "stub_title": "Riferimento Esterno (decreto legislativo 19 dicembre 1991, n. 406)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1991-12-19;406",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1991-12-19;406",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1985;210",
+      "stub_urn": "urn:nir:stato:legge:1985;210",
+      "stub_title": "Riferimento Esterno (legge 17 maggio 1985, n. 210)",
+      "real_id": "urn:nir:stato:legge:1985-05-17;210",
+      "real_urn": "urn:nir:stato:legge:1985-05-17;210",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1993;398",
+      "stub_urn": "urn:nir:stato:decreto.legge:1993;398",
+      "stub_title": "Riferimento Esterno (decreto legge 5 ottobre 1993, n. 398)",
+      "real_id": "urn:nir:stato:decreto.legge:1993-10-05;398",
+      "real_urn": "urn:nir:stato:decreto.legge:1993-10-05;398",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1975;166",
+      "stub_urn": "urn:nir:stato:legge:1975;166",
+      "stub_title": "Riferimento Esterno (legge 27 maggio 1975, n. 166)",
+      "real_id": "urn:nir:stato:legge:1975-05-27;166",
+      "real_urn": "urn:nir:stato:legge:1975-05-27;166",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1995;341",
+      "stub_urn": "urn:nir:stato:legge:1995;341",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 1995, n. 341)",
+      "real_id": "urn:nir:stato:legge:1995-08-08;341",
+      "real_urn": "urn:nir:stato:legge:1995-08-08;341",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1996;647",
+      "stub_urn": "urn:nir:stato:legge:1996;647",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 1996, n. 647)",
+      "real_id": "urn:nir:stato:legge:1996-12-23;647",
+      "real_urn": "urn:nir:stato:legge:1996-12-23;647",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1995;551",
+      "stub_urn": "urn:nir:stato:legge:1995;551",
+      "stub_title": "Riferimento Esterno (legge 28 dicembre 1995, n. 551)",
+      "real_id": "urn:nir:stato:legge:1995-12-28;551",
+      "real_urn": "urn:nir:stato:legge:1995-12-28;551",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1990;135",
+      "stub_urn": "urn:nir:stato:legge:1990;135",
+      "stub_title": "Riferimento Esterno (legge 5 giugno 1990, n. 135)",
+      "real_id": "urn:nir:stato:legge:1990-06-05;135",
+      "real_urn": "urn:nir:stato:legge:1990-06-05;135",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1998;61",
+      "stub_urn": "urn:nir:stato:legge:1998;61",
+      "stub_title": "Riferimento Esterno (legge 30 marzo 1998, n. 61)",
+      "real_id": "urn:nir:stato:legge:1998-03-30;61",
+      "real_urn": "urn:nir:stato:legge:1998-03-30;61",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;450",
+      "stub_urn": "urn:nir:stato:legge:1997;450",
+      "stub_title": "Riferimento Esterno (legge 27 dicembre 1997, n. 450)",
+      "real_id": "urn:nir:stato:legge:1997-12-27;450",
+      "real_urn": "urn:nir:stato:legge:1997-12-27;450",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1995;216",
+      "stub_urn": "urn:nir:stato:legge:1995;216",
+      "stub_title": "Riferimento Esterno (legge 2 giugno 1995, n. 216)",
+      "real_id": "urn:nir:stato:legge:1995-06-02;216",
+      "real_urn": "urn:nir:stato:legge:1995-06-02;216",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1997;468",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1997;468",
+      "stub_title": "Riferimento Esterno (decreto legislativo 1 dicembre 1997, n. 468)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1997-12-01;468",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1997-12-01;468",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1998;176",
+      "stub_urn": "urn:nir:stato:legge:1998;176",
+      "stub_title": "Riferimento Esterno (legge 5 giugno 1998, n. 176)",
+      "real_id": "urn:nir:stato:legge:1998-06-05;176",
+      "real_urn": "urn:nir:stato:legge:1998-06-05;176",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;454",
+      "stub_urn": "urn:nir:stato:legge:1997;454",
+      "stub_title": "Riferimento Esterno (legge 23 dicembre 1997, n. 454)",
+      "real_id": "urn:nir:stato:legge:1997-12-23;454",
+      "real_urn": "urn:nir:stato:legge:1997-12-23;454",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2000;364",
+      "stub_urn": "urn:nir:stato:legge:2000;364",
+      "stub_title": "Riferimento Esterno (legge 15 novembre 2000, n. 364)",
+      "real_id": "urn:nir:stato:legge:2000-11-15;364",
+      "real_urn": "urn:nir:stato:legge:2000-11-15;364",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2013;145",
+      "stub_urn": "urn:nir:stato:decreto.legge:2013;145",
+      "stub_title": "Riferimento Esterno (D.L. 23 DICEMBRE 2013, N. 145)",
+      "real_id": "urn:nir:stato:decreto.legge:2013-12-23;145",
+      "real_urn": "urn:nir:stato:decreto.legge:2013-12-23;145",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2008;162",
+      "stub_urn": "urn:nir:stato:decreto.legge:2008;162",
+      "stub_title": "Riferimento Esterno (D.L. 23 OTTOBRE 2008, N. 162)",
+      "real_id": "urn:nir:stato:decreto.legge:2008-10-23;162",
+      "real_urn": "urn:nir:stato:decreto.legge:2008-10-23;162",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2014;66",
+      "stub_urn": "urn:nir:stato:decreto.legge:2014;66",
+      "stub_title": "Riferimento Esterno (D.L. 24 aprile 2014, n. 66)",
+      "real_id": "urn:nir:stato:decreto.legge:2014-04-24;66",
+      "real_urn": "urn:nir:stato:decreto.legge:2014-04-24;66",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2012;100",
+      "stub_urn": "urn:nir:stato:legge:2012;100",
+      "stub_title": "Riferimento Esterno (legge 12 luglio 2012, n. 100)",
+      "real_id": "urn:nir:stato:legge:2012-07-12;100",
+      "real_urn": "urn:nir:stato:legge:2012-07-12;100",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2000;205",
+      "stub_urn": "urn:nir:stato:legge:2000;205",
+      "stub_title": "Riferimento Esterno (legge 21 luglio 2000, n. 205)",
+      "real_id": "urn:nir:stato:legge:2000-07-21;205",
+      "real_urn": "urn:nir:stato:legge:2000-07-21;205",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2014;90",
+      "stub_urn": "urn:nir:stato:decreto.legge:2014;90",
+      "stub_title": "Riferimento Esterno (D.L. 24 GIUGNO 2014, N. 90)",
+      "real_id": "urn:nir:stato:decreto.legge:2014-06-24;90",
+      "real_urn": "urn:nir:stato:decreto.legge:2014-06-24;90",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1965;14",
+      "stub_urn": "urn:nir:stato:legge:1965;14",
+      "stub_title": "Riferimento Esterno (legge 3 febbraio 1965, n. 14)",
+      "real_id": "urn:nir:stato:legge:1965-02-03;14",
+      "real_urn": "urn:nir:stato:legge:1965-02-03;14",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2008;201",
+      "stub_urn": "urn:nir:stato:legge:2008;201",
+      "stub_title": "Riferimento Esterno (legge 22 dicembre 2008, n. 201)",
+      "real_id": "urn:nir:stato:legge:2008-12-22;201",
+      "real_urn": "urn:nir:stato:legge:2008-12-22;201",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2012;52",
+      "stub_urn": "urn:nir:stato:decreto.legge:2012;52",
+      "stub_title": "Riferimento Esterno (D.L. 7 maggio 2012, n. 52)",
+      "real_id": "urn:nir:stato:decreto.legge:2012-05-07;52",
+      "real_urn": "urn:nir:stato:decreto.legge:2012-05-07;52",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2009;179",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2009;179",
+      "stub_title": "Riferimento Esterno (D.Lgs. 1 dicembre 2009, n. 179)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2009-12-01;179",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2009-12-01;179",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2009;116",
+      "stub_urn": "urn:nir:stato:legge:2009;116",
+      "stub_title": "Riferimento Esterno (legge 3 agosto 2009, n. 116)",
+      "real_id": "urn:nir:stato:legge:2009-08-03;116",
+      "real_urn": "urn:nir:stato:legge:2009-08-03;116",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;76",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;76",
+      "stub_title": "Riferimento Esterno (D.L. 11 giugno 2024, n. 76)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-06-11;76",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-06-11;76",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2005;102",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2005;102",
+      "stub_title": "Riferimento Esterno (decreto legislativo 27 maggio 2005, n. 102)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2005-05-27;102",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2005-05-27;102",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1998;80",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1998;80",
+      "stub_title": "Riferimento Esterno (decreto legislativo 31 marzo 1998, n. 80)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1998-03-31;80",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1998-03-31;80",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;48",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;48",
+      "stub_title": "Riferimento Esterno (D.LGS. 24 MARZO 2024, N. 48)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-03-24;48",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-03-24;48",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;63",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;63",
+      "stub_title": "Riferimento Esterno (D.L. 15 MAGGIO 2024, N. 63)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-05-15;63",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-05-15;63",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1962;604",
+      "stub_urn": "urn:nir:stato:legge:1962;604",
+      "stub_title": "Riferimento Esterno (legge 8 giugno 1962, n. 604)",
+      "real_id": "urn:nir:stato:legge:1962-06-08;604",
+      "real_urn": "urn:nir:stato:legge:1962-06-08;604",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2025;45",
+      "stub_urn": "urn:nir:stato:decreto.legge:2025;45",
+      "stub_title": "Riferimento Esterno (D.L. 7 APRILE 2025, N. 45)",
+      "real_id": "urn:nir:stato:decreto.legge:2025-04-07;45",
+      "real_urn": "urn:nir:stato:decreto.legge:2025-04-07;45",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2024;164",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2024;164",
+      "stub_title": "Riferimento Esterno (D.Lgs. 31 ottobre 2024, n. 164)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2024-10-31;164",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2024-10-31;164",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2013;99",
+      "stub_urn": "urn:nir:stato:legge:2013;99",
+      "stub_title": "Riferimento Esterno (legge 9 agosto 2013, n. 99)",
+      "real_id": "urn:nir:stato:legge:2013-08-09;99",
+      "real_urn": "urn:nir:stato:legge:2013-08-09;99",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1970;21",
+      "stub_urn": "urn:nir:stato:legge:1970;21",
+      "stub_title": "Riferimento Esterno (legge 5 febbraio 1970, n. 21)",
+      "real_id": "urn:nir:stato:legge:1970-02-05;21",
+      "real_urn": "urn:nir:stato:legge:1970-02-05;21",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2016;243",
+      "stub_urn": "urn:nir:stato:decreto.legge:2016;243",
+      "stub_title": "Riferimento Esterno (D.L. 29 dicembre 2016, n. 243)",
+      "real_id": "urn:nir:stato:decreto.legge:2016-12-29;243",
+      "real_urn": "urn:nir:stato:decreto.legge:2016-12-29;243",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2021;121",
+      "stub_urn": "urn:nir:stato:decreto.legge:2021;121",
+      "stub_title": "Riferimento Esterno (D.L. 10 SETTEMBRE 2021, N. 121)",
+      "real_id": "urn:nir:stato:decreto.legge:2021-09-10;121",
+      "real_urn": "urn:nir:stato:decreto.legge:2021-09-10;121",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2019;50",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2019;50",
+      "stub_title": "Riferimento Esterno (decreto legislativo 14 maggio 2019, n. 50)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2019-05-14;50",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2019-05-14;50",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2022;68",
+      "stub_urn": "urn:nir:stato:decreto.legge:2022;68",
+      "stub_title": "Riferimento Esterno (D.L. 16 GIUGNO 2022, N. 68)",
+      "real_id": "urn:nir:stato:decreto.legge:2022-06-16;68",
+      "real_urn": "urn:nir:stato:decreto.legge:2022-06-16;68",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2021;52",
+      "stub_urn": "urn:nir:stato:decreto.legge:2021;52",
+      "stub_title": "Riferimento Esterno (D.L. 22 aprile 2021, n. 52)",
+      "real_id": "urn:nir:stato:decreto.legge:2021-04-22;52",
+      "real_urn": "urn:nir:stato:decreto.legge:2021-04-22;52",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1997;285",
+      "stub_urn": "urn:nir:stato:legge:1997;285",
+      "stub_title": "Riferimento Esterno (legge 28 agosto 1997, n. 285)",
+      "real_id": "urn:nir:stato:legge:1997-08-28;285",
+      "real_urn": "urn:nir:stato:legge:1997-08-28;285",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2022;115",
+      "stub_urn": "urn:nir:stato:decreto.legge:2022;115",
+      "stub_title": "Riferimento Esterno (D.L. 9 agosto 2022, n. 115)",
+      "real_id": "urn:nir:stato:decreto.legge:2022-08-09;115",
+      "real_urn": "urn:nir:stato:decreto.legge:2022-08-09;115",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;39",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;39",
+      "stub_title": "Riferimento Esterno (D.L. 29 marzo 2024, n. 39)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-03-29;39",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-03-29;39",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2023;124",
+      "stub_urn": "urn:nir:stato:decreto.legge:2023;124",
+      "stub_title": "Riferimento Esterno (D.L. 19 settembre 2023, n. 124)",
+      "real_id": "urn:nir:stato:decreto.legge:2023-09-19;124",
+      "real_urn": "urn:nir:stato:decreto.legge:2023-09-19;124",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2023;75",
+      "stub_urn": "urn:nir:stato:decreto.legge:2023;75",
+      "stub_title": "Riferimento Esterno (D.L. 22 GIUGNO 2023, N. 75)",
+      "real_id": "urn:nir:stato:decreto.legge:2023-06-22;75",
+      "real_urn": "urn:nir:stato:decreto.legge:2023-06-22;75",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;71",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;71",
+      "stub_title": "Riferimento Esterno (D.L. 31 maggio 2024, n. 71)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-05-31;71",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-05-31;71",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2024;155",
+      "stub_urn": "urn:nir:stato:decreto.legge:2024;155",
+      "stub_title": "Riferimento Esterno (D.L. 19 ottobre 2024, n. 155)",
+      "real_id": "urn:nir:stato:decreto.legge:2024-10-19;155",
+      "real_urn": "urn:nir:stato:decreto.legge:2024-10-19;155",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;199",
+      "stub_urn": "urn:nir:stato:legge:2024;199",
+      "stub_title": "Riferimento Esterno (legge 20 dicembre 2024, n. 199)",
+      "real_id": "urn:nir:stato:legge:2024-12-20;199",
+      "real_urn": "urn:nir:stato:legge:2024-12-20;199",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2005;152",
+      "stub_urn": "urn:nir:stato:legge:2005;152",
+      "stub_title": "Riferimento Esterno (legge 26 luglio 2005, n. 152)",
+      "real_id": "urn:nir:stato:legge:2005-07-26;152",
+      "real_urn": "urn:nir:stato:legge:2005-07-26;152",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2025;40",
+      "stub_urn": "urn:nir:stato:legge:2025;40",
+      "stub_title": "Riferimento Esterno (legge 18 marzo 2025, n. 40)",
+      "real_id": "urn:nir:stato:legge:2025-03-18;40",
+      "real_urn": "urn:nir:stato:legge:2025-03-18;40",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2024;189",
+      "stub_urn": "urn:nir:stato:legge:2024;189",
+      "stub_title": "Riferimento Esterno (legge 9 dicembre 2024, n. 189)",
+      "real_id": "urn:nir:stato:legge:2024-12-09;189",
+      "real_urn": "urn:nir:stato:legge:2024-12-09;189",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1869;5026",
+      "stub_urn": "urn:nir:stato:legge:1869;5026",
+      "stub_title": "Riferimento Esterno (Legge 22 aprile 1869, n. 5026)",
+      "real_id": "urn:nir:stato:legge:1869-04-22;5026",
+      "real_urn": "urn:nir:stato:legge:1869-04-22;5026",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1890;6972",
+      "stub_urn": "urn:nir:stato:legge:1890;6972",
+      "stub_title": "Riferimento Esterno (legge 17 luglio 1890, n. 6972)",
+      "real_id": "urn:nir:stato:legge:1890-07-17;6972",
+      "real_urn": "urn:nir:stato:legge:1890-07-17;6972",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1927;257",
+      "stub_urn": "urn:nir:stato:legge:1927;257",
+      "stub_title": "Riferimento Esterno (legge 20 febbraio 1927, n. 257)",
+      "real_id": "urn:nir:stato:legge:1927-02-20;257",
+      "real_urn": "urn:nir:stato:legge:1927-02-20;257",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1895;486",
+      "stub_urn": "urn:nir:stato:legge:1895;486",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 1895, n. 486)",
+      "real_id": "urn:nir:stato:legge:1895-08-08;486",
+      "real_urn": "urn:nir:stato:legge:1895-08-08;486",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1949;409",
+      "stub_urn": "urn:nir:stato:legge:1949;409",
+      "stub_title": "Riferimento Esterno (legge 25 giugno 1949, n. 409)",
+      "real_id": "urn:nir:stato:legge:1949-06-25;409",
+      "real_urn": "urn:nir:stato:legge:1949-06-25;409",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1953;184",
+      "stub_urn": "urn:nir:stato:legge:1953;184",
+      "stub_title": "Riferimento Esterno (legge 15 febbraio 1953, n. 184)",
+      "real_id": "urn:nir:stato:legge:1953-02-15;184",
+      "real_urn": "urn:nir:stato:legge:1953-02-15;184",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1938;1803",
+      "stub_urn": "urn:nir:stato:legge:1938;1803",
+      "stub_title": "Riferimento Esterno (legge 21 ottobre 1938, n. 1803)",
+      "real_id": "urn:nir:stato:legge:1938-10-21;1803",
+      "real_urn": "urn:nir:stato:legge:1938-10-21;1803",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1962;1336",
+      "stub_urn": "urn:nir:stato:legge:1962;1336",
+      "stub_title": "Riferimento Esterno (legge 5 agosto 1962, n. 1336)",
+      "real_id": "urn:nir:stato:legge:1962-08-05;1336",
+      "real_urn": "urn:nir:stato:legge:1962-08-05;1336",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1958;425",
+      "stub_urn": "urn:nir:stato:legge:1958;425",
+      "stub_title": "Riferimento Esterno (legge 26 marzo 1958, n. 425)",
+      "real_id": "urn:nir:stato:legge:1958-03-26;425",
+      "real_urn": "urn:nir:stato:legge:1958-03-26;425",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1963;304",
+      "stub_urn": "urn:nir:stato:legge:1963;304",
+      "stub_title": "Riferimento Esterno (legge 18 febbraio 1963, n. 304)",
+      "real_id": "urn:nir:stato:legge:1963-02-18;304",
+      "real_urn": "urn:nir:stato:legge:1963-02-18;304",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1961;469",
+      "stub_urn": "urn:nir:stato:legge:1961;469",
+      "stub_title": "Riferimento Esterno (legge 13 maggio 1961, n. 469)",
+      "real_id": "urn:nir:stato:legge:1961-05-13;469",
+      "real_urn": "urn:nir:stato:legge:1961-05-13;469",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1958;243",
+      "stub_urn": "urn:nir:stato:legge:1958;243",
+      "stub_title": "Riferimento Esterno (legge 6 marzo 1958, n. 243)",
+      "real_id": "urn:nir:stato:legge:1958-03-06;243",
+      "real_urn": "urn:nir:stato:legge:1958-03-06;243",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1947;530",
+      "stub_urn": "urn:nir:stato:legge:1947;530",
+      "stub_title": "Riferimento Esterno (legge 9 giugno 1947, n. 530)",
+      "real_id": "urn:nir:stato:legge:1947-06-09;530",
+      "real_urn": "urn:nir:stato:legge:1947-06-09;530",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:2023;35",
+      "stub_urn": "urn:nir:stato:decreto.legge:2023;35",
+      "stub_title": "Riferimento Esterno (D.L. 31 MARZO 2023, N. 35)",
+      "real_id": "urn:nir:stato:decreto.legge:2023-03-31;35",
+      "real_urn": "urn:nir:stato:decreto.legge:2023-03-31;35",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1961;729",
+      "stub_urn": "urn:nir:stato:legge:1961;729",
+      "stub_title": "Riferimento Esterno (legge 24 luglio 1961, n. 729)",
+      "real_id": "urn:nir:stato:legge:1961-07-24;729",
+      "real_urn": "urn:nir:stato:legge:1961-07-24;729",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1973;475",
+      "stub_urn": "urn:nir:stato:legge:1973;475",
+      "stub_title": "Riferimento Esterno (legge 18 giugno 1973, n. 475)",
+      "real_id": "urn:nir:stato:legge:1973-06-18;475",
+      "real_urn": "urn:nir:stato:legge:1973-06-18;475",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1973;755",
+      "stub_urn": "urn:nir:stato:legge:1973;755",
+      "stub_title": "Riferimento Esterno (legge 10 novembre 1973, n. 755)",
+      "real_id": "urn:nir:stato:legge:1973-11-10;755",
+      "real_urn": "urn:nir:stato:legge:1973-11-10;755",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:1994;320",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:1994;320",
+      "stub_title": "Riferimento Esterno (D.LGS. 22 APRILE 1994, N. 320)",
+      "real_id": "urn:nir:stato:decreto.legislativo:1994-04-22;320",
+      "real_urn": "urn:nir:stato:decreto.legislativo:1994-04-22;320",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1971;1065",
+      "stub_urn": "urn:nir:stato:legge:1971;1065",
+      "stub_title": "Riferimento Esterno (legge 6 dicembre 1971, n. 1065)",
+      "real_id": "urn:nir:stato:legge:1971-12-06;1065",
+      "real_urn": "urn:nir:stato:legge:1971-12-06;1065",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1979;42",
+      "stub_urn": "urn:nir:stato:legge:1979;42",
+      "stub_title": "Riferimento Esterno (legge 6 febbraio 1979, n. 42)",
+      "real_id": "urn:nir:stato:legge:1979-02-06;42",
+      "real_urn": "urn:nir:stato:legge:1979-02-06;42",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1981;17",
+      "stub_urn": "urn:nir:stato:legge:1981;17",
+      "stub_title": "Riferimento Esterno (legge 12 febbraio 1981, n. 17)",
+      "real_id": "urn:nir:stato:legge:1981-02-12;17",
+      "real_urn": "urn:nir:stato:legge:1981-02-12;17",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1981;240",
+      "stub_urn": "urn:nir:stato:legge:1981;240",
+      "stub_title": "Riferimento Esterno (legge 21 maggio 1981, n. 240)",
+      "real_id": "urn:nir:stato:legge:1981-05-21;240",
+      "real_urn": "urn:nir:stato:legge:1981-05-21;240",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1976;374",
+      "stub_urn": "urn:nir:stato:legge:1976;374",
+      "stub_title": "Riferimento Esterno (legge 30 aprile 1976, n. 374)",
+      "real_id": "urn:nir:stato:legge:1976-04-30;374",
+      "real_urn": "urn:nir:stato:legge:1976-04-30;374",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1991;152",
+      "stub_urn": "urn:nir:stato:decreto.legge:1991;152",
+      "stub_title": "Riferimento Esterno (D.L. 13 MAGGIO 1991, N. 152)",
+      "real_id": "urn:nir:stato:decreto.legge:1991-05-13;152",
+      "real_urn": "urn:nir:stato:decreto.legge:1991-05-13;152",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legislativo:2017;223",
+      "stub_urn": "urn:nir:stato:decreto.legislativo:2017;223",
+      "stub_title": "Riferimento Esterno (D.LGS. 15 DICEMBRE 2017, N. 223)",
+      "real_id": "urn:nir:stato:decreto.legislativo:2017-12-15;223",
+      "real_urn": "urn:nir:stato:decreto.legislativo:2017-12-15;223",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1989;65",
+      "stub_urn": "urn:nir:stato:decreto.legge:1989;65",
+      "stub_title": "Riferimento Esterno (D.L. 2 MARZO 1989, N. 65)",
+      "real_id": "urn:nir:stato:decreto.legge:1989-03-02;65",
+      "real_urn": "urn:nir:stato:decreto.legge:1989-03-02;65",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1997;67",
+      "stub_urn": "urn:nir:stato:decreto.legge:1997;67",
+      "stub_title": "Riferimento Esterno (D.L. 25 marzo 1997, n. 67)",
+      "real_id": "urn:nir:stato:decreto.legge:1997-03-25;67",
+      "real_urn": "urn:nir:stato:decreto.legge:1997-03-25;67",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1992;489",
+      "stub_urn": "urn:nir:stato:legge:1992;489",
+      "stub_title": "Riferimento Esterno (legge 19 dicembre 1992, n. 489)",
+      "real_id": "urn:nir:stato:legge:1992-12-19;489",
+      "real_urn": "urn:nir:stato:legge:1992-12-19;489",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1993;317",
+      "stub_urn": "urn:nir:stato:legge:1993;317",
+      "stub_title": "Riferimento Esterno (legge 12 agosto 1993, n. 317)",
+      "real_id": "urn:nir:stato:legge:1993-08-12;317",
+      "real_urn": "urn:nir:stato:legge:1993-08-12;317",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1996;535",
+      "stub_urn": "urn:nir:stato:decreto.legge:1996;535",
+      "stub_title": "Riferimento Esterno (D.L. 21 ottobre 1996, n. 535)",
+      "real_id": "urn:nir:stato:decreto.legge:1996-10-21;535",
+      "real_urn": "urn:nir:stato:decreto.legge:1996-10-21;535",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1942;1460",
+      "stub_urn": "urn:nir:stato:legge:1942;1460",
+      "stub_title": "Riferimento Esterno (legge 18 ottobre 1942, n. 1460)",
+      "real_id": "urn:nir:stato:legge:1942-10-18;1460",
+      "real_urn": "urn:nir:stato:legge:1942-10-18;1460",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1995;244",
+      "stub_urn": "urn:nir:stato:decreto.legge:1995;244",
+      "stub_title": "Riferimento Esterno (decreto legge 23 giugno 1995, n. 244)",
+      "real_id": "urn:nir:stato:decreto.legge:1995-06-23;244",
+      "real_urn": "urn:nir:stato:decreto.legge:1995-06-23;244",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:decreto.legge:1999;484",
+      "stub_urn": "urn:nir:stato:decreto.legge:1999;484",
+      "stub_title": "Riferimento Esterno (D.L. 20 DICEMBRE 1999, N. 484)",
+      "real_id": "urn:nir:stato:decreto.legge:1999-12-20;484",
+      "real_urn": "urn:nir:stato:decreto.legge:1999-12-20;484",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1999;25",
+      "stub_urn": "urn:nir:stato:legge:1999;25",
+      "stub_title": "Riferimento Esterno (legge 5 febbraio 1999, n. 25)",
+      "real_id": "urn:nir:stato:legge:1999-02-05;25",
+      "real_urn": "urn:nir:stato:legge:1999-02-05;25",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2002;166",
+      "stub_urn": "urn:nir:stato:legge:2002;166",
+      "stub_title": "Riferimento Esterno (legge 1 agosto 2002, n. 166)",
+      "real_id": "urn:nir:stato:legge:2002-08-01;166",
+      "real_urn": "urn:nir:stato:legge:2002-08-01;166",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2014;161",
+      "stub_urn": "urn:nir:stato:legge:2014;161",
+      "stub_title": "Riferimento Esterno (legge 30 ottobre 2014 n. 161)",
+      "real_id": "urn:nir:stato:legge:2014-10-30;161",
+      "real_urn": "urn:nir:stato:legge:2014-10-30;161",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2013;87",
+      "stub_urn": "urn:nir:stato:legge:2013;87",
+      "stub_title": "Riferimento Esterno (legge 19 luglio 2013, n. 87)",
+      "real_id": "urn:nir:stato:legge:2013-07-19;87",
+      "real_urn": "urn:nir:stato:legge:2013-07-19;87",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2018;99",
+      "stub_urn": "urn:nir:stato:legge:2018;99",
+      "stub_title": "Riferimento Esterno (legge 7 agosto 2018, n. 99)",
+      "real_id": "urn:nir:stato:legge:2018-08-07;99",
+      "real_urn": "urn:nir:stato:legge:2018-08-07;99",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:2025;119",
+      "stub_urn": "urn:nir:stato:legge:2025;119",
+      "stub_title": "Riferimento Esterno (legge 8 agosto 2025, n. 119)",
+      "real_id": "urn:nir:stato:legge:2025-08-08;119",
+      "real_urn": "urn:nir:stato:legge:2025-08-08;119",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1906;255",
+      "stub_urn": "urn:nir:stato:legge:1906;255",
+      "stub_title": "Riferimento Esterno (legge 23 giugno 1906, n. 255)",
+      "real_id": "urn:nir:stato:legge:1906-06-25;255",
+      "real_urn": "urn:nir:stato:legge:1906-06-25;255",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1931;210",
+      "stub_urn": "urn:nir:stato:legge:1931;210",
+      "stub_title": "Riferimento Esterno (legge 16 febbraio 1931 n. 210)",
+      "real_id": "urn:nir:stato:legge:1931-02-16;210",
+      "real_urn": "urn:nir:stato:legge:1931-02-16;210",
+      "citations": 0,
+      "ambiguous": false
+    },
+    {
+      "stub_id": "urn:nir:stato:legge:1939;126",
+      "stub_urn": "urn:nir:stato:legge:1939;126",
+      "stub_title": "Riferimento Esterno (legge 9 febbraio 1939, n. 126)",
+      "real_id": "urn:nir:stato:legge:1939-02-09;126",
+      "real_urn": "urn:nir:stato:legge:1939-02-09;126",
+      "citations": 0,
+      "ambiguous": false
+    }
+  ],
+  "total_pairs": 483,
+  "total_edges": 43
+}

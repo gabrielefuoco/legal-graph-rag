@@ -1,0 +1,4 @@
+config,graph_search,multi_hop,topological,grader_mode,min_keep,teseo_threshold,teseo_concepts,weight_graph,rerank_top_k,final_k,citation_limit,queries,avg_recall,avg_mrr,avg_hit_at_1,avg_chunks,avg_context_chars,avg_hops,avg_similarity,avg_gen_time_s
+"1. TESEO preciso (grafo silenzioso, no metadati)",True,True,True,on,0,0.6,3,1.2,30,10,10,15,0.9333,0.9333,0.9333,1.6,13374,1,0.7683,2.02
+2. TESEO preciso + metadati grafo nel contesto,True,True,True,on,0,0.6,3,1.2,30,10,10,15,0.9333,0.9333,0.9333,1.6,13381,1,0.7691,7.89
+3. TESEO preciso + metadati + citazioni 3,True,True,True,on,0,0.6,3,1.2,30,10,3,15,0.9333,0.9333,0.9333,2.2,21118,1,0.755,26.62

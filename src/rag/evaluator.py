@@ -159,6 +159,11 @@ async def grade_documents_node(state: RagState) -> dict:
             filtered_chunks.append(chunk)
             if vector_anchor_id and chunk.expression_id == vector_anchor_id:
                 anchor_found = True
+        elif chunk.source == "citation_resolve":
+            # A provision resolved from the reference named in the question is the referenced norm
+            # itself: a relevance judge must not be able to drop it.
+            filtered_chunks.append(chunk)
+            logger.info(f"🛡️ Rinvio risolto mantenuto nonostante il grading: {chunk.expression_id}")
         else:
             logger.debug(f"Scartato chunk (URN: {chunk.work_urn}) in quanto valutato irrilevante.")
             

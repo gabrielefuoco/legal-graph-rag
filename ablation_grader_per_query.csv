@@ -1,0 +1,76 @@
+config,query_index,query,recall,mrr,hit_at_1,n_chunks,context_chars,hops,similarity
+"A. GraphRAG, grader attivo",1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,1,0.545
+"A. GraphRAG, grader attivo",2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,11467,1,0.9194
+"A. GraphRAG, grader attivo",3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+"A. GraphRAG, grader attivo",4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.5,0.0,2,17082,1,0.7597
+"A. GraphRAG, grader attivo",5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,1,0.6576
+"A. GraphRAG, grader attivo",6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,13017,1,0.8158
+"A. GraphRAG, grader attivo",7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,16627,1,0.7664
+"A. GraphRAG, grader attivo",8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+"A. GraphRAG, grader attivo",9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,4,40382,1,0.836
+"A. GraphRAG, grader attivo",10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,1,0.7302
+"A. GraphRAG, grader attivo",11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,42360,1,0.8107
+"A. GraphRAG, grader attivo",12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,1,6041,1,0.748
+"A. GraphRAG, grader attivo",13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,1,0.7284
+"A. GraphRAG, grader attivo",14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.5,0.0,2,12981,1,0.7561
+"A. GraphRAG, grader attivo",15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,12440,1,0.7986
+"B. GraphRAG, grader off (tieni tutti)",1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,7,30388,1,0.4266
+"B. GraphRAG, grader off (tieni tutti)",2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,7,56543,1,0.8204
+"B. GraphRAG, grader off (tieni tutti)",3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,0.1111,0.0,10,46915,1,0.7388
+"B. GraphRAG, grader off (tieni tutti)",4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.1,0.0,10,65302,1,0.7654
+"B. GraphRAG, grader off (tieni tutti)",5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,10,63637,1,0.6576
+"B. GraphRAG, grader off (tieni tutti)",6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,7,129986,1,0.8018
+"B. GraphRAG, grader off (tieni tutti)",7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,0.5,0.0,5,46024,1,0.8234
+"B. GraphRAG, grader off (tieni tutti)",8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,10,63789,1,0.7291
+"B. GraphRAG, grader off (tieni tutti)",9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,6,58182,1,0.836
+"B. GraphRAG, grader off (tieni tutti)",10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,10,24345,1,0.7302
+"B. GraphRAG, grader off (tieni tutti)",11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,0.5,0.0,4,53380,1,0.7978
+"B. GraphRAG, grader off (tieni tutti)",12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,8,42876,1,0.6844
+"B. GraphRAG, grader off (tieni tutti)",13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,10,117508,1,0.779
+"B. GraphRAG, grader off (tieni tutti)",14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.1429,0.0,10,43318,1,0.7561
+"B. GraphRAG, grader off (tieni tutti)",15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.5,0.0,7,52637,1,0.8456
+"C. GraphRAG, grader min_keep=3",1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,3,9935,1,0.545
+"C. GraphRAG, grader min_keep=3",2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,11467,1,0.9194
+"C. GraphRAG, grader min_keep=3",3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,0.3333,0.0,3,18583,1,0.8192
+"C. GraphRAG, grader min_keep=3",4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.3333,0.0,3,20633,1,0.7677
+"C. GraphRAG, grader min_keep=3",5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,3,23231,1,0.6576
+"C. GraphRAG, grader min_keep=3",6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,3,27810,1,0.7975
+"C. GraphRAG, grader min_keep=3",7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,0.5,0.0,3,29314,1,0.8234
+"C. GraphRAG, grader min_keep=3",8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,3,10233,1,0.7351
+"C. GraphRAG, grader min_keep=3",9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.3333,0.0,3,24693,1,0.8969
+"C. GraphRAG, grader min_keep=3",10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,3,5254,1,0.7302
+"C. GraphRAG, grader min_keep=3",11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,0.5,0.0,3,47440,1,0.7978
+"C. GraphRAG, grader min_keep=3",12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,3,11358,1,0.7779
+"C. GraphRAG, grader min_keep=3",13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,3,31955,1,0.6679
+"C. GraphRAG, grader min_keep=3",14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.3333,0.0,3,14558,1,0.7507
+"C. GraphRAG, grader min_keep=3",15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.5,0.0,3,26660,1,0.8266
+"D. GraphRAG, grader min_keep=5",1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,5,25754,1,0.6127
+"D. GraphRAG, grader min_keep=5",2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,5,42405,1,0.7475
+"D. GraphRAG, grader min_keep=5",3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,0.2,0.0,5,27159,1,0.7449
+"D. GraphRAG, grader min_keep=5",4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.2,0.0,5,29549,1,0.7597
+"D. GraphRAG, grader min_keep=5",5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,5,35509,1,0.636
+"D. GraphRAG, grader min_keep=5",6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,5,44296,1,0.7975
+"D. GraphRAG, grader min_keep=5",7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,0.5,0.0,5,46024,1,0.8234
+"D. GraphRAG, grader min_keep=5",8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,5,18979,1,0.7351
+"D. GraphRAG, grader min_keep=5",9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,5,40643,1,0.836
+"D. GraphRAG, grader min_keep=5",10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,5,9093,1,0.7302
+"D. GraphRAG, grader min_keep=5",11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,0.5,0.0,4,53380,1,0.7978
+"D. GraphRAG, grader min_keep=5",12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,5,24509,1,0.7628
+"D. GraphRAG, grader min_keep=5",13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,5,47068,1,0.7358
+"D. GraphRAG, grader min_keep=5",14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.2,0.0,5,22225,1,0.7561
+"D. GraphRAG, grader min_keep=5",15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.5,0.0,5,40235,1,0.7986
+"E. GraphRAG, grader min_keep=8",1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,7,30388,1,0.4266
+"E. GraphRAG, grader min_keep=8",2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,7,56543,1,0.8204
+"E. GraphRAG, grader min_keep=8",3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,0.125,0.0,8,41825,1,0.8108
+"E. GraphRAG, grader min_keep=8",4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.125,0.0,8,42890,1,0.7677
+"E. GraphRAG, grader min_keep=8",5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,8,57800,1,0.636
+"E. GraphRAG, grader min_keep=8",6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,7,129986,1,0.8018
+"E. GraphRAG, grader min_keep=8",7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,0.5,0.0,5,46024,1,0.8234
+"E. GraphRAG, grader min_keep=8",8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,8,49977,1,0.7317
+"E. GraphRAG, grader min_keep=8",9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,6,58182,1,0.836
+"E. GraphRAG, grader min_keep=8",10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,8,13911,1,0.7302
+"E. GraphRAG, grader min_keep=8",11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,0.5,0.0,4,53380,1,0.7978
+"E. GraphRAG, grader min_keep=8",12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,8,42876,1,0.6844
+"E. GraphRAG, grader min_keep=8",13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,8,109796,1,0.779
+"E. GraphRAG, grader min_keep=8",14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.1429,0.0,8,40538,1,0.7734
+"E. GraphRAG, grader min_keep=8",15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.5,0.0,7,52637,1,0.8456

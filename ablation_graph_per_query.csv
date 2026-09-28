@@ -1,0 +1,76 @@
+config,query_index,query,recall,mrr,hit_at_1,n_chunks,context_chars,hops,similarity
+1. dense+BM25 (query nuda),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,1048,0,0.545
+1. dense+BM25 (query nuda),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,1.0,1.0,1.0,3,4921,0,0.9344
+1. dense+BM25 (query nuda),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,0,0.8212
+1. dense+BM25 (query nuda),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.5,0.0,2,15600,0,0.7677
+1. dense+BM25 (query nuda),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,3019,0,0.636
+1. dense+BM25 (query nuda),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,1,5910,0,0.8158
+1. dense+BM25 (query nuda),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,12175,0,0.8209
+1. dense+BM25 (query nuda),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,0,0.7351
+1. dense+BM25 (query nuda),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,2,12466,0,0.9122
+1. dense+BM25 (query nuda),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,1353,0,0.7302
+1. dense+BM25 (query nuda),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,38597,0,0.8107
+1. dense+BM25 (query nuda),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",1.0,1.0,1.0,1,6041,0,0.7673
+1. dense+BM25 (query nuda),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,3126,0,0.7251
+1. dense+BM25 (query nuda),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,0,0.671
+1. dense+BM25 (query nuda),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.5,0.0,2,19869,0,0.8252
+2. + TESEO (match + query expansion),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,1048,0,0.545
+2. + TESEO (match + query expansion),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,1.0,1.0,1.0,3,4921,0,0.9344
+2. + TESEO (match + query expansion),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,0,0.8212
+2. + TESEO (match + query expansion),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.5,0.0,2,15600,0,0.7677
+2. + TESEO (match + query expansion),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,3019,0,0.636
+2. + TESEO (match + query expansion),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,12783,0,0.7981
+2. + TESEO (match + query expansion),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,16627,0,0.7664
+2. + TESEO (match + query expansion),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,0,0.7351
+2. + TESEO (match + query expansion),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,4,37446,0,0.8458
+2. + TESEO (match + query expansion),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,1353,0,0.7302
+2. + TESEO (match + query expansion),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,38597,0,0.8233
+2. + TESEO (match + query expansion),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,2,2759,0,0.3712
+2. + TESEO (match + query expansion),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,3126,0,0.7251
+2. + TESEO (match + query expansion),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.3333,0.0,3,15268,0,0.7218
+2. + TESEO (match + query expansion),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.3333,0.0,3,20629,0,0.7909
+3. + espansione citazioni (multi-hop),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,1048,1,0.545
+3. + espansione citazioni (multi-hop),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,4819,1,0.9443
+3. + espansione citazioni (multi-hop),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+3. + espansione citazioni (multi-hop),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.5,0.0,2,15600,1,0.7677
+3. + espansione citazioni (multi-hop),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,3019,1,0.636
+3. + espansione citazioni (multi-hop),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,12783,1,0.7981
+3. + espansione citazioni (multi-hop),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,16627,1,0.7664
+3. + espansione citazioni (multi-hop),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+3. + espansione citazioni (multi-hop),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,4,37446,1,0.8458
+3. + espansione citazioni (multi-hop),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,1353,1,0.7302
+3. + espansione citazioni (multi-hop),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,38597,1,0.8233
+3. + espansione citazioni (multi-hop),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,2,7228,1,0.7622
+3. + espansione citazioni (multi-hop),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,4,14353,1,0.8008
+3. + espansione citazioni (multi-hop),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,1,0.671
+3. + espansione citazioni (multi-hop),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,12440,1,0.7986
+4. + espansione topologica (NEXT/PART_OF),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,0,0.545
+4. + espansione topologica (NEXT/PART_OF),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,1.0,1.0,1.0,3,11542,0,0.9366
+4. + espansione topologica (NEXT/PART_OF),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,0,0.8212
+4. + espansione topologica (NEXT/PART_OF),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.5,0.0,2,17082,0,0.7597
+4. + espansione topologica (NEXT/PART_OF),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,0,0.6576
+4. + espansione topologica (NEXT/PART_OF),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,13017,0,0.8158
+4. + espansione topologica (NEXT/PART_OF),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,16627,0,0.7664
+4. + espansione topologica (NEXT/PART_OF),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,0,0.7351
+4. + espansione topologica (NEXT/PART_OF),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,4,40382,0,0.836
+4. + espansione topologica (NEXT/PART_OF),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,0,0.7302
+4. + espansione topologica (NEXT/PART_OF),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,0.5,0.0,3,47440,0,0.7978
+4. + espansione topologica (NEXT/PART_OF),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,2,8492,0,0.7622
+4. + espansione topologica (NEXT/PART_OF),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,0,0.7284
+4. + espansione topologica (NEXT/PART_OF),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,0,0.671
+4. + espansione topologica (NEXT/PART_OF),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,9257,0,0.8266
+5. tutto (produzione),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,1,0.545
+5. tutto (produzione),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,11467,1,0.9194
+5. tutto (produzione),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+5. tutto (produzione),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,0.5,0.0,2,17082,1,0.7597
+5. tutto (produzione),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,1,0.6576
+5. tutto (produzione),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,13017,1,0.8158
+5. tutto (produzione),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,16627,1,0.7664
+5. tutto (produzione),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+5. tutto (produzione),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,0.25,0.0,4,40382,1,0.836
+5. tutto (produzione),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,1,0.7302
+5. tutto (produzione),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,42360,1,0.8107
+5. tutto (produzione),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,2,8492,1,0.7622
+5. tutto (produzione),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,1,0.7284
+5. tutto (produzione),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,1,0.671
+5. tutto (produzione),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,2,19869,1,0.8252

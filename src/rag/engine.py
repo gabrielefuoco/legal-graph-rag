@@ -21,6 +21,7 @@ from src.rag.retriever import vector_search, bm25_search, graph_search
 from src.rag.fusion import fuse_and_filter
 from src.rag.reranker import Reranker, build_reranker, rerank_node
 from src.rag.expander import should_expand, expand_citations
+from src.rag.resolver import resolve_query_citations
 from src.rag.generator import LegalGenerator, generation_node
 from src.rag.topology_expander import topological_expand_node
 from src.rag.evaluator import (
@@ -99,6 +100,7 @@ def _build_graph() -> StateGraph:
     builder.add_node("retrieve_all", retrieve_all)
     builder.add_node("fuse_and_filter", fuse_and_filter)
     builder.add_node("rerank", rerank_node)
+    builder.add_node("resolve_citations", resolve_query_citations)
     builder.add_node("expand_citations", expand_citations)
     builder.add_node("grade_documents", grade_documents_node)
     builder.add_node("topological_expand", topological_expand_node)
@@ -118,10 +120,11 @@ def _build_graph() -> StateGraph:
         "rerank",
         should_expand,
         {
-            "expand_citations": "expand_citations",
+            "expand_citations": "resolve_citations",
             "__end__": "grade_documents",
         },
     )
+    builder.add_edge("resolve_citations", "expand_citations")
     builder.add_edge("expand_citations", "fuse_and_filter")
 
     # Self-reflective grading router

@@ -1,0 +1,438 @@
+{
+  "eligible": [
+    {
+      "question": "Nella disciplina introdotta dal Codice dei contratti pubblici, che rinvia all'articolo 17 del Codice dell'amministrazione digitale (CAD) per le funzioni della Direzione generale Digitalizzazione, come è regolata la possibilità di risolvere tramite transazione le controversie relative all'esecuzione di contratti pubblici di lavori, servizi e forniture?",
+      "golden_answer": "Le controversie possono essere risolte mediante transazione nel rispetto del codice civile solo ed esclusivamente nell'ipotesi in cui non risulti possibile esperire altri rimedi alternativi all'azione giurisdizionale.",
+      "expected_ids": [
+        "28f81a2a110d6822"
+      ],
+      "seed_id": "0803be05f19568d2",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2023-03-31;36",
+      "cited_title": "Codice dei contratti pubblici in  attuazione  dell'articolo  1  della\nlegge 21 giugno 2022, n. 78, recante delega al Governo in materia  di\ncontratti pubblici. (23G00044)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 213, comma 1, della legge di bilancio che autorizza la spesa per il sistema bus rapidtransit di Taranto, a quale altra disposizione normativa viene fatto riferimento per l'adeguamento dell'autorizzazione di spesa e qual è il contenuto specifico di tale disposizione richiamata?",
+      "golden_answer": "La disposizione richiamata è l'articolo 1, comma 95, della legge 30 dicembre 2018, n. 145, che riguarda le risorse iscritte nello stato di previsione del Ministero delle infrastrutture e dei trasporti per il finanziamento dei sistemi di trasporto rapido di massa.",
+      "expected_ids": [
+        "7c7a4af205928bbe"
+      ],
+      "seed_id": "d7db84fc481b4347",
+      "cited_urn": "urn:nir:stato:legge:2018-12-30;145",
+      "cited_title": "Bilancio di previsione dello Stato  per  l'anno  finanziario  2019  e\nbilancio pluriennale per il triennio 2019-2021. (18G00172)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo la disciplina introdotta dall'articolo 125 del decreto legislativo 18 aprile 2016, n. 50, che modifica l'articolo 213 dello stesso decreto, quale organo è designato come Autorità nazionale anticorruzione ai sensi della legge 6 novembre 2012, n. 190?",
+      "golden_answer": "L'Autorità nazionale anticorruzione è la Commissione per la valutazione, la trasparenza e l'integrità delle amministrazioni pubbliche, istituita ai sensi dell'articolo 13 del decreto legislativo 27 ottobre 2009, n. 150.",
+      "expected_ids": [
+        "c1a78ee5587820ae"
+      ],
+      "seed_id": "2b1f463c9ebd61af",
+      "cited_urn": "urn:nir:stato:legge:2012-11-06;190",
+      "cited_title": "Disposizioni per la prevenzione e la repressione della  corruzione  e\ndell'illegalita' nella pubblica amministrazione. (12G0213)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 16, comma 7, della legge n. 89 del 2014, che ha modificato l'autorizzazione di spesa prevista dall'articolo 46-bis del decreto-legge n. 69 del 2013, quale importo specifico è stato incrementato per l'anno 2014 a favore del Ministero delle politiche agricole alimentari e forestali?",
+      "golden_answer": "L'importo incrementato per l'anno 2014 a favore del Ministero delle politiche agricole alimentari e forestali è di 4,8 milioni di euro.",
+      "expected_ids": [
+        "b6156769c7f5b3a3"
+      ],
+      "seed_id": "803cbbd28c5d4982",
+      "cited_urn": "urn:nir:stato:decreto.legge:2014-04-24;66",
+      "cited_title": "Misure  urgenti  per  la  competitivita'  e  la  giustizia   sociale.\n(14G00079)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo la disciplina introdotta dal D.Lgs. 24 gennaio 2006, n. 36, che rinvia al Regolamento (UE) 2022/868, quali sono le condizioni e le limitazioni per il riutilizzo commerciale o non commerciale dei dati della ricerca finanziati con fondi pubblici?",
+      "golden_answer": "I dati della ricerca finanziati con fondi pubblici sono riutilizzabili a fini commerciali o non commerciali nel rispetto della disciplina sulla protezione dei dati personali, degli interessi commerciali, della normativa sui diritti di proprietà intellettuale e industriale, purché resi pubblici da ricercatori o organizzazioni di ricerca tramite banche dati pubbliche o gestite a livello istituzionale.",
+      "expected_ids": [
+        "d67610beac19bff0"
+      ],
+      "seed_id": "2c33c83fa2635087",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2006-01-24;36",
+      "cited_title": "((Attuazione della direttiva  (UE)  2019/1024\nrelativa all'apertura dei dati e al riutilizzo dell'informazione  del\nsettore pubblico che ha abrogato la  direttiva  2003/98/CE))",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo la disciplina introdotta dalla legge 27 dicembre 2006, n. 296, che viene richiamata dall'articolo 304 della legge di bilancio 2008 per definire le finalità del Fondo per il trasporto pubblico locale, quali sono gli obiettivi specifici perseguiti da tale articolo 1, comma 1031?",
+      "golden_answer": "Le risorse del Fondo sono destinate alla promozione e al sostegno dello sviluppo del trasporto pubblico locale, con l'obiettivo di promuovere lo sviluppo economico e rimuovere gli squilibri economico-sociali.",
+      "expected_ids": [
+        "67a65c3da46a8192"
+      ],
+      "seed_id": "715180a64ebcb645",
+      "cited_urn": "urn:nir:stato:decreto.legge:2011-07-06;98",
+      "cited_title": "Disposizioni urgenti per la stabilizzazione finanziaria. (11G0146)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    }
+  ],
+  "discarded": [
+    {
+      "question": "Nella disciplina ambientale che prevede la valutazione degli impatti ambientali e l'adozione del provvedimento di VIA, come viene gestito il termine per l'adozione del provvedimento da parte del direttore generale del Ministero dell'ambiente e della sicurezza energetica nei casi di progetti di competenza statale, qualora sia necessario procedere ad accertamenti e indagini di particolare complessità?",
+      "golden_answer": "In tali casi, l'autorità competente può disporre il prolungamento della fase di valutazione per un massimo di ulteriori trenta giorni tramite un atto motivato, comunicando tempestivamente per via telematica al proponente le ragioni della proroga e il termine per l'emanazione del provvedimento.",
+      "expected_ids": [
+        "df7d8fe9673efb28"
+      ],
+      "seed_id": "22d4d274588d316a",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2006-04-03;152",
+      "cited_title": "Norme in materia ambientale.",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo la disciplina introdotta dal Bilancio di previsione dello Stato per l'anno finanziario 2023 e bilancio pluriennale per il triennio 2023-2025, che autorizza l'impegno e il pagamento delle spese del Ministero del lavoro e delle politiche sociali in conformità all'annesso stato di previsione, quali sono le condizioni specifiche che il Ministro dell'economia e delle finanze deve rispettare per apportare variazioni compensative tra i capitoli dello stato di previsione del suddetto ministero?",
+      "golden_answer": "Il Ministro dell'economia e delle finanze è autorizzato ad apportare, su proposta del Ministro del lavoro e delle politiche sociali, variazioni compensative in termini di residui, di competenza e di cassa, anche tra missioni e programmi diversi, connesse con l'attuazione dei decreti legislativi 14 settembre 2015, n. 149 e n. 150.",
+      "expected_ids": [
+        "4a48d2eb23c4960c"
+      ],
+      "seed_id": "af5303fcecb08e55",
+      "cited_urn": "urn:nir:stato:legge:2022-12-29;197",
+      "cited_title": "Bilancio di previsione dello Stato  per  l'anno  finanziario  2023  e\nbilancio pluriennale per il triennio 2023-2025. (22G00211)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal D.Lgs. 112/2017 (Art. 3) che rinvia al D.Lgs. 118/2011 (Titolo 'Disposizioni in materia di armonizzazione dei sistemi contabili...'), come vengono definiti i 'titoli' ai fini della classificazione delle entrate degli schemi di bilancio finanziario?",
+      "golden_answer": "I titoli sono definiti secondo la fonte di provenienza delle entrate.",
+      "expected_ids": [
+        "0fa4d76b3814e5d4"
+      ],
+      "seed_id": "05f86a98212c802f",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2011-06-23;118",
+      "cited_title": "Disposizioni in materia di armonizzazione  dei  sistemi  contabili  e\ndegli schemi di bilancio delle Regioni, degli enti locali e dei  loro\norganismi, a norma degli articoli 1 e 2 della legge 5 maggio 2009, n.\n42. (11G0160)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto legislativo n. 276 del 2003, che viene richiamata dall'articolo 2 dello stesso decreto in materia di appalti, come viene definito il regime di solidarietà tra appaltante e appaltatore quando l'alienante stipula un contratto di appalto per l'esecuzione del ramo d'azienda oggetto di cessione?",
+      "golden_answer": "Nel caso in cui l'alienante stipuli con l'acquirente un contratto di appalto la cui esecuzione avviene utilizzando il ramo d'azienda oggetto di cessione, tra appaltante e appaltatore opera un regime di solidarietà.",
+      "expected_ids": [
+        "d8c2fb0ef28241ba"
+      ],
+      "seed_id": "30276780ad15677b",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2003-09-10;276",
+      "cited_title": "Attuazione  delle  deleghe  in  materia  di occupazione e mercato del\r\nlavoro, di cui alla legge 14 febbraio 2003, n. 30.",
+      "baseline_found_golden": true,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Nella disciplina introdotta dal D.Lgs. 12 gennaio 2019, n. 14, che rinvia all'articolo 4, comma 12, del codice della crisi e dell'insolvenza, cosa è stato disposto riguardo al pagamento dei canoni per l'uso di beni immobili appartenenti allo Stato per il periodo compreso tra il 1° marzo e il 31 luglio 2020?",
+      "golden_answer": "È stato disposto la sospensione del pagamento dei canoni dovuti per il periodo dal 1° marzo 2020 al 31 luglio 2020 per l'uso, in regime di concessione o di locazione, di beni immobili appartenenti allo Stato. I canoni sospesi devono essere versati entro il 31 ottobre 2020, anche mediante rateazione, senza applicazione di interessi.",
+      "expected_ids": [
+        "26e6e9b2cd5f0d3e"
+      ],
+      "seed_id": "fc5b92ed61be2fcd",
+      "cited_urn": "urn:nir:stato:decreto.legge:2020-04-08;23",
+      "cited_title": "Misure urgenti in materia di accesso  al  credito  e  di  adempimenti\nfiscali per le imprese, di poteri speciali  nei  settori  strategici,\nnonche' interventi in materia di  salute  e  lavoro,  di  proroga  di\ntermini amministrativi e processuali. (20G00043)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina finanziaria del 2008 che, all'articolo 9, rinvia alla legge 12 dicembre 1969, n. 1001, come viene modificato il comma 3 dell'articolo 44 del testo unico della radiotelevisione riguardo alle quote di diffusione delle opere europee e cinematografiche di espressione originale italiana?",
+      "golden_answer": "Il comma 3 è sostituito da una disposizione che impone alle emittenti televisive e fornitori di contenuti di riservare annualmente almeno il 10% del tempo di diffusione alle opere europee degli ultimi cinque anni (di cui il 20% a opere cinematografiche di espressione originale italiana), mentre la concessionaria del servizio pubblico deve destinare il 20% del tempo di trasmissione alle opere europee (di cui il 10% a quelle cinematografiche di espressione originale italiana).",
+      "expected_ids": [
+        "e01676eae9696698"
+      ],
+      "seed_id": "db1ac191ac03ed95",
+      "cited_urn": "urn:nir:stato:legge:2007-12-24;244",
+      "cited_title": "Disposizioni per la formazione del bilancio annuale e pluriennale dello Stato (legge finanziaria 2008)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal Codice della crisi d'impresa e dell'insolvenza, che viene richiamata dall'articolo 11 della legge 27 febbraio 1985, n. 49, come deve comportarsi l'imprenditore in stato di crisi durante le trattative per la composizione negoziata, specialmente quando emergono concrete prospettive di risanamento?",
+      "golden_answer": "Durante le trattative, l'imprenditore conserva la gestione ordinaria e straordinaria dell'impresa, agendo in modo da evitare pregiudizi alla sostenibilità economico-finanziaria dell'attività. Se nel corso della composizione negoziata risulta che l'imprenditore è insolvente ma esistono concrete prospettive di risanamento, deve gestire l'impresa nel prevalente interesse dei creditori.",
+      "expected_ids": [
+        "0fddebbb9f5ef978"
+      ],
+      "seed_id": "23f6eb98aff7a3e9",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2019-01-12;14",
+      "cited_title": "Codice della crisi d'impresa e dell'insolvenza  in  attuazione  della\nlegge 19 ottobre 2017, n. 155. (19G00007)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal Decreto Legge 18 maggio 2020, n. 34 (Misure urgenti in materia di salute, sostegno al lavoro e all'economia), che viene richiamata dall'articolo 7 per le modalità di assunzione, come è finanziato e qual è la fonte specifica degli oneri relativi alle ore di formazione finalizzate alla ricollocazione dei lavoratori previste nel Fondo Nuove Competenze?",
+      "golden_answer": "Gli oneri relativi alle ore di formazione sono a carico di un apposito Fondo denominato \"Fondo Nuove Competenze\", costituito presso l'Agenzia Nazionale delle Politiche Attive del Lavoro (ANPAL), finanziato nel limite di 230 milioni di euro a valere sul Programma Operativo Nazionale SPAO, con incrementi specifici per gli anni 2020 e 2021.",
+      "expected_ids": [
+        "9a835062dc0a1722"
+      ],
+      "seed_id": "87247f19909e7e3e",
+      "cited_urn": "urn:nir:stato:decreto.legge:2020-05-19;34",
+      "cited_title": "Misure  urgenti  in  materia  di  salute,  sostegno   al   lavoro   e\nall'economia, nonche' di  politiche  sociali  connesse  all'emergenza\nepidemiologica da COVID-19. (20G00052)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 29 marzo 2024, n. 24 (Misure urgenti in materia di agevolazioni fiscali), che prevede la proroga degli incentivi per la cessione di crediti e ACE innovativa, qual è la data di entrata in vigore del suddetto decreto?",
+      "golden_answer": "Il decreto entra in vigore il giorno successivo a quello della sua pubblicazione nella Gazzetta Ufficiale della Repubblica italiana.",
+      "expected_ids": [
+        "243eb600609ca6d5"
+      ],
+      "seed_id": "a481e04fe5894819",
+      "cited_urn": "urn:nir:stato:decreto.legge:2024-03-29;39",
+      "cited_title": "Misure urgenti  in  materia  di  agevolazioni  fiscali  di  cui  agli\narticoli 119 e 119-ter del  decreto-legge  19  maggio  2020,  n.  34,\nconvertito, con modificazioni, dalla legge 17  luglio  2020,  n.  77,\naltre  misure  urgenti  in  materia  fiscale  e  connesse  a   eventi\neccezionali,  nonche'   relative   all'amministrazione   finanziaria.\n(24G00059)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 16 luglio 2020, n. 76, che rinvia alle misure urgenti per la semplificazione e l'innovazione digitale, cosa è previsto riguardo al ruolo della Corte dei conti nel controllo concomitante sui piani e progetti di sostegno all'economia nazionale?",
+      "golden_answer": "La Corte dei conti svolge il controllo concomitante, anche a richiesta del Governo o delle Commissioni parlamentari, sui principali piani, programmi e progetti relativi agli interventi di sostegno e di rilancio dell'economia nazionale, ad esclusione di quelli previsti dal Piano nazionale di ripresa e resilienza o dal Piano nazionale per gli investimenti complementari. In caso di accertamento di gravi irregolarità gestionali o di rilevanti ritardi nell'erogazione di contributi, l'accertamento è immediatamente trasmesso all'amministrazione competente ai fini della responsabilità dirigenziale.",
+      "expected_ids": [
+        "95ac94269437558c"
+      ],
+      "seed_id": "7825eea5a03f1d8e",
+      "cited_urn": "urn:nir:stato:decreto.legge:2020-07-16;76",
+      "cited_title": "Misure urgenti  per  la  semplificazione  e  l'innovazione  digitale.\n(20G00096)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 2009, n. 185, convertito dalla legge 2009, n. 2, che rinvia alle disposizioni urgenti per la revisione della spesa pubblica, cosa è previsto riguardo alla sostituzione degli strumenti finanziari emessi da Banca Monte dei Paschi di Siena S.p.A. e sottoscritti dal Ministero dell'economia e delle finanze?",
+      "golden_answer": "Il Ministero dell'economia e delle finanze provvede a sottoscrivere Nuovi Strumenti Finanziari per un importo di un miliardo e novecento milioni di euro, al fine dell'integrale sostituzione degli strumenti finanziari emessi dall'Emittente e sottoscritti dal Ministero ai sensi dell'articolo 12 del decreto-legge 29 novembre 2008, n. 185.",
+      "expected_ids": [
+        "d350de1124d2ca9e"
+      ],
+      "seed_id": "661514dd46fd1f60",
+      "cited_urn": "urn:nir:stato:decreto.legge:2012-07-06;95",
+      "cited_title": "Disposizioni urgenti  per  la  revisione  della  spesa  pubblica  con\r\ninvarianza dei servizi ai cittadini ((nonche' misure di rafforzamento patrimoniale delle imprese del settore bancario)). (12G0117)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo la disciplina introdotta dal D.Lgs. 472/1997 (Disposizioni generali in materia di sanzioni amministrative per le violazioni di norme tributarie), quale è la regola sanzionatoria prevista dall'articolo 12 per chi, con una sola azione o omissione, viola diverse disposizioni relative a tributi diversi?",
+      "golden_answer": "Chi viola diverse disposizioni relative a tributi diversi con una sola azione o omissione è punito con la sanzione prevista per la violazione più grave, aumentata da un quarto al doppio.",
+      "expected_ids": [
+        "052efbcc2bb4f8cd"
+      ],
+      "seed_id": "169e65049cbfb31c",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:1997-12-18;472",
+      "cited_title": "Disposizioni generali in materia  di sanzioni amministrative per le\r\nviolazioni di norme  tributarie, a norma dell'articolo  3, comma 133,\r\ndella legge 23 dicembre 1996, n. 662.",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto legislativo n. 14/2019, come modificato dalle disposizioni integrative e correttive (Art. 4), quali sono le modalità telematiche obbligatorie per le comunicazioni poste a carico degli organi di gestione, controllo o assistenza delle procedure disciplinate dal codice della crisi d'impresa?",
+      "golden_answer": "Le comunicazioni devono essere effettuate tramite modalità telematiche nei confronti di soggetti titolari di domicilio digitale risultante dall'Indice nazionale degli indirizzi di posta elettronica certificata delle imprese e dei professionisti (INI-PEC), dall'indice dei domicili digitali della pubblica amministrazione e dei gestori di pubblici servizi (IPA) o dall'indice nazionale dei domicili digitali (INAD).",
+      "expected_ids": [
+        "d2ad2ba5c070ff56"
+      ],
+      "seed_id": "4252c9fd4682a1a0",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2024-09-13;136",
+      "cited_title": "Disposizioni integrative e correttive al codice della crisi d'impresa\ne dell'insolvenza di cui al decreto legislativo del 12 gennaio  2019,\nn. 14. (24G00154)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal Decreto Legge 18 marzo 2020, n. 18 (Misure urgenti connesse all'emergenza da COVID-19), che rinvia al Decreto del Ministro dell'economia e delle finanze 24 novembre 2020, n. 156, come è stato modificato il termine per la presentazione dei reclami avverso la mancata o inesatta contabilizzazione dei rimborsi relativi ai periodi di cui all'articolo 6, comma 2, lettere a) e c), del predetto decreto ministeriale?",
+      "golden_answer": "Per i periodi di cui all'articolo 6, comma 2, lettere a) e c), del decreto del Ministro dell'economia e delle finanze 24 novembre 2020, n. 156, l'aderente può presentare reclamo entro centoventi giorni successivi alla scadenza del termine previsto per il pagamento ai sensi dell'articolo 7, comma 5, dello stesso decreto.",
+      "expected_ids": [
+        "8793aea9dbad0090"
+      ],
+      "seed_id": "bf82f918c94168fb",
+      "cited_urn": "urn:nir:stato:decreto.legge:2021-05-25;73",
+      "cited_title": "Misure urgenti connesse all'emergenza da COVID-19, per le imprese, il\nlavoro, i giovani, la salute e i servizi territoriali. (21G00084)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal Decreto Legge 2012 n. 201 (Patto di stabilità interno), che abroga il comma 302 dell'articolo 1 della Legge 244/2007, si fa riferimento a una misura di semplificazione per l'avvio di attività imprenditoriale contenuta nell'articolo 38 del Decreto Legge 2012 n. 201. Qual è l'obiettivo costituzionale e la finalità principale di tale misura di semplificazione prevista dall'articolo 38 del Decreto Legge 2012 n. 201?",
+      "golden_answer": "La misura ha lo scopo di garantire il diritto di iniziativa economica privata di cui all'articolo 41 della Costituzione, tutelando l'avvio di attività imprenditoriale sin dalla presentazione della dichiarazione di inizio attività o della richiesta del titolo autorizzatorio.",
+      "expected_ids": [
+        "83b9c970ae78ff12"
+      ],
+      "seed_id": "34e10c56b1e2f674",
+      "cited_urn": "urn:nir:stato:decreto.legge:2008-06-25;112",
+      "cited_title": "Disposizioni  urgenti  per lo sviluppo economico, la semplificazione,\r\nla  competitivita',  la  stabilizzazione  della finanza pubblica e la\r\nperequazione Tributaria.",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 17 della legge 22 febbraio 1994, n. 146, che disciplina le modalità di recepimento delle direttive comunitarie in materia di tutela delle acque dall'inquinamento, quali sono i criteri specifici previsti dall'articolo 30 della Legge comunitaria 1993 per l'attuazione della direttiva 92/102/CEE relativa all'identificazione e alla registrazione degli animali?",
+      "golden_answer": "L'attuazione della direttiva 92/102/CEE deve essere informata ai criteri di coordinare la legislazione vigente in materia di anagrafe del bestiame e di obblighi di registrazione degli allevamenti, e di disciplinare la tenuta dei registri per garantire la semplificazione degli adempimenti e lo snellimento delle procedure, anche attraverso forme di autocontrollo.",
+      "expected_ids": [
+        "b55d30f8769b7941"
+      ],
+      "seed_id": "ac6550db72de39a6",
+      "cited_urn": "urn:nir:stato:legge:1994-02-22;146",
+      "cited_title": "Disposizioni    per    l'adempimento    di    obblighi    derivanti\ndall'appartenenza    dell'Italia   alle  Comunita'  europee  -  Legge\ncomunitaria 1993.",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal Decreto Legislativo 30 aprile 2022, n. 50, che rinvia al Decreto del Presidente della Repubblica 22 giugno 2022, n. 130 (Ulteriori misure urgenti per l'attuazione del Piano nazionale di ripresa e resilienza), come viene stabilito il momento di entrata in vigore del decreto che contiene le misure per il PNRR?",
+      "golden_answer": "Il decreto entra in vigore il giorno successivo a quello della sua pubblicazione nella Gazzetta Ufficiale della Repubblica italiana e sarà presentato alle Camere per la conversione in legge.",
+      "expected_ids": [
+        "1687b25395446c47"
+      ],
+      "seed_id": "ae67fb2d75ab4dd6",
+      "cited_urn": "urn:nir:stato:decreto.legge:2022-04-30;36",
+      "cited_title": "Ulteriori misure urgenti per  l'attuazione  del  Piano  nazionale  di\nripresa e resilienza (PNRR). (22G00049)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 1° giugno 2023, n. 61, convertito dalla legge 31 luglio 2023, n. 100, e successivamente modificata dalle disposizioni urgenti per le imprese agricole, cosa è previsto riguardo alla trasmissione delle denunce di danno ricevute dal soggetto gestore del Fondo mutualistico nazionale alle regioni Emilia-Romagna, Toscana e Marche?",
+      "golden_answer": "Il soggetto gestore del Fondo mutualistico nazionale trasmette alle regioni Emilia-Romagna, Toscana e Marche le denunce di danno ricevute, ai sensi dell'articolo 12, comma 4, alla data di entrata in vigore della disposizione di modifica.",
+      "expected_ids": [
+        "cb6506e3810c2b53"
+      ],
+      "seed_id": "32082790f1c40f03",
+      "cited_urn": "urn:nir:stato:decreto.legge:2024-05-15;63",
+      "cited_title": "Disposizioni  urgenti  per  le  imprese  agricole,  della   pesca   e\ndell'acquacoltura, nonche' per le  imprese  di  interesse  strategico\nnazionale. (24G00081)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto 'Disposizioni urgenti in materia di politiche di coesione...', che rinvia all'articolo 8-bis, cosa è previsto riguardo alla presentazione del progetto di fattibilità tecnico-economica per l'aeroporto di Agrigento?",
+      "golden_answer": "La provincia di Agrigento, d'intesa con la Regione siciliana, deve presentare al Ministero delle infrastrutture e dei trasporti un progetto di fattibilità tecnico-economica corredato dall'analisi costi-benefici entro centoventi giorni dalla data di entrata in vigore della legge di conversione del decreto.",
+      "expected_ids": [
+        "64c613fde91bd0cb"
+      ],
+      "seed_id": "efb4ba0e9324b9a6",
+      "cited_urn": "urn:nir:stato:decreto.legge:2023-09-19;124",
+      "cited_title": "Disposizioni urgenti in materia di  politiche  di  coesione,  per  il\nrilancio dell'economia nelle aree del Mezzogiorno del Paese,  nonche'\nin materia di immigrazione. (23G00137)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal D.L. 13G00116 che modifica la Legge 190/2012, cosa è previsto riguardo alla natura del parere espresso dal Ministro per la pubblica amministrazione e la semplificazione sugli atti di direttiva e di indirizzo?",
+      "golden_answer": "Il Ministro per la pubblica amministrazione e la semplificazione esprime un parere obbligatorio sugli atti di direttiva e di indirizzo, nonché sulle circolari relative alla conformità degli atti e comportamenti dei funzionari pubblici.",
+      "expected_ids": [
+        "d45440e0748e989b"
+      ],
+      "seed_id": "6d26dab6b67d923f",
+      "cited_urn": "urn:nir:stato:decreto.legge:2013-06-21;69",
+      "cited_title": "Disposizioni urgenti per il rilancio dell'economia. (13G00116)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 21 giugno 2021, n. 76 (Disposizioni urgenti per l'attuazione del Piano nazionale di ripresa e resilienza), che istituisce il contratto di rioccupazione richiamando le norme per la prevenzione delle infiltrazioni mafiose, come viene finanziato il contributo di euro 27.200.000 riconosciuto a Sport e Salute S.p.A. per il rilancio del sistema sportivo nell'anno 2021?",
+      "golden_answer": "Il contributo è finanziato mediante una corrispondente riduzione del fondo di cui all'articolo 1, comma 34, della legge 30 dicembre 2020, n. 178.",
+      "expected_ids": [
+        "6031d2cb2307537b"
+      ],
+      "seed_id": "b216b8dad2fa70d7",
+      "cited_urn": "urn:nir:stato:decreto.legge:2021-11-06;152",
+      "cited_title": "Disposizioni urgenti per l'attuazione del Piano nazionale di  ripresa\ne resilienza (PNRR) e per la prevenzione delle infiltrazioni mafiose.\n(21G00166)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 28 aprile 2009, n. 39, convertito dalla legge 24 giugno 2009, n. 77, quali sono i comuni abruzzesi specificamente elencati per la ricostruzione dei borghi?",
+      "golden_answer": "La norma richiamata non elenca i comuni abruzzesi nel testo fornito, ma rinvia all'articolo 1 del decreto-legge 28 aprile 2009, n. 39, convertito dalla legge 24 giugno 2009, n. 77, dove tale elenco è contenuto.",
+      "expected_ids": [
+        "d6b8d22aa329d0aa"
+      ],
+      "seed_id": "70ad55d7e633506e",
+      "cited_urn": "urn:nir:stato:decreto.legge:2025-05-07;65",
+      "cited_title": "Ulteriori disposizioni urgenti per affrontare gli straordinari eventi\nalluvionali verificatisi nei territori di Emilia-Romagna,  Toscana  e\nMarche e gli effetti del fenomeno bradisismico  nell'area  dei  Campi\nFlegrei, nonche' disposizioni di carattere finanziario in materia  di\nprotezione civile. (25G00075)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 24 giugno 2012, n. 91 (Misure urgenti per l'apertura dei cantieri...), che all'articolo 15 prevede misure per l'equilibrio del settore sanitario e la spesa farmaceutica, cosa è specificamente stabilito riguardo alle strutture organizzate per la sosta e il pernottamento di diportisti all'interno delle unità da diporto, a decorrere dal 1º gennaio 2016?",
+      "golden_answer": "A decorrere dal 1º gennaio 2016, le strutture organizzate per la sosta e il pernottamento di diportisti all'interno delle proprie unità da diporto, se ormeggiate in specchi acqueo appositamente attrezzati secondo i requisiti stabiliti dal Ministero delle Infrastrutture e dei Trasporti, rientrano nelle strutture ricettive all'aria aperta.",
+      "expected_ids": [
+        "7037e4fe8cd0d906"
+      ],
+      "seed_id": "78467c0a47c0982e",
+      "cited_urn": "urn:nir:stato:decreto.legge:2014-09-12;133",
+      "cited_title": "Misure urgenti per l'apertura dei cantieri,  la  realizzazione  delle\nopere pubbliche, la digitalizzazione del  Paese,  la  semplificazione\nburocratica, l'emergenza del dissesto idrogeologico e per la  ripresa\ndelle attivita' produttive. (14G00149)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo la disciplina introdotta dal decreto-legge 19 maggio 2020, n. 34, che rinvia all'articolo 11-terdecies del decreto-legge 23 aprile 2020, n. 21, fino a quando è prorogata l'applicabilità delle disposizioni contenute nel comma 1, lettera f), dell'articolo 264 del decreto-legge 19 maggio 2020, n. 34?",
+      "golden_answer": "Le disposizioni dell'articolo 264, comma 1, lettera f), del decreto-legge 19 maggio 2020, n. 34, si applicano fino al 31 dicembre 2021.",
+      "expected_ids": [
+        "70430870683e6e46"
+      ],
+      "seed_id": "0db63486b532e6cf",
+      "cited_urn": "urn:nir:stato:decreto.legge:2021-04-22;52",
+      "cited_title": "Misure urgenti per la graduale ripresa delle attivita'  economiche  e\nsociali nel rispetto delle esigenze di contenimento della  diffusione\ndell'epidemia da COVID-19. (21G00064)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto-legge 22 maggio 2021, n. 76, che rinvia all'articolo 24 del decreto-legge 28 settembre 2020, n. 137, quali sono le finalità specifiche e le dotazioni finanziarie previste per le iniziative multilaterali in materia di salute finalizzate alla prevenzione e risposta alle pandemie?",
+      "golden_answer": "Le iniziative sono finalizzate alla partecipazione italiana al Financial Intermediary Fund presso la Banca mondiale con un contributo di 100 milioni di euro nel 2022 e al contrasto della pandemia di COVID-19 tramite un finanziamento a dono di 100 milioni di euro alla GAVI Alliance per l'acquisto di vaccini tramite il COVAX Advance Market Commitment.",
+      "expected_ids": [
+        "b80e9245600692fd"
+      ],
+      "seed_id": "b8249e26c1ec6d38",
+      "cited_urn": "urn:nir:stato:decreto.legge:2022-08-09;115",
+      "cited_title": "Misure urgenti in materia di  energia,  emergenza  idrica,  politiche\nsociali e industriali. (22G00128)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto legislativo che riordina il servizio nazionale della riscossione, quale è l'articolo della legge delega del 2023 che ha stabilito i principi e i criteri direttivi per la revisione del sistema?",
+      "golden_answer": "L'articolo 18 della legge 9 agosto 2023, n. 111, recante «Delega al Governo per la riforma fiscale», contiene i principi e i criteri direttivi per la revisione del sistema nazionale della riscossione.",
+      "expected_ids": [
+        "a448202c423a1264"
+      ],
+      "seed_id": "2bdd27438df6c638",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2024-07-29;110",
+      "cited_title": "Disposizioni in materia  di  riordino  del  sistema  nazionale  della\nriscossione. (24G00128)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto legge 23 giugno 1995, n. 244, che rinvia all'articolo 21 del Testo unico delle leggi per gli interventi nei territori colpiti dal terremoto del 1980, quali sono le specifiche modifiche apportate alla procedura di accertamento della regolarità della documentazione amministrativa e ai limiti del contributo massimo ammissibile?",
+      "golden_answer": "L'accertamento di regolarità della documentazione amministrativa è effettuato dal comune tramite proprio tecnico in ordine cronologico di presentazione, richiedendo per i lavori superiori a un miliardo di lire il certificato di collaudo tecnico-amministrativo, e il contributo spettante non può superare il massimo ammissibile definito dagli articoli 10, 11, 12 e 13.",
+      "expected_ids": [
+        "609ab3dc4e0ddf91"
+      ],
+      "seed_id": "563cbdcd3cc703d2",
+      "cited_urn": "urn:nir:stato:decreto.legge:1995-06-23;244",
+      "cited_title": "Misure  dirette  ad  accelerare  il  completamento degli interventi\r\npubblici e la realizzazione dei nuovi interventi nelle aree depresse ((,  nonche'\r\ndisposizioni in materia di lavoro e occupazione)).",
+      "baseline_found_golden": true,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo la disciplina introdotta dalla legge che sostituisce le tabelle organiche dell'A.N.A.S. e rinvia al decreto legislativo n. 38 del 1946, quali sono i compiti specifici attribuiti ai Compartimenti regionali per la viabilita' nell'ambito della propria circoscrizione territoriale?",
+      "golden_answer": "I Compartimenti regionali per la viabilita' propongono alla Direzione generale i provvedimenti necessari per la manutenzione e il miglioramento delle strade, compilano le perizie di spese, redigono i progetti dei lavori, dirigono i lavori in appalto, provvedono all'esecuzione dei lavori in economia, esercitano la vigilanza sulla conservazione del patrimonio stradale e sulla circolazione, curano la gestione delle strade, controllano l'esercizio delle autostrade non gestite dallo Stato, adottano provvedimenti di sospensione e ripristino delle competenze, gestiscono le indennita' di alloggio e malaria, provvedono all'istruttoria delle pratiche inerenti ai compiti dell'Azienda ed esercitano tutte le facolta' attribuite dal decreto.",
+      "expected_ids": [
+        "8db364ff33d88599"
+      ],
+      "seed_id": "95b8b5485bda8c67",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:1948-04-17;547",
+      "cited_title": "Modificazioni al decreto legislativo Presidenziale 27 giugno 1946, n.\n38,  concernente  l'istituzione dell'Azienda nazionale autonoma delle\nstrade statali (A.N.A.S.).",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Nella disciplina introdotta dalla legge comunitaria 2001 (legge 1 marzo 2002, n. 39), che prevede una delega al Governo per adeguare la normativa sui ritardi di pagamento, quali sono i principi e criteri direttivi specifici relativi ai termini per la notifica degli atti giudiziari in caso di notifica in uno degli Stati europei o in altri Stati, come stabiliti nell'articolo 26?",
+      "golden_answer": "Il termine per la notifica in uno degli Stati europei è fissato in cinquanta giorni, riducibile fino a venti e aumentabile fino a sessanta per giusti motivi, mentre per la notifica in altri Stati non può essere inferiore a trenta né superiore a centoventi giorni.",
+      "expected_ids": [
+        "d72a37a58c1e7edc"
+      ],
+      "seed_id": "5ceb515b5b119a0f",
+      "cited_urn": "urn:nir:stato:legge:2002-03-01;39",
+      "cited_title": "Disposizioni per l'adempimento di obblighi derivanti dall'appartenenza dell'Italia alle Comunita' europee. Legge\ncomunitaria 2001.",
+      "baseline_found_golden": true,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Nella disciplina introdotta dal decreto 'Disposizioni urgenti per la razionalizzazione della spesa pubblica' (D.L. 12/2012), che viene richiamato dall'articolo 31 del decreto-legge n. 201/2011, come viene regolamentata l'entrata in vigore del provvedimento e quali sono le procedure successive alla sua pubblicazione?",
+      "golden_answer": "Il decreto entra in vigore il giorno successivo a quello della sua pubblicazione nella Gazzetta Ufficiale della Repubblica italiana e sarà presentato alle Camere per la conversione in legge. Inoltre, il testo sarà munito del sigillo dello Stato e inserito nella Raccolta ufficiale degli atti normativi della Repubblica italiana.",
+      "expected_ids": [
+        "fa661ff126d58d30"
+      ],
+      "seed_id": "cdd8f6718263fa28",
+      "cited_urn": "urn:nir:stato:decreto.legge:2012-05-07;52",
+      "cited_title": "Disposizioni urgenti per la razionalizzazione della  spesa  pubblica.\n(12G0074)",
+      "baseline_found_golden": true,
+      "baseline_found_seed": false
+    }
+  ]
+}

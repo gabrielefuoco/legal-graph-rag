@@ -1,0 +1,642 @@
+{
+  "eligible": [
+    {
+      "question": "Secondo quanto disposto dall'articolo 25 del decreto legislativo 3 aprile 2006, n. 152, che regola la valutazione degli impatti ambientali e il provvedimento di VIA, quali sono le specifiche procedure e i termini applicabili per l'adozione del provvedimento di VIA nei casi di progetti di competenza statale, in particolare riguardo alla necessità del concerto del Ministero della cultura e alle modalità di proroga in presenza di accertamenti di particolare complessità?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 25 del decreto legislativo 3 aprile 2006, n. 152, né descrive le procedure, i termini, il concerto del Ministero della cultura o le modalità di proroga per i provvedimenti di VIA.",
+      "expected_ids": [
+        "327e3646ddc6826d"
+      ],
+      "seed_id": "df7d8fe9673efb28",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2006-04-03;152",
+      "cited_title": "Norme in materia ambientale.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "In base all'articolo 2, comma 2, del decreto-legge 24 aprile 2014, n. 66 (Misure urgenti per la competitivita' e la giustizia sociale), che aliquota di contributo di solidarieta' e' dovuta sui redditi complessivi superiori a 300.000 euro lordi annui?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sull'aliquota di contributo di solidarietà dovuta sui redditi superiori a 300.000 euro lordi annui, in quanto disciplina esclusivamente le disposizioni per il pagamento dei debiti sanitari.",
+      "expected_ids": [
+        "e7db13ddbbf06b13"
+      ],
+      "seed_id": "940235af6c2fda19",
+      "cited_urn": "urn:nir:stato:decreto.legge:2014-04-24;66",
+      "cited_title": "Misure  urgenti  per  la  competitivita'  e  la  giustizia   sociale.\n(14G00079)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 15, comma 1, lettera b), del presente decreto, a quale autorizzazione di spesa, come determinata dalla tabella C della legge 12 novembre 2011, n. 183 (Legge di stabilità 2012), si provvede per coprire l'onere derivante dall'articolo 3, comma 1, lettera b), del medesimo decreto?",
+      "golden_answer": "L'articolo fornito non contiene disposizioni relative all'articolo 15, comma 1, lettera b), né alla tabella C della legge 12 novembre 2011, n. 183, pertanto non è possibile rispondere alla domanda utilizzando esclusivamente le informazioni contenute nel testo.",
+      "expected_ids": [
+        "a05f38c0b3544e0a"
+      ],
+      "seed_id": "1ebe06e72534d278",
+      "cited_urn": "urn:nir:stato:legge:2011-11-12;183",
+      "cited_title": "Disposizioni per la formazione del  bilancio  annuale  e  pluriennale\ndello Stato (Legge di stabilita' 2012). (11G0234)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "In relazione ai provvedimenti di riorganizzazione delle amministrazioni pubbliche, quali sono le specifiche procedure e le modalità di comunicazione che il Ministro dell'economia e delle finanze deve seguire per apportare le variazioni compensative di bilancio, come previsto dalla disciplina introdotta dalla legge 7 agosto 2015, n. 124, che rinvia a tale normativa delega?",
+      "golden_answer": "L'articolo fornito non contiene informazioni specifiche sulle procedure del Ministro dell'economia e delle finanze per le variazioni compensative di bilancio relative alla riorganizzazione delle amministrazioni pubbliche, poiché si limita a disciplinare il silenzio-assenso generale tra amministrazioni pubbliche e gestori.",
+      "expected_ids": [
+        "2e59c1be22c4dc83"
+      ],
+      "seed_id": "1f757da0b98e404b",
+      "cited_urn": "urn:nir:stato:legge:2015-08-07;124",
+      "cited_title": "Deleghe   al   Governo   in   materia   di   riorganizzazione   delle\namministrazioni pubbliche. (15G00138)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Nel contesto del concordato in continuità aziendale, qualora una o più classi di creditori siano dissenzienti, il tribunale può omologare la proposta anche in presenza di dissenso, a condizione che il valore di liquidazione sia distribuito nel rispetto della graduazione delle cause legittime di prelazione e che i crediti delle classi dissenzienti ricevano un trattamento almeno pari a quello delle classi dello stesso grado e più favorevole rispetto a quello delle classi di grado inferiore; secondo la disciplina introdotta dal decreto legislativo 12 gennaio 2019, n. 14, che rinvia al Codice della crisi d'impresa e dell'insolvenza, quali sono esattamente le condizioni aggiuntive che devono ricorrere congiuntamente per consentire tale omologa?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sulle condizioni aggiuntive per l'omologa del concordato in continuità aziendale in presenza di dissenzienti, poiché si limita esclusivamente a elencare le modifiche apportate al decreto legislativo n. 385/1993 per adeguarlo al Codice della crisi e dell'insolvenza.",
+      "expected_ids": [
+        "3d18563a65160d91"
+      ],
+      "seed_id": "920688fd23b3b335",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2019-01-12;14",
+      "cited_title": "Codice della crisi d'impresa e dell'insolvenza  in  attuazione  della\nlegge 19 ottobre 2017, n. 155. (19G00007)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 1102 della legge 31 dicembre 1982, n. 979, le somme recuperate dai privati per gli interventi di difesa del mare sono riassegnate allo stato di previsione del Ministero dell'ambiente; quale decreto legislativo, richiamato dalla stessa norma, ha introdotto la disciplina per la perequazione tributaria che regola tale riassegnazione?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 1102 della legge 31 dicembre 1982, n. 979, né menziona alcun decreto legislativo sulla perequazione tributaria per la riassegnazione delle somme recuperate dai privati per gli interventi di difesa del mare.",
+      "expected_ids": [
+        "4576208ae63c7ba3"
+      ],
+      "seed_id": "c3e850ae864813ef",
+      "cited_urn": "urn:nir:stato:decreto.legge:2008-06-25;112",
+      "cited_title": "Disposizioni  urgenti  per lo sviluppo economico, la semplificazione,\r\nla  competitivita',  la  stabilizzazione  della finanza pubblica e la\r\nperequazione Tributaria.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 25 del D.P.R. 687/1974, che disposizioni sono state introdotte dal D.L. 24 aprile 2017, n. 50 in materia di registrazione degli acquisti di beni e servizi?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 25 del D.P.R. 687/1974 né alle disposizioni introdotte dal D.L. 24 aprile 2017, n. 50 in materia di registrazione degli acquisti di beni e servizi.",
+      "expected_ids": [
+        "2c3a3774f13baa3d"
+      ],
+      "seed_id": "b041040e61b7f5f1",
+      "cited_urn": "urn:nir:stato:decreto.legge:2017-04-24;50",
+      "cited_title": "Disposizioni urgenti in  materia  finanziaria,  iniziative  a  favore\ndegli enti territoriali, ulteriori interventi per le zone colpite  da\neventi sismici e misure per lo sviluppo. (17G00063)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 8-bis del decreto legislativo in materia di ENAC Servizi S.r.l., quale è la normativa specifica che regola la determinazione del compenso dell'amministratore unico quando l'incarico è conferito a un dipendente dell'ENAC in deroga alle disposizioni del testo unico in materia di società a partecipazione pubblica?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sulla determinazione del compenso dell'amministratore unico di ENAC Servizi S.r.l. né fa riferimento all'articolo 8-bis del decreto legislativo in materia di ENAC.",
+      "expected_ids": [
+        "3087773f4ecada9c"
+      ],
+      "seed_id": "f9cc801896fc11ea",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2016-08-19;175",
+      "cited_title": "Testo  unico  in  materia  di  societa'  a  partecipazione  pubblica.\n(16G00188)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "In relazione al contenimento delle spese in materia di impiego pubblico per gli anni 2011, 2012 e 2013, come vengono definite le amministrazioni pubbliche inserite nel conto economico consolidato ai fini dell'applicazione del limite al trattamento economico complessivo, secondo la disciplina introdotta dal decreto legislativo 23 giugno 2011, n. 118, che rinvia a tale normativa?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative al contenimento delle spese in materia di impiego pubblico per gli anni 2011, 2012 e 2013, né definisce le amministrazioni pubbliche inserite nel conto economico consolidato ai fini dell'applicazione del limite al trattamento economico complessivo.",
+      "expected_ids": [
+        "f014675ea8d659d7"
+      ],
+      "seed_id": "755251f8766a3245",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2011-06-23;118",
+      "cited_title": "Disposizioni in materia di armonizzazione  dei  sistemi  contabili  e\ndegli schemi di bilancio delle Regioni, degli enti locali e dei  loro\norganismi, a norma degli articoli 1 e 2 della legge 5 maggio 2009, n.\n42. (11G0160)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 28 del d.P.R. n. 554/1999, che rinvia alla disciplina introdotta dal D.Lgs. 18 aprile 2016, n. 50 (Codice dei contratti pubblici), quali sono i requisiti minimi di scala e i contenuti obbligatori che devono caratterizzare la planimetria d'insieme e le planimetrie con le indagini geotecniche e sezioni relative agli elaborati grafici del progetto definitivo per gli edifici?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sui requisiti minimi di scala e sui contenuti obbligatori delle planimetrie per il progetto definitivo, poiché si limita a riportare disposizioni sull'applicabilità del Codice dei contratti pubblici ai procedimenti in corso.",
+      "expected_ids": [
+        "7a292e4c2ccfe137"
+      ],
+      "seed_id": "c8d087faff0bba12",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2016-04-18;50",
+      "cited_title": "((Codice dei contratti pubblici)). (16G00062)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 3, comma 1-bis, del decreto-legge 23 dicembre 2013, n. 145, convertito con modificazioni dalla legge 21 febbraio 2014, n. 9, come vengono definite e qual è la natura delle 'revoche' che confluiscono nel fondo di cui all'articolo 32, comma 6, del decreto-legge 6 luglio 2011, n. 9?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 3, comma 1-bis, né alle definizioni e alla natura delle 'revoche' che confluiscono nel fondo di cui all'articolo 32, comma 6, del decreto-legge 6 luglio 2011, n. 9.",
+      "expected_ids": [
+        "b73b3cc81ddab1e5"
+      ],
+      "seed_id": "8e41b33eed4b8977",
+      "cited_urn": "urn:nir:stato:legge:2014-02-21;9",
+      "cited_title": "Conversione  in  legge,  con  modificazioni,  del  decreto-legge   23\ndicembre 2013, n. 145, recante interventi urgenti di avvio del  piano\n«Destinazione Italia», per il contenimento delle tariffe elettriche e\ndel   gas,   per   la    riduzione    dei    premi    RC-auto,    per\nl'internazionalizzazione, lo sviluppo  e  la  digitalizzazione  delle\nimprese, nonche' misure per la realizzazione di  opere  pubbliche  ed\nEXPO 2015. (14G00023)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Ai sensi dell'art. 231-bis del D.L. 73/2021, che disciplina le misure per la ripresa dell'attività didattica in presenza, quali sono le modalità di svolgimento delle prestazioni da parte del personale docente e ATA in caso di sospensione delle attività didattiche in presenza a seguito dell'emergenza epidemiologica, come previsto dalla normativa richiamata per l'anno scolastico 2020/2021?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'art. 231-bis del D.L. 73/2021, alle modalità di svolgimento delle prestazioni del personale docente e ATA né alle misure per la ripresa dell'attività didattica in presenza.",
+      "expected_ids": [
+        "80e42c3c769c59c5"
+      ],
+      "seed_id": "16718567a8cf73e6",
+      "cited_urn": "urn:nir:stato:decreto.legge:2021-05-25;73",
+      "cited_title": "Misure urgenti connesse all'emergenza da COVID-19, per le imprese, il\nlavoro, i giovani, la salute e i servizi territoriali. (21G00084)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 9, comma 29, del decreto-legge 23 febbraio 2020, n. 18 (come modificato), quale è la data di scadenza finale per la proroga dei piani terapeutici che includono la fornitura di ausili e dispositivi per patologie respiratorie e altre categorie indicate, come stabilito dalla disciplina introdotta dal decreto-legge 22 aprile 2021, n. 52, convertito con modificazioni dalla legge 17 giugno 2021, n. 87?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 9, comma 29, del decreto-legge 23 febbraio 2020, n. 18, né alle date di scadenza per la proroga dei piani terapeutici.",
+      "expected_ids": [
+        "0b8e46d7dc926157"
+      ],
+      "seed_id": "0b285b8e9f4efed9",
+      "cited_urn": "urn:nir:stato:decreto.legge:2021-04-22;52",
+      "cited_title": "Misure urgenti per la graduale ripresa delle attivita'  economiche  e\nsociali nel rispetto delle esigenze di contenimento della  diffusione\ndell'epidemia da COVID-19. (21G00064)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 60 del decreto legge 16 luglio 2020, n. 76, che disposizioni sono state apportate all'articolo 19 della legge 28 dicembre 2001, n. 448, in particolare riguardo alle modifiche relative alla contemporanea iscrizione e frequenza a corsi di formazione specifica in medicina generale e alle scuole di specializzazione universitarie?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 60 del decreto legge 16 luglio 2020, n. 76, né alle modifiche all'articolo 19 della legge 28 dicembre 2001, n. 448, trattandosi di disposizioni concernenti il personale del Ministero delle infrastrutture e dei trasporti.",
+      "expected_ids": [
+        "f5a9d5ec39471349"
+      ],
+      "seed_id": "42120597b3b6533c",
+      "cited_urn": "urn:nir:stato:decreto.legge:2020-07-16;76",
+      "cited_title": "Misure urgenti  per  la  semplificazione  e  l'innovazione  digitale.\n(20G00096)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Ai sensi dell'articolo 9-ter del decreto-legge che istituisce il Commissario straordinario per l'area dei Campi Flegrei, quale è la norma richiamata che disciplina i poteri e le modalità di esercizio delle funzioni di tale Commissario, in particolare riguardo alla possibilità di derogare alle disposizioni in caso di adozione di ordinanze?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa all'articolo 9-ter del decreto-legge per i Campi Flegrei, né disciplina i poteri, le modalità di esercizio delle funzioni del Commissario straordinario o la possibilità di derogare alle disposizioni in caso di ordinanze.",
+      "expected_ids": [
+        "a1011a4e86eae55a"
+      ],
+      "seed_id": "de846fe677a5bb37",
+      "cited_urn": "urn:nir:stato:legge:1997-05-15;127",
+      "cited_title": "Misure urgenti per lo snellimento dell'attivita' amministrativa e\r\ndei procedimenti di decisione e di controllo.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Ai sensi dell'articolo 9, comma 2, della legge di conversione del D.L. 2 marzo 2024, n. 19, quale misura specifica di riduzione è prevista per i trattamenti economici complessivi dei dipendenti delle amministrazioni pubbliche superiori a 90.000 euro lordi annui, come disciplinato dalle ulteriori disposizioni urgenti per l'attuazione del Piano nazionale di ripresa e resilienza (PNRR)?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sulla misura di riduzione per i trattamenti economici superiori a 90.000 euro né fa riferimento alla legge di conversione del D.L. 2 marzo 2024, n. 19, trattandosi di disposizioni relative esclusivamente alle modifiche all'articolo 9 del decreto-legge 31 maggio 2010, n. 78, concernenti il personale degli enti del Servizio sanitario nazionale.",
+      "expected_ids": [
+        "3e224f3f6c22bed3"
+      ],
+      "seed_id": "755251f8766a3245",
+      "cited_urn": "urn:nir:stato:decreto.legge:2024-03-02;19",
+      "cited_title": "Ulteriori disposizioni urgenti per l'attuazione del  Piano  nazionale\ndi ripresa e resilienza (PNRR). (24G00035)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 148 del decreto-legge 24 aprile 2017, n. 50, convertito, con modificazioni, dalla legge 21 giugno 2017, n. 96, che disciplina le modifiche agli indici sintetici di affidabilità fiscale (ISA) in relazione all'emergenza COVID-19, quali sono le specifiche metodologie e le deroghe procedurali previste dalla normativa richiamata dal comma 1, lettera b), che a sua volta rinvia al decreto-legge 21 giugno 2022, n. 73?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa al decreto-legge 24 aprile 2017, n. 50, alle modifiche agli indici sintetici di affidabilità fiscale (ISA) o alle deroghe procedurali per l'emergenza COVID-19.",
+      "expected_ids": [
+        "8562d4664097d745"
+      ],
+      "seed_id": "e819476da590184c",
+      "cited_urn": "urn:nir:stato:decreto.legge:2022-06-21;73",
+      "cited_title": "Misure urgenti in materia di semplificazioni fiscali  e  di  rilascio\ndel  nulla  osta  al  lavoro,  Tesoreria  dello  Stato  e   ulteriori\ndisposizioni finanziarie e sociali. (22G00086)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 7 del decreto in esame, quali sono le disposizioni della legge 19 febbraio 1992, n. 142 (legge comunitaria per il 1991) che vengono abrogate nella parte relativa all'istituzione del Comitato tecnico-consultivo per la riparazione delle violazioni comunitarie in materia di appalti e forniture?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 7, alla legge 19 febbraio 1992, n. 142, né alle disposizioni abrogate concernenti il Comitato tecnico-consultivo per la riparazione delle violazioni comunitarie in materia di appalti e forniture.",
+      "expected_ids": [
+        "da3c1e8d6f576eb0"
+      ],
+      "seed_id": "778e8bf854bac5ca",
+      "cited_urn": "urn:nir:stato:legge:1992-02-19;142",
+      "cited_title": "Disposizioni per l'adempimento di obblighi derivanti dall'appartenenza dell'Italia alle Comunita' europee (legge comunitaria per il 1991).",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 74-ter delle disposizioni per le agenzie di viaggio e turismo, che modifica il D.L. 21 giugno 2013, n. 69, come vengono tassate le operazioni di pacchetto turistico quando la differenza tra il prezzo del pacchetto ed il corrispettivo dovuto ai fornitori di servizi (al netto dell'imposta) risulta inferiore a quella determinata all'atto della conclusione del contratto?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 74-ter delle disposizioni per le agenzie di viaggio e turismo né alle modalità di tassazione dei pacchetti turistici.",
+      "expected_ids": [
+        "46b78141e7936626"
+      ],
+      "seed_id": "6d26dab6b67d923f",
+      "cited_urn": "urn:nir:stato:decreto.legge:2013-06-21;69",
+      "cited_title": "Disposizioni urgenti per il rilancio dell'economia. (13G00116)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 8 della legge 4 novembre 1963, n. 1457, che disciplina le provvidenze a favore delle zone devastate dalla catastrofe del Vajont, quali sono le condizioni generali per la concessione dell'esenzione dai tributi erariali, provinciali e comunali per i comuni non specificatamente elencati nel primo comma?",
+      "golden_answer": "L'articolo fornito non contiene informazioni riguardo all'articolo 8 della legge 4 novembre 1963, n. 1457, né disciplina le condizioni per l'esenzione dai tributi erariali, provinciali e comunali.",
+      "expected_ids": [
+        "3704357696ba3dd1"
+      ],
+      "seed_id": "adb9cfa44980b11f",
+      "cited_urn": "urn:nir:stato:legge:1963-11-04;1457",
+      "cited_title": "Provvidenze a favore delle zone devastate dalla catastrofe del Vajont\ndel 9 ottobre 1963.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 2 della legge in esame, quali sono le norme tecniche emanate in applicazione della legge 28 luglio 1967, n. 641 (titolata 'Nuove norme per l'edilizia scolastica e universitaria e piano finanziario dell'intervento per il quinquennio 1967-1971') che stabiliscono l'ampiezza minima delle aree destinate all'edilizia scolastica?",
+      "golden_answer": "L'articolo 26 non contiene informazioni sulle norme tecniche che stabiliscono l'ampiezza minima delle aree destinate all'edilizia scolastica.",
+      "expected_ids": [
+        "b013a796bff37549"
+      ],
+      "seed_id": "2663feb8304dcc6c",
+      "cited_urn": "urn:nir:stato:legge:1967-07-28;641",
+      "cited_title": "Nuove  norme  per  l'edilizia  scolastica  e  universitaria  e  piano\r\nfinanziario dell'intervento per il quinquennio 1967-1971.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 46-bis della legge 28 giugno 2012, n. 92, che specifica disciplina comunitaria (introdotta dalla legge 29 dicembre 1990, n. 428) deve essere consultata per determinare le condizioni di durata e percezione dei corrispettivi applicabili alla collaborazione coordinata e continuativa?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione riguardo all'articolo 46-bis della legge 28 giugno 2012, n. 92, né alle condizioni di durata e percezione dei corrispettivi per la collaborazione coordinata e continuativa.",
+      "expected_ids": [
+        "114497997090a4c8"
+      ],
+      "seed_id": "471a05289cfa2170",
+      "cited_urn": "urn:nir:stato:legge:1990-12-29;428",
+      "cited_title": "Disposizioni per l'adempimento di obblighi derivanti dall'appartenenza  dell'Italia alle Comunita' europee. (Legge comunitaria per il 1990).",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 10, comma 2, del decreto legge 23 giugno 1995, n. 244, quale percentuale dell'occupazione o della produzione prevista dal piano di fattibilità deve essere realizzata dalle imprese ammesse al contributo di cui all'articolo 32 della legge 14 maggio 1981, n. 219, per ottenere in proprietà il lotto di terreno a esse provvisoriamente assegnato, come previsto dalla disciplina introdotta dal decreto legge 23 giugno 1995, n. 244, convertito dalla legge 8 agosto 1995, n. 341?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa all'articolo 10, comma 2, del decreto legge 23 giugno 1995, n. 244, né alle percentuali di occupazione o produzione richieste per l'ottenimento in proprietà del lotto di terreno.",
+      "expected_ids": [
+        "aae0690c80bc7520"
+      ],
+      "seed_id": "563cbdcd3cc703d2",
+      "cited_urn": "urn:nir:stato:decreto.legge:1995-06-23;244",
+      "cited_title": "Misure  dirette  ad  accelerare  il  completamento degli interventi\r\npubblici e la realizzazione dei nuovi interventi nelle aree depresse ((,  nonche'\r\ndisposizioni in materia di lavoro e occupazione)).",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo il decreto del Ministro dello sviluppo economico 19 gennaio 2018, n. 31, che disciplina gli schemi di contratti tipo per l'aggiudicazione dei contratti di concessione, quali sono le disposizioni integrative e correttive al decreto legislativo 18 aprile 2016, n. 50, introdotte dal decreto legislativo 19 aprile 2017, n. 56, in particolare riguardo alle modifiche apportate all'articolo 67, comma 1, lettera c)?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione riguardo alle disposizioni introdotte dal decreto legislativo 19 aprile 2017, n. 56, né alle modifiche apportate all'articolo 67, comma 1, lettera c), del decreto legislativo 18 aprile 2016, n. 50.",
+      "expected_ids": [
+        "6a1d68edeaa63dab"
+      ],
+      "seed_id": "5d6562a3a80b55db",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2017-04-19;56",
+      "cited_title": "Disposizioni integrative  e  correttive  al  decreto  legislativo  18\naprile 2016, n. 50. (17G00078)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Quali sono i principi e i criteri direttivi stabiliti dall'articolo 2, comma 1, lettere a), e), f) e g), del decreto legislativo 24 giugno 1998, n. 213, che il Governo deve rispettare nell'adozione del decreto legislativo attuativo della decisione quadro 2006/783/GAI relativa al reciproco riconoscimento delle decisioni di confisca?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sui principi e criteri direttivi dell'articolo 2, comma 1, lettere a), e), f) e g), del decreto legislativo 24 giugno 1998, n. 213, né sulla decisione quadro 2006/783/GAI, trattandosi di un testo relativo alla ridenominazione degli strumenti finanziari privati.",
+      "expected_ids": [
+        "ca5dae33232cdf68"
+      ],
+      "seed_id": "fb5289cf43e31de3",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:1998-06-24;213",
+      "cited_title": "Disposizioni per l'introduzione dell'EURO nell'ordinamento nazionale, a norma dell'articolo 1, comma 1, della legge 17 dicembre 1997, n. 433.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Il decreto legislativo che approva l'unito codice dei beni culturali e del paesaggio è stato emanato in esecuzione della delega conferita dalla legge 6 luglio 2002, n. 137, recante delega per la riforma dell'organizzazione del Governo e della Presidenza del Consiglio dei Ministri; quale articolo di tale legge di delega ha specificamente autorizzato l'approvazione del suddetto codice?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sul decreto legislativo che approva il codice dei beni culturali e del paesaggio né sull'articolo della legge di delega n. 137/2002 che ha autorizzato la sua approvazione.",
+      "expected_ids": [
+        "8c562800c564d88f"
+      ],
+      "seed_id": "99cd269d0a11b365",
+      "cited_urn": "urn:nir:stato:legge:2002-07-06;137",
+      "cited_title": "Delega per la riforma dell'organizzazione del Governo e della\nPresidenza del Consiglio dei Ministri, nonche' di enti pubblici.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 3-quater della legge 27 gennaio 1968, n. 35, il secondo periodo dell'articolo 3 della medesima legge è stato abrogato da quale decreto legislativo?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 3-quater della legge 27 gennaio 1968, n. 35, né menziona l'abrogazione del secondo periodo dell'articolo 3 di tale legge.",
+      "expected_ids": [
+        "ccd557e071fa5e04"
+      ],
+      "seed_id": "47d2ca6b0d530a7d",
+      "cited_urn": "urn:nir:stato:decreto.legge:2019-04-30;34",
+      "cited_title": "Misure  urgenti  di  crescita  economica  e  per  la  risoluzione  di\nspecifiche situazioni di crisi. (19G00043)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo l'articolo 2 della legge 27 ottobre 1951, n. 1402, che disposizioni regolano la definizione economica dei rapporti di cui al presente articolo, facendo riferimento alle norme introdotte dalla legge 12 agosto 1993, n. 317?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa all'articolo 2 della legge 27 ottobre 1951, n. 1402, né alle disposizioni che regolano la definizione economica dei rapporti o ai riferimenti alla legge 12 agosto 1993, n. 317.",
+      "expected_ids": [
+        "9b6c007b2d183f31"
+      ],
+      "seed_id": "718defd3912a9c53",
+      "cited_urn": "urn:nir:stato:legge:1993-08-12;317",
+      "cited_title": "Norme generali per il  completamento  dei  piani  di  ricostruzione\npost-bellica.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Ai fini del riconoscimento dei distacchi e dei permessi retribuiti alle Associazioni Professionali a Carattere Sindacale tra Militari nel triennio 2025-2027, secondo i criteri stabiliti dalla disciplina introdotta dal decreto-legge 9 maggio 2024, n. 61, convertito con modificazioni dalla legge 4 luglio 2024, n. 96, quali sono i criteri specifici di riferimento?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sui criteri specifici per il riconoscimento dei distacchi e dei permessi retribuiti, poiché si limita a dichiarare la conversione del decreto-legge n. 61/2024 in legge e la sua entrata in vigore.",
+      "expected_ids": [
+        "7b86734ca23daaff"
+      ],
+      "seed_id": "79e8c2e32fc08743",
+      "cited_urn": "urn:nir:stato:legge:2024-07-04;96",
+      "cited_title": "Conversione in legge, con modificazioni, del decreto-legge  9  maggio\n2024, n. 61, recante disposizioni urgenti in materia di  associazioni\nprofessionali a carattere sindacale tra militari, personale  militare\ne civile del  Ministero  della  difesa  e  operativita'  delle  Forze\narmate. (24G00115)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "In base all'articolo 9, comma 2, della legge 31 dicembre 2018, n. 137, che disciplina il contenimento delle spese in materia di impiego pubblico per gli anni 2011-2013, quale è la norma specifica (identificata per numero e titolo) a cui il testo rinvia per quanto concerne le eccezioni relative alle progressioni di carriera, maternità, malattia, missioni all'estero e effettiva presenza in servizio, e qual è il contenuto di tale norma richiamata?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa all'articolo 9, comma 2, della legge 31 dicembre 2018, n. 137, né menziona le eccezioni per progressioni di carriera, maternità, malattia, missioni all'estero o il contenuto di norme richiamate a tale proposito.",
+      "expected_ids": [
+        "b72943f14cd947f3"
+      ],
+      "seed_id": "755251f8766a3245",
+      "cited_urn": "urn:nir:stato:decreto.legge:2018-09-28;109",
+      "cited_title": "Disposizioni urgenti per la citta' di Genova, la sicurezza della rete\nnazionale delle infrastrutture e dei trasporti,  gli  eventi  sismici\ndel 2016 e 2017, il lavoro e le altre emergenze. (18G00137)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Ai sensi dell'articolo 28 sulla razionalizzazione della rete distributiva dei carburanti, che disposizioni specifiche introdotte dalla Legge comunitaria 2009 (Legge 4 giugno 2010, n. 96) devono essere osservate per l'erogazione dei contributi destinati alla chiusura degli impianti di distribuzione?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 28 sulla razionalizzazione della rete distributiva dei carburanti, alla Legge comunitaria 2009 o alle disposizioni per l'erogazione dei contributi destinati alla chiusura degli impianti di distribuzione.",
+      "expected_ids": [
+        "22da1c59601fb311"
+      ],
+      "seed_id": "a61d34dfe87db651",
+      "cited_urn": "urn:nir:stato:legge:2010-06-04;96",
+      "cited_title": "Disposizioni    per    l'adempimento    di     obblighi     derivanti\ndall'appartenenza  dell'Italia  alle  Comunita'   europee   -   Legge\ncomunitaria 2009. (10G0119)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Nel caso di mancata definizione dell'intesa di cui all'articolo 52-quinquies del testo unico del gas naturale, quali sono le disposizioni di semplificazione previste dalla disciplina introdotta dalla legge 24 novembre 2000, n. 340, che rinvia a tale procedura?",
+      "golden_answer": "L'articolo fornito non contiene disposizioni relative alla mancata definizione dell'intesa dell'articolo 52-quinquies del testo unico del gas naturale, né menziona la legge 24 novembre 2000, n. 340, trattandosi di un testo che regola esclusivamente il trasferimento di impianti e beni alle società costituite a seguito della liberalizzazione del mercato elettrico.",
+      "expected_ids": [
+        "4ff884286a327357"
+      ],
+      "seed_id": "4a51f695a0b97dd2",
+      "cited_urn": "urn:nir:stato:legge:2000-11-24;340",
+      "cited_title": "Disposizioni   per   la   delegificazione   di   norme   e   per  la\nsemplificazione   di   procedimenti   amministrativi   -   Legge   di\nsemplificazione 1999.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 68, comma c, lettera g), dell'articolo 2 della legge di armonizzazione tributaria, quali beni specifici sono esenti dall'imposta per le importazioni?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione riguardo all'articolo 68, comma c, lettera g), dell'articolo 2 della legge di armonizzazione tributaria né elenca beni specifici esenti dall'imposta per le importazioni.",
+      "expected_ids": [
+        "29965f007cdc0626"
+      ],
+      "seed_id": "092faeb1ded241f6",
+      "cited_urn": "urn:nir:stato:decreto.legge:1993-08-30;331",
+      "cited_title": "Armonizzazione  delle  disposizioni in materia di imposte sugli oli\r\nminerali, sull'alcole, sulle bevande alcoliche, sui tabacchi lavorati\r\ne  in  materia  di  IVA  con  quelle  recate  da  direttive   CEE   e\r\nmodificazioni    conseguenti    a   detta   armonizzazione,   nonche'\r\ndisposizioni concernenti la  disciplina  dei  centri  autorizzati  di\r\nassistenza   fiscale,   le   procedure   dei   rimborsi  di  imposta,\r\nl'esclusione dall'ILOR dei  redditi  di  impresa  fino  all'ammontare\r\ncorrispondente al contributo diretto lavorativo, l'istituzione per il\r\n1993  di  un'imposta  erariale  straordinaria su taluni beni ed altre\r\ndisposizioni tributarie.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "In base alla delega contenuta nell'articolo 26 della legge 1 marzo 2002, n. 39, quali sono i principi e le prescrizioni della direttiva 2000/35/CE che devono essere adeguati nella normativa vigente in materia di ritardi di pagamento nelle transazioni commerciali?",
+      "golden_answer": "L'articolo fornito non contiene informazioni sui principi e le prescrizioni della direttiva 2000/35/CE né sulle modalità del loro adeguamento nella normativa vigente, limitandosi a stabilire la delega al Governo per l'attuazione delle direttive elencate negli allegati A e B.",
+      "expected_ids": [
+        "79f85b977bd1639a"
+      ],
+      "seed_id": "5ceb515b5b119a0f",
+      "cited_urn": "urn:nir:stato:legge:2002-03-01;39",
+      "cited_title": "Disposizioni per l'adempimento di obblighi derivanti dall'appartenenza dell'Italia alle Comunita' europee. Legge\ncomunitaria 2001.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    },
+    {
+      "question": "Ai fini del supporto tecnico della Ragioneria generale dello Stato per la realizzazione delle missioni M1C1-119 e M1C1-120 del Piano nazionale di ripresa e resilienza, come vengono disciplinati i criteri e le modalità di reclutamento del contingente di personale autorizzato dal Ministero dell'economia e delle finanze, facendo riferimento alla normativa emergenziale introdotta per fronteggiare gli eventi alluvionali verificatisi a partire dal 1° maggio 2023?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione riguardo ai criteri e alle modalità di reclutamento del personale per le missioni M1C1-119 e M1C1-120 né alla normativa emergenziale per gli eventi alluvionali del 1° maggio 2023, trattandosi esclusivamente di disposizioni sulla ricostruzione privata dei patrimoni danneggiati.",
+      "expected_ids": [
+        "47e698db9352a498"
+      ],
+      "seed_id": "32082790f1c40f03",
+      "cited_urn": "urn:nir:stato:decreto.legge:2023-06-01;61",
+      "cited_title": "Interventi  urgenti  per  fronteggiare  l'emergenza  provocata  dagli\neventi  alluvionali  verificatisi  a  partire  dal  1°  maggio  2023 ((nonche'\ndisposizioni urgenti per la ricostruzione nei territori  colpiti  dai\nmedesimi eventi)). (23G00074)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": true
+    }
+  ],
+  "discarded": [
+    {
+      "question": "Secondo quanto disposto dall'articolo 1, comma 2, della legge che promuove misure in materia di sanità e pubblico impiego, quale è la norma comunitaria del 1994 a cui si rinvia per l'adempimento degli obblighi derivanti dall'appartenenza dell'Italia alle Comunità europee?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 1, comma 2, della legge sulla sanità e pubblico impiego né menziona una norma comunitaria del 1994.",
+      "expected_ids": [
+        "f14b8c15c6306e9e"
+      ],
+      "seed_id": "5a681d0ebbd16c7b",
+      "cited_urn": "urn:nir:stato:legge:1996-02-06;52",
+      "cited_title": "Disposizioni    per    l'adempimento    di    obblighi    derivanti\ndall'appartenenza   dell'Italia   alle  Comunita'  europee  -   legge\ncomunitaria 1994.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 18 del decreto legislativo 81/2008, quale articolo del medesimo decreto legislativo deve essere consultato per individuare i casi specifici in cui è richiesta la nomina del medico competente per l'effettuazione della sorveglianza sanitaria?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 18 del decreto legislativo 81/2008 né alle disposizioni sulla nomina del medico competente.",
+      "expected_ids": [
+        "ac6d58ffbdd52a93"
+      ],
+      "seed_id": "fc0f204c65b21d5e",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2008-04-09;81",
+      "cited_title": "Attuazione  dell'articolo  1  della  legge  3 agosto 2007, n. 123, in\r\nmateria  di  tutela  della  salute  e  della  sicurezza nei luoghi di\r\nlavoro.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Ai sensi dell'articolo 9 della legge in esame, per la concessione di contributi disciplinati dall'articolo 72 della legge 22 ottobre 1971, n. 865, quale è l'oggetto specifico degli interventi straordinari nel settore dell'edilizia residenziale, agevolata e convenzionata, come definito nella normativa richiamata?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 9, ai contributi dell'articolo 72 della legge 22 ottobre 1971, n. 865, né alla definizione dell'oggetto specifico degli interventi straordinari nel settore dell'edilizia residenziale.",
+      "expected_ids": [
+        "bc56c45b9419bd55"
+      ],
+      "seed_id": "e0cf5cae26ddcb07",
+      "cited_urn": "urn:nir:stato:legge:1971-10-22;865",
+      "cited_title": "Programmi  e coordinamento dell'edilizia residenziale pubblica; norme\nsulla espropriazione per pubblica utilita'; modifiche ed integrazioni\nalle  leggi  17  agosto  1942,  n.  1150;  18 aprile 1962, n. 167; 29\nsettembre  1964,  n.  847;  ed autorizzazione di spesa per interventi\nstraordinari  nel  settore  dell'edilizia  residenziale,  agevolata e\nconvenzionata.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Ai sensi dell'articolo 14, comma 2-bis, della legge di bilancio per il 2025, quali sono le specifiche condizioni di avvio temporale e le tipologie di intervento urbanistico, edilizio o di demolizione e ricostruzione che devono essere realizzate ai sensi del decreto legislativo 22 gennaio 2004, n. 42 (Codice dei beni culturali e del paesaggio), per poter beneficiare delle disposizioni di cui al comma 1?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 14, comma 2-bis, della legge di bilancio per il 2025, né menziona condizioni di avvio temporale o tipologie di interventi urbanistici, edilizi o di demolizione e ricostruzione.",
+      "expected_ids": [
+        "f12067702dc53043"
+      ],
+      "seed_id": "cc32e6757f92fe09",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:2004-01-22;42",
+      "cited_title": "Codice  dei beni culturali e del paesaggio, ai sensi dell'articolo 10\r\ndella legge 6 luglio 2002, n. 137.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 905 del testo unico delle disposizioni concernenti l'imposta di registro, quale è la nuova aliquota percentuale che sostituisce la precedente per le prestazioni di servizi di cui all'articolo 1, comma 1, terzo periodo, della tariffa allegata, e a quale decreto legislativo è fatto esplicito riferimento per la definizione della disciplina applicabile?",
+      "golden_answer": "Le informazioni richieste non sono contenute nell'articolo fornito, il quale disciplina i compensi per le attività di dichiarazione dei redditi e non menziona l'articolo 905 del testo unico delle disposizioni concernenti l'imposta di registro né nuove aliquote per le prestazioni di servizi.",
+      "expected_ids": [
+        "8200ce1d5d7b927b"
+      ],
+      "seed_id": "773dbfc4728efc8f",
+      "cited_urn": "urn:nir:stato:decreto.legislativo:1997-07-09;241",
+      "cited_title": "Norme di semplificazione degli adempimenti dei contribuenti in sede\r\ndi  dichiarazione dei  redditi  e dell'imposta  sul valore  aggiunto,\r\nnonche'   di   modernizzazione   del  sistema   di   gestione   delle\r\ndichiarazioni.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Ai fini del supporto tecnico della Ragioneria generale dello Stato per la realizzazione delle missioni M1C1-119 e M1C1-120 del Piano nazionale di ripresa e resilienza, in quale specifica Area del nuovo sistema di classificazione professionale del personale introdotto dal contratto collettivo nazionale di lavoro 2019-2021 - Comparto Funzioni centrali devono essere inquadrati i dieci unità di personale reclutate mediante concorsi pubblici?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa al supporto tecnico della Ragioneria generale dello Stato, alle missioni M1C1-119 e M1C1-120, al Piano nazionale di ripresa e resilienza, al contratto collettivo nazionale di lavoro 2019-2021 o all'Area del nuovo sistema di classificazione professionale del personale.",
+      "expected_ids": [
+        "9382fa3d32e8d212"
+      ],
+      "seed_id": "32082790f1c40f03",
+      "cited_urn": "urn:nir:stato:legge:2007-08-03;124",
+      "cited_title": "Sistema  di  informazione  per  la sicurezza della Repubblica e nuova\r\ndisciplina del segreto.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 2 del decreto che affida alla Ferrovie dello Stato Spa la gestione dei servizi di trasporto in regime di commissariamento governativo, a quale decreto legislativo emanato nel 2020 si rimanda per le disposizioni in materia di salute e sostegno al lavoro connesse all'emergenza epidemiologica da COVID-19?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 2 del decreto che affida alla Ferrovie dello Stato Spa la gestione dei servizi di trasporto né menziona alcun decreto legislativo emanato nel 2020 per le disposizioni in materia di salute e sostegno al lavoro connesse all'emergenza epidemiologica da COVID-19.",
+      "expected_ids": [
+        "949130dae54cd574"
+      ],
+      "seed_id": "de6a0d29cb47b11d",
+      "cited_urn": "urn:nir:stato:decreto.legge:2020-05-19;34",
+      "cited_title": "Misure  urgenti  in  materia  di  salute,  sostegno   al   lavoro   e\nall'economia, nonche' di  politiche  sociali  connesse  all'emergenza\nepidemiologica da COVID-19. (20G00052)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 5 della legge che istituisce la delega per il riordino normativo in materia di direttive comunitarie, entro quale termine il Governo è autorizzato ad adottare i testi unici o i codici di settore, e a quale norma legislativa precedente deve conformarsi per definire le modalità e i principi e criteri direttivi di tale delega?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 5 della legge sulla delega per il riordino normativo in materia di direttive comunitarie, né specifica i termini per l'adozione dei testi unici o i riferimenti a norme legislative precedenti per definire le modalità di tale delega.",
+      "expected_ids": [
+        "eeb9192cf52feaf0"
+      ],
+      "seed_id": "46535feca6119c86",
+      "cited_urn": "urn:nir:stato:legge:1997-03-15;59",
+      "cited_title": "Delega  al  Governo per il conferimento di funzioni e compiti  alle\r\nregioni     ed   enti   locali,   per   la   riforma  della  pubblica\r\namministrazione e per la semplificazione amministrativa.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 1304 del decreto legislativo in esame, che istituisce un fondo presso il Ministero della giustizia per le esigenze correnti connesse all'acquisizione di beni e servizi, quale è l'importo della dotazione annuale prevista per ciascuno degli anni 2007, 2008 e 2009, e a quale disciplina specifica rinvia tale articolo per la realizzazione degli interventi?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa all'articolo 1304 del decreto legislativo né alle dotazioni annuali previste per gli anni 2007, 2008 e 2009.",
+      "expected_ids": [
+        "b4df370261e039d8"
+      ],
+      "seed_id": "c46366f4a81ca050",
+      "cited_urn": "urn:nir:stato:decreto.legge:2017-02-09;8",
+      "cited_title": "Nuovi interventi urgenti in favore delle  popolazioni  colpite  dagli\neventi sismici del 2016 e del 2017. (17G00021)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 15 della legge sulle istituzioni pubbliche di beneficenza, che disciplina le incompatibilità per i membri delle congregazioni di carità, a quale normativa specifica si deve fare riferimento per determinare la definizione aggiornata di 'istituzioni pubbliche di beneficenza'?",
+      "golden_answer": "L'articolo fornito (Art. 36) non contiene alcuna informazione relativa all'articolo 15 della legge sulle istituzioni pubbliche di beneficenza, alle incompatibilità dei membri delle congregazioni di carità o alla definizione aggiornata di 'istituzioni pubbliche di beneficenza', trattandosi di disposizioni concernenti l'approvazione della Giunta provinciale amministrativa.",
+      "expected_ids": [
+        "c6ace306006d54d6"
+      ],
+      "seed_id": "64a71b860791ee40",
+      "cited_urn": "urn:nir:stato:legge:1890-07-17;6972",
+      "cited_title": "Sulle Opere Pie. (090U6972)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo le disposizioni contenute nell'articolo 404 della legge di conversione del decreto-legge 31 maggio 2010, n. 78, che prevede l'applicazione delle norme relative alle cessioni di farmaci soggette al regime della scissione dei pagamenti di cui all'articolo 17-ter del DPR 26 ottobre 1972, n. 633, a quale titolo normativo di riferimento, introdotto dalla legge 10 ottobre 1990, n. 287, si deve fare riferimento per la tutela della concorrenza e del mercato?",
+      "golden_answer": "Le informazioni contenute nell'articolo fornito non permettono di rispondere alla domanda, poiché l'articolo 15-octies riguarda la cooperazione investigativa tra le autorità nazionali della concorrenza dell'Unione europea e non menziona l'articolo 404, la legge 10 ottobre 1990, n. 287, né le norme relative alle cessioni di farmaci.",
+      "expected_ids": [
+        "a2957c9339617848"
+      ],
+      "seed_id": "e55168e4730e70a3",
+      "cited_urn": "urn:nir:stato:legge:1990-10-10;287",
+      "cited_title": "Norme per la tutela della concorrenza e del mercato.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 10 del D.L. 25 marzo 2008, n. 42, che disciplina i servizi ai cittadini e prevede l'aggiunta di un comma al decreto-legge 29 novembre 2008, n. 185, quale specifica misura di sostegno o intervento è stata introdotta nel decreto richiamato per affrontare la crisi?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione riguardo all'articolo 10 del D.L. 25 marzo 2008, n. 42, né alle misure di sostegno introdotte nel decreto-legge 29 novembre 2008, n. 185 per affrontare la crisi.",
+      "expected_ids": [
+        "9fed5cc1c108db00"
+      ],
+      "seed_id": "e3f4bc80de0b7a97",
+      "cited_urn": "urn:nir:stato:decreto.legge:2008-11-29;185",
+      "cited_title": "Misure  urgenti  per  il  sostegno  a famiglie, lavoro, occupazione e\r\nimpresa e per ridisegnare in funzione anti-crisi il quadro strategico\r\nnazionale.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 8 della legge 28 dicembre 2015, n. 221, che disposizioni urgenti vengono introdotte in materia di trasporto pubblico locale e regionale?",
+      "golden_answer": "L'articolo fornito non contiene informazioni relative all'articolo 8 della legge 28 dicembre 2015, n. 221, né disposizioni urgenti in materia di trasporto pubblico locale e regionale.",
+      "expected_ids": [
+        "eaf8e7b7c1aff657"
+      ],
+      "seed_id": "8d549bbad621011c",
+      "cited_urn": "urn:nir:stato:legge:2015-12-28;221",
+      "cited_title": "Disposizioni in materia ambientale per  promuovere  misure  di  green\neconomy e per il contenimento dell'uso eccessivo di risorse naturali.\n(16G00006)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 1001 del decreto-legge 9 agosto 2022, n. 115, le risorse indicate nel comma 1000 possono essere impiegate secondo le modalità previste dalla disciplina introdotta dal decreto-legge 31 marzo 2005, n. 45, convertito, con modificazioni, dalla legge 31 maggio 2005, n. 89, e quali sono le specifiche finalità e modalità operative stabilite da tale normativa richiamata?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione relativa all'articolo 1001 del decreto-legge 9 agosto 2022, n. 115, né alle modalità di impiego delle risorse del comma 1000 secondo la disciplina del decreto-legge 31 marzo 2005, n. 45.",
+      "expected_ids": [
+        "0fb9c4f47a87da6b"
+      ],
+      "seed_id": "af5303fcecb08e55",
+      "cited_urn": "urn:nir:stato:decreto.legge:2022-08-09;115",
+      "cited_title": "Misure urgenti in materia di  energia,  emergenza  idrica,  politiche\nsociali e industriali. (22G00128)",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "In virtù delle disposizioni contenute nel decreto-legge emanato per la stabilizzazione finanziaria e il contenimento della spesa pubblica del 2011, che richiamano la normativa urgente per l'università, la ricerca, i beni culturali e la mobilità dei pubblici dipendenti, quali sono le specifiche misure di semplificazione previste per gli adempimenti relativi alle imposte di bollo e alle tasse di concessione?",
+      "golden_answer": "L'articolo fornito non contiene alcuna informazione sulle misure di semplificazione per le imposte di bollo e le tasse di concessione, poiché tratta esclusivamente delle proroghe dei termini per lo smaltimento delle scorte dei preparati pericolosi.",
+      "expected_ids": [
+        "d555a66c57976034"
+      ],
+      "seed_id": "4d322f78caf1ce1d",
+      "cited_urn": "urn:nir:stato:decreto.legge:2005-01-31;7",
+      "cited_title": "Disposizioni  urgenti per l'universita' e la ricerca, per i beni e le\r\nattivita'   culturali,   per   il   completamento   di  grandi  opere\r\nstrategiche,   per  la  mobilita' dei pubblici  dipendenti,  ((e  per\r\nsemplificare gli  adempimenti relativi  a  imposte  di  bollo e tasse\r\ndi concessione, nonche' altre misure urgenti)).",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 17, comma 2, della legge che incrementa il fondo per la prosecuzione degli interventi della legge 14 maggio 1981, n. 219, quale è la disciplina vigente in materia di finanza pubblica che abroga tale comma?",
+      "golden_answer": "L'articolo 2-bis abroga il comma 2 dell'articolo 17 della legge 11 marzo 1988, n. 67, stabilendo che la pubblica amministrazione deve valutare l'anomalia delle offerte ai sensi dell'articolo 24 della legge 8 agosto 1977, n. 584, ed ai sensi dell'articolo 5 della legge 2 febbraio 1973, n. 14.",
+      "expected_ids": [
+        "84b27a0410396615"
+      ],
+      "seed_id": "22af699c7a829fb2",
+      "cited_urn": "urn:nir:stato:decreto.legge:1989-03-02;65",
+      "cited_title": "Disposizioni in materia di finanza pubblica.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo l'articolo 6 della norma sulla ricostruzione degli immobili distrutti o danneggiati, quali sono i criteri specifici che devono seguire rispettare le opere previste nelle perizie dei lavori quando queste vengono eseguite in comuni classificati ai sensi del decreto-legge 27 febbraio 1968, n. 79, convertito nella legge 18 marzo 1968, n. 241?",
+      "golden_answer": "L'articolo 62 non contiene informazioni sui criteri per le opere previste nelle perizie dei lavori nei comuni classificati ai sensi del decreto-legge 27 febbraio 1968, n. 79, poiché tratta esclusivamente l'autorizzazione del Ministro per il tesoro a contrarre mutui con il Consorzio di credito per le opere pubbliche.",
+      "expected_ids": [
+        "c78c1f9a44ed0caf"
+      ],
+      "seed_id": "868db041c55699b9",
+      "cited_urn": "urn:nir:stato:decreto.legge:1968-02-27;79",
+      "cited_title": "Ulteriori  interventi  e  provvidenze  per  la ricostruzione e per la\nripresa  economica dei comuni della Sicilia colpiti dai terremoti del\ngennaio 1968.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    },
+    {
+      "question": "Secondo quanto disposto dall'articolo 25, lettera m) del testo in esame, i Compartimenti della viabilità esercitano le facoltà loro attribuite anche da altre leggi; quale specifica normativa urgente, emanata nel dicembre 1968, è richiamata in tale contesto per la gestione dei provvedimenti relativi alle zone colpite dalle alluvioni?",
+      "golden_answer": "L'articolo fornito non contiene alcuna menzione all'articolo 25, lettera m), ai Compartimenti della viabilità o a normative urgenti emanate nel dicembre 1968.",
+      "expected_ids": [
+        "6e80fe7e12703063"
+      ],
+      "seed_id": "38c39b489380499b",
+      "cited_urn": "urn:nir:stato:decreto.legge:1968-12-18;1232",
+      "cited_title": "Provvedimenti  urgenti  in  favore delle zone colpite dalle alluvioni\ndell'autunno 1968.",
+      "baseline_found_golden": false,
+      "baseline_found_seed": false
+    }
+  ]
+}

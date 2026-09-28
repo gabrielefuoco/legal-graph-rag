@@ -29,9 +29,33 @@ class LegalGenerator:
             urn_info = f" (URN: {chunk.work_urn})" if chunk.work_urn else ""
             # Use expanded text if present, otherwise base text
             chunk_text = getattr(chunk, 'expanded_text', None) or chunk.text
-            context_parts.append(f"[{i}] {source_info}{urn_info}\nTesto: {chunk_text}")
+            graph_info = self._format_graph_metadata(chunk)
+            context_parts.append(f"[{i}] {source_info}{urn_info}{graph_info}\nTesto: {chunk_text}")
             
         return "\n\n".join(context_parts)
+
+    def _format_graph_metadata(self, chunk: RetrievedChunk) -> str:
+        """Render the knowledge-graph annotations of a chunk (TESEO institutes, citation links).
+
+        This is information only the graph holds: it does not change the ranking, it helps the
+        model interpret *why* a provision is relevant (normative institute, act that cites it).
+        """
+        if not getattr(settings, "GRAPH_METADATA_IN_CONTEXT", True):
+            return ""
+
+        bits = []
+        labels = chunk.metadata.get("matched_concept_labels") or chunk.metadata.get("matched_concepts")
+        if labels:
+            clean = [str(x) for x in labels if x][:5]
+            if clean:
+                bits.append(f"Istituti giuridici (TESEO): {', '.join(clean)}")
+
+        trace = chunk.expansion_trace or {}
+        if trace.get("citing_title"):
+            rinvio = f" — rinvio: \"{trace['citation_text']}\"" if trace.get("citation_text") else ""
+            bits.append(f"Disposizione richiamata da: {trace['citing_title']}{rinvio}")
+
+        return ("\n" + " | ".join(bits)) if bits else ""
 
     def _build_messages(self, query: str, chunks: List[RetrievedChunk], chat_history: list = None) -> list:
         """Construct the prompt messages (System, History, Human) for the LLM."""
@@ -46,7 +70,8 @@ class LegalGenerator:
             "   \"Non dispongo di informazioni sufficienti per rispondere a questa domanda.\"\n"
             "3. FORMATO CITAZIONI: Cita la fonte per ogni affermazione rilevante alla fine della frase, inserendo il riferimento tra parentesi quadre nel formato [Titolo dell'Atto, Articolo X] o [Articolo X] (es. [Costituzione, Art. 2]).\n"
             "4. FORMATTAZIONE PULITA: Vai dritto al punto. Non inserire alcun preambolo (es. 'Ecco la risposta:', 'Certamente,', 'Sulla base del contesto fornito...'), nessuna introduzione e nessuna conclusione di cortesia. Genera solo la risposta fattuale.\n"
-            "5. TONE: Mantieni un tono rigoroso, professionale, formale ed oggettivo.\n\n"
+            "5. METADATI DEL GRAFO: alcune fonti riportano una riga 'Istituti giuridici (TESEO)' o 'Disposizione richiamata da'. Sono annotazioni del grafo di conoscenza: usale per inquadrare correttamente l'istituto giuridico e i rapporti tra norme, ma NON inventare contenuti che non siano nel testo della fonte.\n"
+            "6. TONE: Mantieni un tono rigoroso, professionale, formale ed oggettivo.\n\n"
             f"CONTESTO UFFICIALE DA UTILIZZARE:\n{context}"
         )
         

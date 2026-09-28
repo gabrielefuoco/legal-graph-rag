@@ -1,0 +1,91 @@
+config,query_index,query,recall,mrr,hit_at_1,n_chunks,context_chars,hops,similarity
+1. BASELINE vettoriale+BM25 (nessun grafo),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,1048,0,0.545
+1. BASELINE vettoriale+BM25 (nessun grafo),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,1.0,1.0,1.0,3,4921,0,0.9344
+1. BASELINE vettoriale+BM25 (nessun grafo),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,0,0.8212
+1. BASELINE vettoriale+BM25 (nessun grafo),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,1.0,1.0,2,31698,0,0.7718
+1. BASELINE vettoriale+BM25 (nessun grafo),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,3019,0,0.636
+1. BASELINE vettoriale+BM25 (nessun grafo),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,3,21167,0,0.8158
+1. BASELINE vettoriale+BM25 (nessun grafo),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,19940,0,0.7784
+1. BASELINE vettoriale+BM25 (nessun grafo),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,0,0.7351
+1. BASELINE vettoriale+BM25 (nessun grafo),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,3,21878,0,0.836
+1. BASELINE vettoriale+BM25 (nessun grafo),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,1353,0,0.7302
+1. BASELINE vettoriale+BM25 (nessun grafo),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,1,52855,0,0.8107
+1. BASELINE vettoriale+BM25 (nessun grafo),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",1.0,1.0,1.0,1,6041,0,0.7673
+1. BASELINE vettoriale+BM25 (nessun grafo),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,3126,0,0.7251
+1. BASELINE vettoriale+BM25 (nessun grafo),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,0,0.671
+1. BASELINE vettoriale+BM25 (nessun grafo),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,17089,0,0.7986
+2. GraphRAG completo (stessa finestra),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,1,0.545
+2. GraphRAG completo (stessa finestra),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,4,14683,1,0.9194
+2. GraphRAG completo (stessa finestra),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+2. GraphRAG completo (stessa finestra),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,1.0,1.0,10,70138,1,0.1726
+2. GraphRAG completo (stessa finestra),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,1,0.6576
+2. GraphRAG completo (stessa finestra),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,18099,1,0.8158
+2. GraphRAG completo (stessa finestra),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,2,32732,1,0.8126
+2. GraphRAG completo (stessa finestra),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+2. GraphRAG completo (stessa finestra),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,3,34236,1,0.9134
+2. GraphRAG completo (stessa finestra),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,1,0.7302
+2. GraphRAG completo (stessa finestra),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,56408,1,0.8107
+2. GraphRAG completo (stessa finestra),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,3,12559,1,0.7675
+2. GraphRAG completo (stessa finestra),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,1,0.7284
+2. GraphRAG completo (stessa finestra),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,1,0.671
+2. GraphRAG completo (stessa finestra),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,13097,1,0.8252
+3. GraphRAG finestra larga (40/20),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,1,0.545
+3. GraphRAG finestra larga (40/20),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,11467,1,0.9194
+3. GraphRAG finestra larga (40/20),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+3. GraphRAG finestra larga (40/20),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,1.0,1.0,1,10937,1,0.7718
+3. GraphRAG finestra larga (40/20),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,1,0.6576
+3. GraphRAG finestra larga (40/20),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,18099,1,0.8158
+3. GraphRAG finestra larga (40/20),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,2,33401,1,0.8247
+3. GraphRAG finestra larga (40/20),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+3. GraphRAG finestra larga (40/20),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,4,86886,1,0.8268
+3. GraphRAG finestra larga (40/20),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,1,0.7302
+3. GraphRAG finestra larga (40/20),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,2,59027,1,0.8107
+3. GraphRAG finestra larga (40/20),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,2,8927,1,0.3712
+3. GraphRAG finestra larga (40/20),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,1,0.7284
+3. GraphRAG finestra larga (40/20),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,1,0.671
+3. GraphRAG finestra larga (40/20),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,22051,1,0.7727
+4. GraphRAG peso grafo 0.8,1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,1,0.545
+4. GraphRAG peso grafo 0.8,2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,11467,1,0.9194
+4. GraphRAG peso grafo 0.8,3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+4. GraphRAG peso grafo 0.8,4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,1.0,1.0,2,31698,1,0.7718
+4. GraphRAG peso grafo 0.8,5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,1,0.6576
+4. GraphRAG peso grafo 0.8,6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,18099,1,0.8158
+4. GraphRAG peso grafo 0.8,7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,1,19940,1,0.8232
+4. GraphRAG peso grafo 0.8,8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+4. GraphRAG peso grafo 0.8,9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,3,24684,1,0.9134
+4. GraphRAG peso grafo 0.8,10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,1,0.7302
+4. GraphRAG peso grafo 0.8,11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,3,64107,1,0.8107
+4. GraphRAG peso grafo 0.8,12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,1,2449,1,0.3712
+4. GraphRAG peso grafo 0.8,13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,1,0.7284
+4. GraphRAG peso grafo 0.8,14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,1,0.671
+4. GraphRAG peso grafo 0.8,15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,18852,1,0.7977
+5. GraphRAG TESEO preciso (0.6/3c),1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,1,0.545
+5. GraphRAG TESEO preciso (0.6/3c),2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,3,11467,1,0.9194
+5. GraphRAG TESEO preciso (0.6/3c),3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,1,0.8212
+5. GraphRAG TESEO preciso (0.6/3c),4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,1.0,1.0,8,62709,1,0.7677
+5. GraphRAG TESEO preciso (0.6/3c),5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,1,0.6576
+5. GraphRAG TESEO preciso (0.6/3c),6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,18099,1,0.8158
+5. GraphRAG TESEO preciso (0.6/3c),7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,2,32732,1,0.8126
+5. GraphRAG TESEO preciso (0.6/3c),8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,1,0.7351
+5. GraphRAG TESEO preciso (0.6/3c),9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,4,31070,1,0.9134
+5. GraphRAG TESEO preciso (0.6/3c),10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,1,0.7302
+5. GraphRAG TESEO preciso (0.6/3c),11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,1,40330,1,0.8107
+5. GraphRAG TESEO preciso (0.6/3c),12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",1.0,1.0,1.0,1,6041,1,0.7673
+5. GraphRAG TESEO preciso (0.6/3c),13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,2,7700,1,0.7284
+5. GraphRAG TESEO preciso (0.6/3c),14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,1.0,1.0,1,6843,1,0.671
+5. GraphRAG TESEO preciso (0.6/3c),15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,1.0,1.0,1,13097,1,0.8252
+6. GraphRAG multi-hop 2 salti,1,Le imprese siderurgiche che hanno l'autorizzazione per il carico e scarico merci possono utilizzare il proprio personale sulle banchine?,1.0,1.0,1.0,1,6124,2,0.545
+6. GraphRAG multi-hop 2 salti,2,Da quanti membri è composta la Commissione e da chi vengono scelti?,0.0,0.0,0.0,7,31895,2,0.7868
+6. GraphRAG multi-hop 2 salti,3,Quali sono le soglie di fatturato necessarie per avvalersi della procedura di cooperazione e collaborazione rafforzata per i gruppi multinazionali?,1.0,1.0,1.0,1,8402,2,0.8212
+6. GraphRAG multi-hop 2 salti,4,Entro quanti giorni dall'entrata in vigore del decreto le regioni devono predisporre un programma di interventi di edilizia residenziale pubblica nelle zone colpite da sisma?,1.0,1.0,1.0,4,39488,2,0.7677
+6. GraphRAG multi-hop 2 salti,5,Cosa si intende per imprese turistico-balneari secondo l'articolo 34-quater?,1.0,1.0,1.0,1,4417,2,0.6576
+6. GraphRAG multi-hop 2 salti,6,Cosa deve comprendere la relazione geologica del progetto definitivo negli appalti pubblici?,1.0,1.0,1.0,2,18099,2,0.8158
+6. GraphRAG multi-hop 2 salti,7,Qual è la durata minima del corso di formazione basico per il rilascio del brevetto di pilota di aeromobile?,1.0,1.0,1.0,2,32732,2,0.8126
+6. GraphRAG multi-hop 2 salti,8,"Oltre al decreto del 2001, da chi vengono determinate le modalità tecniche per la rilevazione dei dati statistici relativi agli eventi di nascita e nati morti?",1.0,1.0,1.0,1,1355,2,0.7351
+6. GraphRAG multi-hop 2 salti,9,A quanto ammonta la percentuale di detrazione dall'imposta lorda per le spese relative agli interventi di recupero del patrimonio edilizio?,1.0,1.0,1.0,3,34236,2,0.9134
+6. GraphRAG multi-hop 2 salti,10,Dopo quanti giorni dalla pubblicazione in Gazzetta Ufficiale entra in vigore questa legge del 1971?,1.0,1.0,1.0,2,2213,2,0.7302
+6. GraphRAG multi-hop 2 salti,11,"Quali sono le quattro classifiche di segretezza previste per la trattazione di informazioni, e cosa serve per accedervi?",1.0,1.0,1.0,1,50236,2,0.1849
+6. GraphRAG multi-hop 2 salti,12,"In base al D.P.R. 560/1992, da quali requisiti si può prescindere per l'equiparazione dei titoli aeronautici?",0.0,0.0,0.0,10,60994,2,0.2344
+6. GraphRAG multi-hop 2 salti,13,A chi deve dare comunicazione senza ritardo il pubblico ministero quando procede contro persone imputate del delitto di cui all'articolo 416-bis del codice penale?,1.0,1.0,1.0,10,133760,2,0.2036
+6. GraphRAG multi-hop 2 salti,14,"Per agevolare il rispetto della normativa sui controlli, cosa pubblicano i Ministeri competenti e le regioni sui propri siti istituzionali?",1.0,0.5,0.0,10,43485,2,0.2648
+6. GraphRAG multi-hop 2 salti,15,Con quali termini deve essere sostituita la parola 'handicap' secondo le nuove disposizioni sulla terminologia in materia di disabilità?,1.0,0.5,0.0,10,91628,2,0.2571

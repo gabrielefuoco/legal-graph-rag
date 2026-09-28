@@ -6,6 +6,7 @@ Two interchangeable backends are available (settings.RERANKER_BACKEND):
              dedicated rerank models, so the LLM judges all candidates in a single call.
 """
 
+import asyncio
 import logging
 import os
 import torch
@@ -252,12 +253,25 @@ async def rerank_node(state: RagState) -> dict:
     if state.get("analyzed_query"):
         instruction = state["analyzed_query"].reranker_instruction
 
-    # Execute reranking and filtering
+    # Execute reranking and filtering (the LLM backend is asynchronous)
     final_chunks = reranker.rerank(query, fused_chunks, instruction=instruction)
+    if asyncio.iscoroutine(final_chunks):
+        final_chunks = await final_chunks
     
     # Truncate to top final_k results
     final_k = state.get("final_k", 10)
     final_chunks = final_chunks[:final_k]
+
+    # Safety net: provisions resolved from the reference named in the question must reach the
+    # judge/generator even if the listwise reranker ranked them below the cut-off.
+    resolved = [c for c in fused_chunks if c.source == "citation_resolve"]
+    if resolved:
+        kept_ids = {c.expression_id for c in final_chunks}
+        for chunk in resolved:
+            if chunk.expression_id not in kept_ids:
+                final_chunks.append(chunk)
+                kept_ids.add(chunk.expression_id)
+                logger.info(f"🛡️ Rinvio risolto reinserito dopo il reranking: {chunk.expression_id}")
     
     # Safety net: guarantee retention of top vector anchor chunk
     vector_anchor_id = state.get("vector_anchor_id")

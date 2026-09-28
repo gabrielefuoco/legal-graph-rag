@@ -1,0 +1,5 @@
+config,graph_search,multi_hop,topological,grader_mode,min_keep,teseo_threshold,teseo_concepts,weight_graph,rerank_top_k,final_k,citation_limit,queries,avg_recall,avg_mrr,avg_hit_at_1,avg_chunks,avg_context_chars,avg_hops,avg_similarity,avg_gen_time_s
+1. Baseline TESTO-PURO (nessun campo del grafo),False,False,False,on,0,0.45,10,1.2,15,10,10,15,1.0,1.0,1.0,2,6508,0,0.7841,8.12
+2. Baseline con metadati di corpus (breadcrumb+vigenza),False,False,False,on,0,0.45,10,1.2,15,10,10,15,1.0,1.0,1.0,1.73,10348,0,0.7593,9.79
+3. GraphRAG completo (TESEO+citazioni+topologia),True,True,True,on,0,0.45,10,1.2,15,10,10,15,0.8667,0.8667,0.8667,2,14836,1,0.7359,6.32
+4. GraphRAG preciso + citazioni 1,True,True,True,on,0,0.6,3,1.2,15,10,1,15,1.0,1.0,1.0,1.73,12963,1,0.755,11.61

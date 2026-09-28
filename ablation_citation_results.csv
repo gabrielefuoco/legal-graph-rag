@@ -1,0 +1,6 @@
+config,graph_search,multi_hop,topological,grader_mode,min_keep,teseo_threshold,teseo_concepts,weight_graph,rerank_top_k,final_k,citation_limit,queries,avg_recall,avg_mrr,avg_hit_at_1,avg_chunks,avg_context_chars,avg_hops,avg_similarity,avg_gen_time_s
+1. TESEO preciso + citazioni 10 (attuale),True,True,True,on,0,0.6,3,1.2,30,10,10,15,0.9333,0.7667,0.6667,9.73,86575,1,0.209,0.72
+2. TESEO preciso + citazioni 3,True,True,True,on,0,0.6,3,1.2,30,10,3,15,0.9333,0.7667,0.6667,9.67,78394,1,0.209,0.67
+3. TESEO preciso + citazioni 2,True,True,True,on,0,0.6,3,1.2,30,10,2,15,0.9333,0.7667,0.6667,9.6,77231,1,0.209,0.67
+4. TESEO preciso + citazioni 1,True,True,True,on,0,0.6,3,1.2,30,10,1,15,1.0,0.8333,0.7333,9.47,78946,1,0.209,0.64
+5. TESEO preciso + citazioni 3 + w_graph 0.8,True,True,True,on,0,0.6,3,0.8,30,10,3,15,0.9333,0.8444,0.8,9.27,71572,1,0.209,0.46

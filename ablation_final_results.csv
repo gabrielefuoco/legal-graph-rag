@@ -1,0 +1,7 @@
+config,graph_search,multi_hop,topological,grader_mode,min_keep,teseo_threshold,teseo_concepts,weight_graph,rerank_top_k,final_k,queries,avg_recall,avg_mrr,avg_hit_at_1,avg_chunks,avg_context_chars,avg_hops,avg_similarity,avg_gen_time_s
+1. BASELINE vettoriale+BM25 (nessun grafo),False,False,False,on,0,0.45,10,1.2,30,10,15,1.0,1.0,1.0,1.6,13382,0,0.7584,8.67
+2. GraphRAG completo (stessa finestra),True,True,True,on,0,0.45,10,1.2,30,10,15,0.8667,0.8667,0.8667,2.4,19267,1,0.7284,9.36
+3. GraphRAG finestra larga (40/20),True,True,True,on,0,0.45,10,1.2,40,20,15,0.8667,0.8667,0.8667,1.73,19190,1,0.7334,18.55
+4. GraphRAG peso grafo 0.8,True,True,True,on,0,0.45,10,0.8,30,10,15,0.8667,0.8667,0.8667,1.67,15223,1,0.7408,5.98
+5. GraphRAG TESEO preciso (0.6/3c),True,True,True,on,0,0.6,3,1.2,30,10,15,0.9333,0.9333,0.9333,2.07,16840,1,0.768,9.23
+6. GraphRAG multi-hop 2 salti,True,True,True,on,0,0.45,10,1.2,30,10,15,0.8667,0.8,0.7333,4.33,37271,2,0.582,1.83
