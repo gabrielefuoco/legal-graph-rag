@@ -1,0 +1,7 @@
+classe,configurazione,domande,recall@10,MRR,Hit@1,chunk_medi,caratteri_contesto,salti_citazione,similarita
+A. Testo sufficiente (15),Baseline (denso+BM25),15,1.0,1.0,1.0,2.0,11494,0.0,0.7658
+A. Testo sufficiente (15),GraphRAG (config unica),15,1.0,1.0,1.0,2.67,13988,1.0,0.7667
+B. Rinvio nominato (12),Baseline (denso+BM25),12,0.0,0.0,0.0,1.83,4534,0.0,0.2591
+B. Rinvio nominato (12),GraphRAG (config unica),12,0.8333,0.6111,0.4167,3.83,7766,1.0,0.6611
+C. Multi-hop (20),Baseline (denso+BM25),20,0.15,0.1,0.05,1.9,38051,0.0,0.5115
+C. Multi-hop (20),GraphRAG (config unica),20,0.3,0.2167,0.15,3.6,59762,1.0,0.516

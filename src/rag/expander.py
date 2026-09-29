@@ -52,10 +52,13 @@ async def expand_citations(state: RagState) -> dict:
     why the correct provision was almost never among the injected chunks.
     """
     driver: AsyncDriver = state["_driver"]
-    # Seeds = chunks that survived the reranker *plus* the top of the wider fused set: the act that
-    # performs the citation is often pushed out of the final window, but expanding every fused
-    # chunk drags in dozens of cited acts, so the one the question is about gets lost.
-    source_chunks = list(state.get("final_chunks") or [])
+    # Seeds: the provisions resolved from the question (they are the reference being asked about)
+    # plus the best fused chunks. The pinned base chunks are deliberately *not* used here: they
+    # exist to protect recall, and using them as hop sources would drag in dozens of cited acts.
+    source_chunks = [
+        c for c in (state.get("final_chunks") or [])
+        if "citation_resolve" in (c.source or "")
+    ]
     fused = state.get("fused_chunks") or []
     hop_sources = getattr(settings, "CITATION_HOP_SOURCE_TOP_K", 5)
     for extra in fused[:hop_sources]:

@@ -30,6 +30,9 @@ from neo4j import AsyncGraphDatabase
 from src.config import settings
 from src.logging_config import setup_logging
 from src.rag.llm_factory import get_llm
+from src.rag.query_analyzer import analyze_query
+from src.rag.retriever import bm25_search, vector_search
+from src.rag.fusion import fuse_and_filter
 
 setup_logging()
 logger = logging.getLogger("build_multihop")
@@ -63,17 +66,18 @@ RETURN DISTINCT
 QUESTION_PROMPT = (
     "Sei un redattore di quesiti per la valutazione di un sistema RAG giuridico italiano. "
     "Devi scrivere una domanda MULTI-HOP: la risposta si trova in una norma RICHIAMATA da un'altra "
-    "norma, e NON nel testo che ti viene mostrato.\n\n"
+    "norma, e la domanda deve far capire quale norma è richiamata.\n\n"
     "Ti fornisco:\n"
-    "(A) l'ARTICOLO DELLA NORMA CHE RINVIA (contiene il rinvio, ma NON la risposta);\n"
+    "(A) l'ARTICOLO DELLA NORMA CHE RINVIA (contiene il rinvio);\n"
     "(B) il testo del RINVIO contenuto in (A), se disponibile;\n"
-    "(C) il TITOLO DELLA NORMA RICHIAMATA (dove sta la risposta).\n\n"
+    "(C) il TESTO DELLA NORMA RICHIAMATA, che contiene la risposta.\n\n"
     "Scrivi UNA domanda in italiano che:\n"
-    "(i) riguardi il tema e il lessico di (A);\n"
-    "(ii) chieda esplicitamente cosa prevede/dispone la norma richiamata (menziona il rinvio, "
-    "es. 'nella disciplina introdotta da ... che rinvia a ...');\n"
-    "(iii) NON contenga dettagli, numeri o termini tecnici che solo la norma richiamata può "
-    "fornire (la domanda deve essere formulata senza conoscerne il contenuto).\n\n"
+    "(i) riguardi l'istituto e i fatti della norma richiamata (C), usando la sua terminologia "
+    "tecnica (deve essere possibile riconoscere la disposizione dall'argomento);\n"
+    "(ii) dica esplicitamente che la risposta va cercata nella norma richiamata da (A) "
+    "(es. 'nella disciplina introdotta da ... che rinvia a ...'), così che si capisca che serve "
+    "seguire il rinvio;\n"
+    "(iii) NON copi frasi intere di (C) e non contenga la risposta, ma ne descriva l'argomento.\n\n"
     "Restituisci SOLO un oggetto JSON con la chiave \"question\"."
 )
 
@@ -93,7 +97,7 @@ async def generate_question(llm, seed_text: str, golden_text: str, cited_title: 
         HumanMessage(content=(
             f"(A) ARTICOLO DELLA NORMA CHE RINVIA:\n{seed_text}\n\n"
             f"(B) TESTO DEL RINVIO:\n{citation_text or 'non disponibile'}\n\n"
-            f"(C) TITOLO DELLA NORMA RICHIAMATA:\n{cited_title}"
+            f"(C) TESTO DELLA NORMA RICHIAMATA:\n{golden_text}"
         )),
     ]
     try:
@@ -142,6 +146,8 @@ async def main():
     parser.add_argument("--samples", type=int, default=40, help="Quante triple candidato provare")
     parser.add_argument("--output", default="data/eval_multihop.json")
     parser.add_argument("--report", default="multihop_benchmark_report.json")
+    parser.add_argument("--eligibility", choices=["cheap", "full"], default="cheap",
+                        help="cheap = solo canali base (veloce), full = pipeline completa con LLM")
     parser.add_argument("--queries-only", action="store_true", help="Salva solo le query ammissibili già trovate")
     args = parser.parse_args()
 
@@ -191,19 +197,37 @@ async def main():
     eligible, discarded = [], []
     try:
         for idx, item in enumerate(generated, 1):
-            chunks, _, _ = await engine.retrieve_with_trace(
-                query=item["question"],
-                top_k=settings.RAG_TOP_K,
-                final_k=10,
-                enable_graph_search=False,      # no TESEO concepts, no TESEO query expansion
-                enable_multi_hop=False,          # no citation hops
-                enable_topological_expansion=False,
-                skip_generation=True,
-            )
+            if args.eligibility == "cheap":
+                # Base channels only (no LLM reranker/grader): the golden must not be reachable
+                # by plain retrieval, the seed must be. ~5s instead of ~40s per question.
+                state = {
+                    "query": item["question"],
+                    "top_k": settings.RAG_TOP_K,
+                    "final_k": 10,
+                    "_driver": driver,
+                    "_analyzer": engine.analyzer,
+                    "enable_graph_search": False,
+                }
+                state.update(await analyze_query(state))
+                for fn in (vector_search, bm25_search):
+                    res = fn(state)
+                    state.update(res if isinstance(res, dict) else await res)
+                chunks = fuse_and_filter(state)["fused_chunks"][:10]
+            else:
+                chunks, _, _ = await engine.retrieve_with_trace(
+                    query=item["question"],
+                    top_k=settings.RAG_TOP_K,
+                    final_k=10,
+                    enable_graph_search=False,      # no TESEO concepts, no TESEO query expansion
+                    enable_multi_hop=False,          # no citation hops
+                    enable_topological_expansion=False,
+                    skip_generation=True,
+                )
             ids = set()
             for c in chunks:
                 ids.add(c.expression_id)
                 ids.add(c.expression_id.replace("merged_", ""))
+                ids.update(c.metadata.get("merged_ids") or [])
             golden_found = item["golden_id"] in ids
             seed_found = item["seed_id"] in ids
             verdict = {
