@@ -264,7 +264,7 @@ async def rerank_node(state: RagState) -> dict:
 
     # Safety net: provisions resolved from the reference named in the question must reach the
     # judge/generator even if the listwise reranker ranked them below the cut-off.
-    resolved = [c for c in fused_chunks if c.source == "citation_resolve"]
+    resolved = [c for c in fused_chunks if "citation_resolve" in (c.source or "")]
     if resolved:
         kept_ids = {c.expression_id for c in final_chunks}
         for chunk in resolved:
@@ -273,6 +273,21 @@ async def rerank_node(state: RagState) -> dict:
                 kept_ids.add(chunk.expression_id)
                 logger.info(f"🛡️ Rinvio risolto reinserito dopo il reranking: {chunk.expression_id}")
     
+    # Safety net: the best chunks of the base channels are a floor. Graph-injected context may add
+    # to them but must never push them out of the window (that was the recall loss).
+    priority_ids = state.get("priority_base_ids") or []
+    if priority_ids:
+        kept_ids = {c.expression_id for c in final_chunks}
+        for priority_id in priority_ids:
+            if priority_id in kept_ids or f"merged_{priority_id}" in kept_ids:
+                continue
+            for c in fused_chunks:
+                if c.expression_id == priority_id or c.expression_id == f"merged_{priority_id}":
+                    final_chunks.append(c)
+                    kept_ids.add(c.expression_id)
+                    logger.info(f"🛡️ Chunk base prioritario mantenuto dopo il reranking: {c.expression_id}")
+                    break
+
     # Safety net: guarantee retention of top vector anchor chunk
     vector_anchor_id = state.get("vector_anchor_id")
     if vector_anchor_id:

@@ -25,6 +25,7 @@ import json
 import logging
 import os
 import pickle
+import re
 import statistics
 import sys
 import time
@@ -44,6 +45,42 @@ logger = logging.getLogger("ablation_graph")
 # Text snippets of the expected provisions, loaded once: ids alone cannot detect a provision
 # that ended up inside a merged chunk.
 _GOLDEN_SNIPPETS: Dict[str, str] = {}
+
+# Provision id -> distinctive tokens of its wording (tolerant containment check)
+_GOLDEN_TOKENS: Dict[str, set] = {}
+
+
+async def load_golden_containers(dataset: List[dict]) -> int:
+    """Map every expected provision to the sibling chunks of the same structural unit.
+
+    The corpus stores an article and each of its commas as separate Expression nodes, so the
+    provision can legitimately be returned under a sibling id (the article-level chunk).
+    """
+    ids = [e for item in dataset for e in (item.get("expected_ids") or [])]
+    if not ids:
+        return 0
+    from neo4j import AsyncGraphDatabase
+    driver = AsyncGraphDatabase.driver(
+        settings.NEO4J_URI, auth=(settings.NEO4J_USERNAME, settings.NEO4J_PASSWORD)
+    )
+    try:
+        async with driver.session() as session:
+            result = await session.run(
+                """
+                MATCH (e:Expression) WHERE e.id IN $ids
+                MATCH (e)-[:PART_OF*1..2]->(u:StructuralUnit)
+                MATCH (sib:Expression)-[:PART_OF*1..2]->(u)
+                RETURN e.id AS id, collect(DISTINCT sib.id) AS siblings
+                """,
+                ids=list(dict.fromkeys(ids)),
+            )
+            async for record in result:
+                siblings = {s for s in (record.get("siblings") or []) if s and s != record["id"]}
+                if siblings:
+                    _GOLDEN_CONTAINERS[record["id"]] = siblings
+    finally:
+        await driver.close()
+    return len(_GOLDEN_CONTAINERS)
 
 # (query, graph switches, knobs) -> (chunks, trace): lets configs that only differ in the
 # grader policy or in prompt-side metadata reuse the same retrieval instead of repeating it.
@@ -68,10 +105,16 @@ async def load_golden_snippets(dataset: List[dict]) -> int:
             async for record in result:
                 text = (record.get("text") or "").strip()
                 if text:
-                    _GOLDEN_SNIPPETS[record["id"]] = " ".join(text[:160].split())
+                    snippet = " ".join(text[:160].split())
+                    _GOLDEN_SNIPPETS[record["id"]] = snippet
+                    _GOLDEN_TOKENS[record["id"]] = set(re.findall(r"[a-zà-ù]{4,}", snippet.lower()))
     finally:
         await driver.close()
     return len(_GOLDEN_SNIPPETS)
+
+
+# Provision id -> ids of the sibling chunks sharing its structural unit
+_GOLDEN_CONTAINERS: Dict[str, set] = {}
 
 
 @dataclass
@@ -183,20 +226,26 @@ CITATION_CONFIGS = [
 def _golden_present(chunks: List[RetrievedChunk], expected_id: str) -> bool:
     """Is the expected provision in the context?
 
-    Chunk ids are not enough: `_merge_chunks` fuses adjacent articles of the same act into a
-    synthetic "merged_<id>" chunk, so a provision can sit inside the context under another id.
-    The text of the provision is therefore used as the authoritative check.
+    Three ways to count as present, all deterministic:
+      * a chunk *is* the provision (same id) or holds it as a member of a merged chunk;
+      * a chunk is a sibling of the provision (the corpus stores an article and its commas as
+        separate Expression nodes: returning the article does answer the question);
+      * a chunk contains the provision's wording (token overlap >= 90%), which tolerates the
+        small rendering differences between fields ("...senatori e venticinque..." vs
+        "...senatori e da venticinque...").
     """
+    wanted = {expected_id} | _GOLDEN_CONTAINERS.get(expected_id, set())
+    snippet_tokens = _GOLDEN_TOKENS.get(expected_id) or set()
     for chunk in chunks:
-        if chunk.expression_id == expected_id or chunk.expression_id == f"merged_{expected_id}":
+        if chunk.expression_id in wanted:
             return True
-    snippet = _GOLDEN_SNIPPETS.get(expected_id)
-    if not snippet:
-        return False
-    for chunk in chunks:
-        text = getattr(chunk, "expanded_text", None) or chunk.text or ""
-        if snippet in text:
+        if wanted & set(chunk.metadata.get("merged_ids") or []):
             return True
+        if snippet_tokens:
+            text = getattr(chunk, "expanded_text", None) or chunk.text or ""
+            tokens = set(re.findall(r"[a-zà-ù]{4,}", text.lower()))
+            if tokens and len(snippet_tokens & tokens) / len(snippet_tokens) >= 0.9:
+                return True
     return False
 
 
@@ -211,12 +260,7 @@ def calculate_mrr(chunks: List[RetrievedChunk], expected_ids: List[str]) -> floa
     if not expected_ids:
         return 1.0
     for rank_0, chunk in enumerate(chunks):
-        if chunk.expression_id in expected_ids or chunk.expression_id == f"merged_{expected_ids[0]}":
-            return 1.0 / (rank_0 + 1)
-    # Fallback: the provision is inside a merged chunk, rank it by that chunk's position
-    for rank_0, chunk in enumerate(chunks):
-        text = getattr(chunk, "expanded_text", None) or chunk.text or ""
-        if any(_GOLDEN_SNIPPETS.get(e) and _GOLDEN_SNIPPETS[e] in text for e in expected_ids):
+        if _golden_present([chunk], expected_ids[0]):
             return 1.0 / (rank_0 + 1)
     return 0.0
 

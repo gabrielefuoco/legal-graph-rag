@@ -67,7 +67,9 @@ class Settings(BaseSettings):
     CITATION_EXPANSION_LIMIT: int = 10          # Max chunks pulled in per citation hop (global budget)
     CITATION_EXPANSION_PER_ACT: int = 3         # Max chunks taken from each single cited act
     CITATION_HOP_SOURCE_TOP_K: int = 5          # Expand citations of the N best fused chunks only
+    PRIORITY_BASE_CHUNKS: int = 6               # Best base-channel chunks that graph chunks may not displace
     RESOLVE_QUERY_CITATIONS: bool = True        # Resolve acts/articles named in the question via the graph
+    RESOLVED_ACT_ARTICLES: int = 3              # Articles injected per resolved act (by relevance)
     GRAPH_METADATA_IN_CONTEXT: bool = False     # Surface TESEO institutes / citation links to the
                                                 # generator (measured neutral: keep off)
     PURE_TEXT_BASELINE: bool = False            # Strip every graph-derived field (breadcrumb, URN,

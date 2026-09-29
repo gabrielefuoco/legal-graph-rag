@@ -1,0 +1,134 @@
+[
+  {
+    "query": "Cosa stabilisce l'articolo 129 della decreto legislativo 3 aprile 2006, n. 152?",
+    "expected_ids": [
+      "b6782b9f602fe3ad"
+    ],
+    "golden_answer": "ART. 129 (accessi ed ispezioni) 1. L'autorita' competente al controllo e' autorizzata a effettuare le ispezioni, i controlli e i prelievi necessari all'accertamento del rispetto dei valori limite di emissione, delle prescrizioni contenute nei provvedimenti autorizzatori o regolamentari e delle condizioni che danno luogo alla formazione degli scarichi. Il titolare dello scarico e' tenuto a fornire le informazioni richieste e a consentire l'accesso ai luoghi dai quali origina lo scarico.",
+    "_reference": "decreto legislativo 3 aprile 2006, n. 152",
+    "_article": "129",
+    "_act_urn": "urn:nir:stato:decreto.legislativo:2006-04-03;152",
+    "_act_title": "Norme in materia ambientale."
+  },
+  {
+    "query": "Riassumi quanto disposto dall'articolo 11 della legge 25 novembre 2024, n. 177.",
+    "expected_ids": [
+      "b39bad8ffafa7c0c"
+    ],
+    "golden_answer": "Art. 11 Accertamento delle violazioni della velocita' nella navigazione 1. In considerazione dell'esigenza della salvaguardia di Venezia e della sua laguna, per l'accertamento dell'inosservanza dei limiti di velocita' nelle vie d'acqua di cui all'articolo 1 della legge 5 marzo 1963, n. 366, possono essere utilizzate, anche per la determinazione della velocita' media su tratti determinati, apparecchiature di rilevamento approvate od omologate dal Ministero delle infrastrutture e dei trasporti o da idoneo ente dallo stesso vigilato. 2. In via sperimentale, nelle more della conclusione della procedura di approvazione od omologazione, per un periodo di ventiquattro mesi dalla data di entrata in vigore della presente legge, possono essere utilizzate apparecchiature di rilevamento della velocita' di navigazione, previa istanza al Ministero delle infrastrutture e dei trasporti corredata di una relazione tecnica e delle certificazioni di enti riconosciuti o di laboratori autorizzati, attestanti le prove alle quali le apparecchiature sono state sottoposte, nonche' di ogni altro elemento idoneo a dimostrare l'utilita' e l'efficienza delle stesse. 3. Al valore della velocita' rilevato mediant",
+    "_reference": "legge 25 novembre 2024, n. 177",
+    "_article": "11",
+    "_act_urn": "urn:nir:stato:legge:2024-11-25;177",
+    "_act_title": "Interventi in materia di sicurezza stradale e delega al  Governo  per\nla revisione del codice della strada, di cui al  decreto  legislativo\n30 aprile 1992, n. 285. (24G00199)"
+  },
+  {
+    "query": "Cosa stabilisce l'articolo 25 della legge 17 settembre 2024, n. 133?",
+    "expected_ids": [
+      "7dd85d976ed9ca84"
+    ],
+    "golden_answer": "Art. 25 Uso commerciale delle imbarcazioni e delle navi da diporto 1. L'articolo 24 del decreto del Ministro delle infrastrutture e dei trasporti 29 luglio 2008, n. 146, e' sostituito dal seguente: «Art. 24 (Uso commerciale delle imbarcazioni e delle navi da diporto). - 1. Ai fini delle annotazioni di cui all'articolo 2, comma 2, del codice, il proprietario, l'utilizzatore in locazione finanziaria o l'armatore presenta domanda a uno STED. 2. La domanda di cui al comma 1 e' corredata dai seguenti documenti: a) certificato di iscrizione nel registro delle imprese della camera di commercio industria artigianato e agricoltura o dichiarazione sostitutiva di certificazione ai sensi del decreto del Presidente della Repubblica 28 dicembre 2000, n. 445, da cui risulti che l'impresa individuale o la societa' richiedente ha nell'oggetto sociale le attivita' commerciali di cui all'articolo 2, comma 1, del codice che si intendono esercitare e gli estremi dell'iscrizione nel suddetto registro; b) licenza di navigazione dell'imbarcazione o della nave da diporto che si intende adibire a uso commerciale; c) nel caso di cui all'articolo 2, comma 1, lettera b), del codice, l'autorizzazione rilasciata",
+    "_reference": "legge 17 settembre 2024, n. 133",
+    "_article": "25",
+    "_act_urn": "urn:nir:stato:legge:2024-09-17;133",
+    "_act_title": "Regolamento di modifica al decreto 29 luglio 2008, n. 146 concernente\nil regolamento di attuazione dell'articolo 65 del decreto legislativo\n18 luglio 2005, n. 171, recante il codice della nautica  da  diporto.\n(24G00152)"
+  },
+  {
+    "query": "Quali disposizioni prevede l'articolo 7-bis della decreto-legge 6 giugno 2012, n. 74?",
+    "expected_ids": [
+      "4be07dc43272349d"
+    ],
+    "golden_answer": "Art. 7-bis. (( (Crediti vantati dalle imprese). )) ((1. La pubblica amministrazione, inclusi le regioni, gli enti locali e gli enti del Servizio sanitario nazionale, provvede al pagamento dei crediti certi, liquidi ed esigibili vantati dalle imprese fornitrici di beni e servizi o esecutrici di opere pubbliche, ubicate nei territori colpiti dagli eventi sismici del maggio 2012 di cui all'allegato l al decreto del Ministro dell'economia e delle finanze 1° giugno 2012, pubblicato nella Gazzetta Ufficiale n. 130 del 6 giugno 2012, entro il termine di sessanta giorni, fermo restando il rispetto dei saldi di finanza pubblica e, per gli enti territoriali, compatibilmente con i vincoli derivanti dall'applicazione del patto di stabilita' interno)).",
+    "_reference": "decreto-legge 6 giugno 2012, n. 74",
+    "_article": "7-bis",
+    "_act_urn": "urn:nir:stato:decreto.legge:2012-06-06;74",
+    "_act_title": "Interventi urgenti in favore delle popolazioni colpite  dagli  eventi\nsismici  che  hanno  interessato  il  territorio  delle  province  di\nBologna, Modena, Ferrara, Mantova, Reggio Emilia e Rovigo, il 20 e il\n29 maggio 2012. (12G0096)"
+  },
+  {
+    "query": "Quali disposizioni prevede l'articolo 13 della legge 29 luglio 2021, n. 149?",
+    "expected_ids": [
+      "d5525300806db896"
+    ],
+    "golden_answer": "Art. 13 ((PROVVEDIMENTO ABROGATO DAL D.P.C.M. 30 OTTOBRE 2023, N. 174)) ((1)) ------------- AGGIORNAMENTO (1) Il D.P.C.M. 30 ottobre 2023, n. 174 ha disposto (con l'art. 9, comma 2) che \"Le strutture organizzative operanti in forza del decreto del Presidente del Consiglio dei ministri 29 luglio 2021, n. 149 continuano ad operare fino alla conclusione delle procedure di conferimento degli incarichi dirigenziali di livello generale relativi alla nuova organizzazione del Ministero\".",
+    "_reference": "legge 29 luglio 2021, n. 149",
+    "_article": "13",
+    "_act_urn": "urn:nir:stato:legge:2021-07-29;149",
+    "_act_title": "Regolamento di organizzazione del Ministero dello sviluppo economico.\n(21G00160)"
+  },
+  {
+    "query": "Quali disposizioni prevede l'articolo 20 della legge 5 febbraio 2018, n. 22?",
+    "expected_ids": [
+      "8a6bc82e06cb1ccb"
+    ],
+    "golden_answer": "Art. 20 Ammissibilita' sulla base dell'ubicazione delle operazioni 1. Sono ammissibili le spese relative alle operazioni cofinanziate dai Fondi SIE situate nell'area geografica, o categoria di regioni nel caso del FESR e FSE, dove interviene il programma operativo, conformemente all'articolo 70, paragrafo 1, del regolamento (UE) n. 1303/2013. 2. Le deroghe alla regola generale di cui al comma 1, per il FESR, nell'ambito dell'obiettivo «Investimenti in favore della crescita e dell'occupazione», per il FEAMP e per il FEASR sono consentite alle condizioni ed entro i limiti di cui all'articolo 70, paragrafi 2 e 3, del regolamento (UE) n. 1303/2013 e nel rispetto delle regole specifiche di ciascun Fondo. In particolare, ulteriori disposizioni specifiche applicabili al FEAMP e al FEASR sono previste, rispettivamente, dagli articoli 64, 74 e 75 del regolamento (UE) n. 508/2014 e dagli articoli 44 e 56 del regolamento (UE) n. 1305/2013. 3. Le deroghe specifiche per il FSE sono stabilite dall'articolo 13, paragrafi 2 e 3, del regolamento (UE) n. 1304/2013. 4. Per i programmi dell'obiettivo «Cooperazione territoriale europea» si applicano le disposizioni specifiche previste a norma dell'arti",
+    "_reference": "legge 5 febbraio 2018, n. 22",
+    "_article": "20",
+    "_act_urn": "urn:nir:stato:legge:2018-02-05;22",
+    "_act_title": "Regolamento recante i criteri sull'ammissibilita' delle spese  per  i\nprogrammi cofinanziati dai Fondi strutturali di investimento  europei\n(SIE) per il periodo di programmazione 2014/2020. (18G00048)"
+  },
+  {
+    "query": "Riassumi quanto disposto dall'articolo 38 della legge 17 luglio 1890, n. 6972.",
+    "expected_ids": [
+      "7e05febb1e081836"
+    ],
+    "golden_answer": "Art. 38. IL REGIO DECRETO 30 DICEMBRE 1923, N. 2841 HA DISPOSTO (CON L'ART. 19) CHE IL PRESENTE ARTICOLO E' SOSTITUITO DALL'ATTUALE ART. 36 DELLA L. 17 LUGLIO 1890, N. 6972. (3) ((4)) --------------- AGGIORNAMENTO (3) Il Regio Decreto 30 dicembre 1923, n. 2841 ha disposto (con l'art. 44, comma 2 e 3) che \"Il presente decreto avra' completa esecuzione a decorrere dal 1° luglio 1924. Il Ministro dell'interno ha facolta' di dare parziale esecuzione al decreto stesso anche prima, a misura che vengano compiuti gli atti preparatori per l'esecuzione di esso\". --------------- AGGIORNAMENTO (4) Il Decreto 11 febbraio 1924 (in G.U. 19/02/19, n. 42), nel modificare l'art. 44 del Regio Decreto 30 dicembre 1923, n. 2841, ha conseguentemente disposto (con l'art. 1, comma 1) che \"E' data esecuzione, a decorrere dal 1° marzo 1924, alle disposizioni contenute negli articoli 1, 3, 4, 5, 6, 9, 11, 12, 13, 14, 15, 16, 17, 18 (ultimo comma), 19, 20, 21, 22, 23, 25, 28, 29, 30, 31, 32, 33, 34, 39, 40, 41, 43, 44 del predetto R. decreto 30 dicembre 1923, n. 2841, fatta eccezione per quelle di cui nei due ultimi capoversi dell'art. 5, alle lettere c) e d) dell'art. 19, negli ultimi dieci capoversi dell'ar",
+    "_reference": "legge 17 luglio 1890, n. 6972",
+    "_article": "38",
+    "_act_urn": "urn:nir:stato:legge:1890-07-17;6972",
+    "_act_title": "Sulle Opere Pie. (090U6972)"
+  },
+  {
+    "query": "Riassumi quanto disposto dall'articolo 488 della legge 15 marzo 2010, n. 90.",
+    "expected_ids": [
+      "be7cb3e63f63655b"
+    ],
+    "golden_answer": "Art. 488 Approvvigionamento dei generi alimentari 1. In ottemperanza alle direttive del servizio amministrativo dell'ente, il gestore della mensa provvede ad approvvigionare e custodire i generi alimentari necessari per la confezione dei pasti, secondo il programma definito dalla commissione amministrativa. 2. Il gestore della mensa provvede a ritirare dall'ufficio cassa del servizio amministrativo delle unita', se non sono previste modalita' diverse di funzionamento, anticipazioni di massima decadali per gli acquisti di generi alimentari in contanti in relazione all'entita' della spesa e al numero dei conviventi, sulla base di un prospetto dimostrativo dal quale risulti la prevedibile media giornaliera dei partecipanti alla mensa. 3. Gli acquisti dal commercio sono effettuati previa ricerca di mercato da effettuare con cadenza annuale e da indirizzare ad almeno tre ditte per settore merceologico e in relazione ai generi di piu' largo e frequente consumo. Le offerte ricevute formano oggetto di valutazione tecnico-economica secondo canoni di corretta amministrazione. 4. Alla fine di ciascun mese tutti i documenti contabili sono presentati al servizio amministrativo dell'unita'. 5. D",
+    "_reference": "legge 15 marzo 2010, n. 90",
+    "_article": "488",
+    "_act_urn": "urn:nir:stato:legge:2010-03-15;90",
+    "_act_title": "Testo  unico  delle  disposizioni   regolamentari   in   materia   di\r\nordinamento  militare,  a  norma  dell'articolo  14  della  legge  28\r\nnovembre 2005, n. 246. (10G0091)"
+  },
+  {
+    "query": "Qual è il contenuto dell'articolo 20 della decreto-legge 18 aprile 2019, n. 32?",
+    "expected_ids": [
+      "66d3d2a3dfe37c9b"
+    ],
+    "golden_answer": "Art. 20 Sospensione dei termini 1. I redditi dei fabbricati ubicati nei comuni di cui all'allegato 1, purche' relativi ad immobili distrutti o fatti oggetto di ordinanze sindacali di sgombero comunque adottate entro il 30 giugno 2019, in quanto inagibili totalmente o parzialmente a causa degli eventi di cui al presente Capo, non concorrono alla formazione del reddito imponibile ne' ai fini del calcolo dell'imposta sul reddito delle persone fisiche e dell'imposta sul reddito delle societa' ne' del calcolo dell'indicatore della situazione economica equivalente (ISEE), fino alla definitiva ricostruzione e agibilita' dei fabbricati medesimi e non oltre l'anno di imposta 2020. I fabbricati di cui al primo periodo sono, altresi', esenti dall'applicazione dell'imposta municipale propria di cui all'articolo 13 del decreto-legge 6 dicembre 2011, n. 201, convertito, con modificazioni, dalla legge 22 dicembre 2011, n. 214, e dal tributo per i servizi indivisibili di cui all'articolo 1, comma 639, della legge 27 dicembre 2013, n. 147, a decorrere dalla rata in scadenza successivamente al 31 dicembre 2018 fino alla definitiva ricostruzione o agibilita' dei fabbricati stessi e comunque non oltre",
+    "_reference": "decreto-legge 18 aprile 2019, n. 32",
+    "_article": "20",
+    "_act_urn": "urn:nir:stato:decreto.legge:2019-04-18;32",
+    "_act_title": "Disposizioni urgenti  per  il  rilancio  del  settore  dei  contratti\npubblici, per l'accelerazione degli interventi  infrastrutturali,  di\nrigenerazione urbana e di ricostruzione a seguito di eventi  sismici.\n(19G00040)"
+  },
+  {
+    "query": "Riassumi quanto disposto dall'articolo 28 della legge 18 marzo 2025, n. 40.",
+    "expected_ids": [
+      "1161c7e6d3ab73ff"
+    ],
+    "golden_answer": "Art. 28 Entrata in vigore 1. La presente legge entra in vigore il giorno successivo a quello della sua pubblicazione nella Gazzetta Ufficiale. La presente legge, munita del sigillo dello Stato, sara' inserita nella Raccolta ufficiale degli atti normativi della Repubblica italiana. E' fatto obbligo a chiunque spetti di osservarla e di farla osservare come legge dello Stato. Data a Roma, addi' 18 marzo 2025 MATTARELLA Meloni, Presidente del Consiglio dei ministri Musumeci, Ministro per la protezione civile e le politiche del mare Visto, il Guardasigilli: Nordio",
+    "_reference": "legge 18 marzo 2025, n. 40",
+    "_article": "28",
+    "_act_urn": "urn:nir:stato:legge:2025-03-18;40",
+    "_act_title": "Legge quadro in materia di ricostruzione post-calamita'. (25G00047)"
+  },
+  {
+    "query": "Quali disposizioni prevede l'articolo 34-bis della decreto-legge 25 maggio 2021, n. 73?",
+    "expected_ids": [
+      "2c54986321e3ca0f"
+    ],
+    "golden_answer": "Art. 34-bis (( (Disposizioni in materia di sorveglianza epidemiologica del SARS-CoV-2 e delle relative varianti genetiche e di monitoraggio delle risposte immunologiche al COVID-19 e ai vaccini). )) ((1. Al fine di assicurare la sorveglianza epidemiologica della circolazione del virus SARS-CoV-2 e delle relative varianti genetiche, l'Istituto superiore di sanita' si avvale di una rete di laboratori di microbiologia e di centri di sequenziamento genomico individuati ai sensi del comma 2. Allo scopo di promuovere il monitoraggio delle risposte immunologiche all'infezione da SARS-CoV-2 e ai vaccini somministrati per la prevenzione del medesimo virus, nonche' attivita' di formazione e ricerca nel settore specifico che comprendono studi sui meccanismi patogenetici dell'infezione da SARS-CoV-2 e sull'individuazione di nuove strategie diagnostiche, preventive e terapeutiche, l'Istituto superiore di sanita' coordina lo svolgimento di attivita' in collaborazione con laboratori e centri appositamente identificati nel territorio nazionale, anche mediante bandi pubblici. 2. Ai fini di cui al comma 1, ciascuna regione e provincia autonoma costituisce una rete di laboratori di microbiologia e di",
+    "_reference": "decreto-legge 25 maggio 2021, n. 73",
+    "_article": "34-bis",
+    "_act_urn": "urn:nir:stato:decreto.legge:2021-05-25;73",
+    "_act_title": "Misure urgenti connesse all'emergenza da COVID-19, per le imprese, il\nlavoro, i giovani, la salute e i servizi territoriali. (21G00084)"
+  },
+  {
+    "query": "Riassumi quanto disposto dall'articolo 3 della decreto-legge 27 febbraio 1968, n. 79.",
+    "expected_ids": [
+      "21704ae5dd9698c0"
+    ],
+    "golden_answer": "Art. 3. Nei comuni indicati nei decreti di cui all'art. 1 il Ministro per i lavori pubblici e' autorizzato a provvedere alla concessione di contributi sulla spesa per la ricostruzione o riparazione di fabbricati adibiti ad uso di civile abitazione o ad esercizio artigianale o commerciale o professionale, relativamente alle opere necessarie ai fini dell'abitabilita' o dell'uso, col limite di L. 6.000.000 per ciascuna unita' immobiliare distrutta o danneggiata per i nuclei familiari comprendenti sino a cinque membri. Tale limite e' elevato a lire 7 milioni quando ricorrano le condizioni previste dalla lettera a) del quinto comma del presente articolo. (7) Il contributo di cui al comma precedente e' elevato a L. 7.000.000 nei confronti dei proprietari di una sola unita' immobiliare adibita ad uso di abitazione della propria famiglia il cui nucleo familiare sia di numero superiore a cinque membri. Tale limite e' elevato a lire 8 milioni quando ricorrano le condizioni previste dalla lettera a) del quinto comma del presente articolo. (7) Ai proprietari di unita' immobiliari destinate ad uso di abitazione che avessero da quattro a sette vani utili possono essere concessi contributi per la",
+    "_reference": "decreto-legge 27 febbraio 1968, n. 79",
+    "_article": "3",
+    "_act_urn": "urn:nir:stato:decreto.legge:1968-02-27;79",
+    "_act_title": "Ulteriori  interventi  e  provvidenze  per  la ricostruzione e per la\nripresa  economica dei comuni della Sicilia colpiti dai terremoti del\ngennaio 1968."
+  }
+]

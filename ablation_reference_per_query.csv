@@ -1,0 +1,25 @@
+config,query_index,query,recall,mrr,hit_at_1,n_chunks,context_chars,hops,similarity
+1. dense+BM25 (query nuda),1,"Cosa stabilisce l'articolo 129 della decreto legislativo 3 aprile 2006, n. 152?",0.0,0.0,0.0,1,1138,0,0.2363
+1. dense+BM25 (query nuda),2,"Riassumi quanto disposto dall'articolo 11 della legge 25 novembre 2024, n. 177.",0.0,0.0,0.0,1,1199,0,0.1961
+1. dense+BM25 (query nuda),3,"Cosa stabilisce l'articolo 25 della legge 17 settembre 2024, n. 133?",0.0,0.0,0.0,1,955,0,0.2202
+1. dense+BM25 (query nuda),4,"Quali disposizioni prevede l'articolo 7-bis della decreto-legge 6 giugno 2012, n. 74?",0.0,0.0,0.0,1,271,0,0.2279
+1. dense+BM25 (query nuda),5,"Quali disposizioni prevede l'articolo 13 della legge 29 luglio 2021, n. 149?",0.0,0.0,0.0,1,410,0,0.2437
+1. dense+BM25 (query nuda),6,"Quali disposizioni prevede l'articolo 20 della legge 5 febbraio 2018, n. 22?",0.0,0.0,0.0,1,664,0,0.1893
+1. dense+BM25 (query nuda),7,"Riassumi quanto disposto dall'articolo 38 della legge 17 luglio 1890, n. 6972.",0.0,0.0,0.0,1,287,0,0.4031
+1. dense+BM25 (query nuda),8,"Riassumi quanto disposto dall'articolo 488 della legge 15 marzo 2010, n. 90.",0.0,0.0,0.0,1,684,0,0.1915
+1. dense+BM25 (query nuda),9,"Qual è il contenuto dell'articolo 20 della decreto-legge 18 aprile 2019, n. 32?",0.0,0.0,0.0,1,1337,0,0.2104
+1. dense+BM25 (query nuda),10,"Riassumi quanto disposto dall'articolo 28 della legge 18 marzo 2025, n. 40.",0.0,0.0,0.0,1,14048,0,0.2085
+1. dense+BM25 (query nuda),11,"Quali disposizioni prevede l'articolo 34-bis della decreto-legge 25 maggio 2021, n. 73?",0.0,0.0,0.0,1,1389,0,0.1841
+1. dense+BM25 (query nuda),12,"Riassumi quanto disposto dall'articolo 3 della decreto-legge 27 febbraio 1968, n. 79.",0.0,0.0,0.0,2,12233,0,0.5926
+3. + espansione citazioni (multi-hop),1,"Cosa stabilisce l'articolo 129 della decreto legislativo 3 aprile 2006, n. 152?",1.0,1.0,1.0,3,4929,1,0.7415
+3. + espansione citazioni (multi-hop),2,"Riassumi quanto disposto dall'articolo 11 della legge 25 novembre 2024, n. 177.",1.0,0.5,0.0,4,7894,1,0.7857
+3. + espansione citazioni (multi-hop),3,"Cosa stabilisce l'articolo 25 della legge 17 settembre 2024, n. 133?",1.0,1.0,1.0,3,3026,1,0.7624
+3. + espansione citazioni (multi-hop),4,"Quali disposizioni prevede l'articolo 7-bis della decreto-legge 6 giugno 2012, n. 74?",1.0,1.0,1.0,3,2240,1,0.7215
+3. + espansione citazioni (multi-hop),5,"Quali disposizioni prevede l'articolo 13 della legge 29 luglio 2021, n. 149?",1.0,1.0,1.0,2,965,1,0.6887
+3. + espansione citazioni (multi-hop),6,"Quali disposizioni prevede l'articolo 20 della legge 5 febbraio 2018, n. 22?",1.0,0.5,0.0,3,3305,1,0.9316
+3. + espansione citazioni (multi-hop),7,"Riassumi quanto disposto dall'articolo 38 della legge 17 luglio 1890, n. 6972.",1.0,0.5,0.0,3,1906,1,0.4803
+3. + espansione citazioni (multi-hop),8,"Riassumi quanto disposto dall'articolo 488 della legge 15 marzo 2010, n. 90.",1.0,1.0,1.0,3,2363,1,0.7664
+3. + espansione citazioni (multi-hop),9,"Qual è il contenuto dell'articolo 20 della decreto-legge 18 aprile 2019, n. 32?",1.0,1.0,1.0,4,8178,1,0.5925
+3. + espansione citazioni (multi-hop),10,"Riassumi quanto disposto dall'articolo 28 della legge 18 marzo 2025, n. 40.",0.0,0.0,0.0,2,14348,1,0.2085
+3. + espansione citazioni (multi-hop),11,"Quali disposizioni prevede l'articolo 34-bis della decreto-legge 25 maggio 2021, n. 73?",1.0,1.0,1.0,3,8345,1,0.7402
+3. + espansione citazioni (multi-hop),12,"Riassumi quanto disposto dall'articolo 3 della decreto-legge 27 febbraio 1968, n. 79.",0.0,0.0,0.0,3,7271,1,0.2021

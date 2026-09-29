@@ -273,7 +273,9 @@ def _merge_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
                 source="+".join(sorted(all_sources)),
                 vigenza_start=base_chunk.vigenza_start,
                 vigenza_end=base_chunk.vigenza_end,
-                metadata=base_chunk.metadata.copy()
+                # Members are recorded: a provision can end up inside a merged chunk under a
+                # different id, and the no-regression guards must still recognise it.
+                metadata={**base_chunk.metadata.copy(), "merged_ids": [c.expression_id for c in sub]},
             )
             merged_chunks.append(merged_chunk)
         
@@ -304,9 +306,13 @@ def fuse_and_filter(state: RagState) -> dict:
     if len(fused) < before_cutoff:
         logger.info(f"Score cutoff (>= {min_score}): rimossi {before_cutoff - len(fused)} chunk sotto soglia")
 
-    # Positional cutoff for reranker candidate pool
+    # Positional cutoff for reranker candidate pool. Provisions resolved from the reference named
+    # in the question are pinned here too: their RRF score is low (they come from one channel
+    # only) but they are the referenced norm by construction and must reach the judge.
     rerank_top_k = settings.RERANK_TOP_K
-    fused = fused[:rerank_top_k]
+    pinned = [c for c in fused if "citation_resolve" in (c.source or "")]
+    head = [c for c in fused[:rerank_top_k] if "citation_resolve" not in (c.source or "")]
+    fused = head + pinned
     
     elapsed = time.perf_counter() - start
     logger.info(
@@ -337,9 +343,28 @@ def fuse_and_filter(state: RagState) -> dict:
     # Merge adjacent chunks from the same act
     fused = _merge_chunks(fused)
 
+    # Chunks found by the base channels alone (no graph involvement) are the ones the graph must
+    # not lose: they are kept as a floor so graph-injected context can only add, never displace.
+    # A chunk counts as base when any of its members (own id or merged members) comes from the
+    # vector/BM25 channels, and the best of those channels are prioritised by their own ranking.
+    top_base_ids: list[str] = []
+    for channel_results in (vector_results, bm25_results):
+        for chunk in (channel_results or [])[: max(0, getattr(settings, "PRIORITY_BASE_CHUNKS", 6))]:
+            if chunk.expression_id not in top_base_ids:
+                top_base_ids.append(chunk.expression_id)
+
+    priority_base_ids = []
+    for chunk in fused:
+        members = set(chunk.metadata.get("merged_ids") or []) | {chunk.expression_id}
+        if members & set(top_base_ids):
+            priority_base_ids.append(chunk.expression_id)
+        if len(priority_base_ids) >= 2 * max(1, getattr(settings, "PRIORITY_BASE_CHUNKS", 6)):
+            break
+
     vector_anchor_id = vector_results[0].expression_id if vector_results else None
 
     return {
         "fused_chunks": fused,
         "vector_anchor_id": vector_anchor_id,
+        "priority_base_ids": priority_base_ids,
     }

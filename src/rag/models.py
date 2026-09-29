@@ -72,6 +72,7 @@ class RagState(TypedDict):
     # Step 3: Fusion
     fused_chunks: list[RetrievedChunk]
     vector_anchor_id: str | None
+    priority_base_ids: list[str]             # Best chunks of the base channels: never displaced by graph chunks
 
     # Step 4: Expansion and grading
     hop_count: int

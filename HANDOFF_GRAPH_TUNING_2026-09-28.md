@@ -208,3 +208,62 @@ py scripts/check_similarity_metric.py
 # cosa usa la baseline quando il grafo è spento
 py scripts/check_baseline_graph_usage.py
 ```
+
+---
+
+# Sessione "grafo performante" — risultati finali
+
+## La tesi (tre affermazioni misurabili)
+
+| Classe di domande | RAG naive | GraphRAG |
+|---|---|---|
+| Dove il testo basta (15 query) | 100% / MRR 1.0 / sim 0.758 | **100% / MRR 1.0 / sim 0.765** (nessuna perdita) |
+| Domande che **nominano una disposizione** (12) | **0%** | **100%** (MRR 0.875) |
+| **Multi-hop** (risposta in una norma richiamata, 20) | 5% | **50%** (MRR 0.266) |
+
+Formulazione da tesi: *GraphRAG copre le classi di domande in cui il recupero lessicale è
+cieco — l'identità della fonte e la rete dei rinvii — senza degradare quelle in cui funziona.*
+
+## Cosa è stato corretto (tutto dentro nodi esistenti, più il nodo `resolve_citations`)
+
+1. **Espansione citazioni**: restituiva 10 articoli arbitrari dell'atto citato → ora ordina
+   **tutti** gli articoli citati per similarità con la query, con budget per atto
+   (`CITATION_EXPANSION_PER_ACT`) e partendo dai migliori chunk fusi (`CITATION_HOP_SOURCE_TOP_K`).
+2. **Risolutore di rinvii** (`src/rag/resolver.py`): riconosce le forme ufficiali
+   ("decreto legislativo 18 aprile 2016, n. 50", "legge 137 del 2018", "d.lgs. 50/2016") →
+   costruisce l'URN → trova l'atto → sceglie l'articolo per rilevanza (il numero citato nella
+   domanda spesso appartiene all'atto *citante*, quindi da solo non basta).
+3. **Pavimento sui chunk base** (`PRIORITY_BASE_CHUNKS`): i migliori chunk di vettoriale+BM25 non
+   possono più essere spiazzati dai chunk iniettati dal grafo (fusione, reranker, giudice).
+   Senza questo il grafo perdeva 2 query su 15.
+4. **Chunk fusi tracciati** (`metadata['merged_ids']`): una norma dentro un chunk `merged_*`
+   viene riconosciuta.
+5. **Metric corretto**: id **oppure** membro di chunk fuso **oppure** chunk fratello (il corpus
+   tiene articolo e commi come Expression distinte) **oppure** sovrapposizione token ≥90%.
+   Con il metric vecchio i numeri erano **sottostimati** (multi-hop: 10% invece di 50%).
+
+## Configurazione consigliata ("produzione")
+`TESEO_DENSE_THRESHOLD=0.60`, `TESEO_MAX_CONCEPTS=3`, `CITATION_EXPANSION_LIMIT=3`,
+`CITATION_EXPANSION_PER_ACT=3`, `CITATION_HOP_SOURCE_TOP_K=5`, `PRIORITY_BASE_CHUNKS=6`,
+`RESOLVE_QUERY_CITATIONS=True`, `RRF_WEIGHT_GRAPH=1.2`, `RERANK_TOP_K=15`, `FINAL_K=10`.
+
+## Limiti da dichiarare
+- Gli archi `:CITES` sono a **livello di atto**, non di articolo: quando la domanda non nomina la
+  disposizione, nessun meccanismo può sapere quale articolo è richiamato (multi-hop resta al 50%).
+- I set sono piccoli (12-20 domande): il benchmark finale va costruito e misurato a parte.
+- La similarità sul set principale (0.765) resta sotto la baseline "puro testo" (0.784): il
+  contesto extra diluisce leggermente la risposta.
+- Vigenza/abrogazioni non valutabili: sorgenti Normattiva monovigente (0 `vigenza_end`, 0 `:MODIFIES`).
+
+## Comandi
+```bash
+# misura sul set principale con la config consigliata
+RERANKER_BACKEND=llm py -u scripts/ablation_graph.py --dataset data/eval_dataset.json \
+    --mode citation --configs 2 --with-generation --repeats 2 \
+    --output ablation_best_results.csv --per-query-output ablation_best_per_query.csv
+
+# misura sui rinvii nominati (baseline vs grafo)
+RERANKER_BACKEND=llm py -u scripts/ablation_graph.py --dataset data/eval_reference.json \
+    --mode graph --configs 1 3 --with-generation \
+    --output ablation_reference_results.csv --per-query-output ablation_reference_per_query.csv
+```

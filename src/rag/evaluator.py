@@ -152,6 +152,7 @@ async def grade_documents_node(state: RagState) -> dict:
     
     filtered_chunks = []
     vector_anchor_id = state.get("vector_anchor_id")
+    priority_ids = set(state.get("priority_base_ids") or [])
     anchor_found = False
     
     for chunk, is_relevant in zip(chunks, results):
@@ -159,11 +160,16 @@ async def grade_documents_node(state: RagState) -> dict:
             filtered_chunks.append(chunk)
             if vector_anchor_id and chunk.expression_id == vector_anchor_id:
                 anchor_found = True
-        elif chunk.source == "citation_resolve":
+        elif "citation_resolve" in (chunk.source or ""):
             # A provision resolved from the reference named in the question is the referenced norm
             # itself: a relevance judge must not be able to drop it.
             filtered_chunks.append(chunk)
             logger.info(f"🛡️ Rinvio risolto mantenuto nonostante il grading: {chunk.expression_id}")
+        elif chunk.expression_id in priority_ids or f"merged_{chunk.expression_id}" in priority_ids:
+            # Floor for the base channels: the graph must not cost the system what plain retrieval
+            # had already found.
+            filtered_chunks.append(chunk)
+            logger.info(f"🛡️ Chunk base prioritario mantenuto nonostante il grading: {chunk.expression_id}")
         else:
             logger.debug(f"Scartato chunk (URN: {chunk.work_urn}) in quanto valutato irrilevante.")
             
