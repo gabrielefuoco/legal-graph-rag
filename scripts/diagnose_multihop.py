@@ -55,6 +55,7 @@ RETURN count(g) AS reachable
 
 
 def _score(query_embedding, embedding) -> float:
+    """Cosine similarity between the query and a provision embedding, -1.0 when missing."""
     if not embedding or query_embedding is None:
         return -1.0
     dot = sum(a * b for a, b in zip(query_embedding, embedding))
@@ -64,6 +65,7 @@ def _score(query_embedding, embedding) -> float:
 
 
 async def main():
+    """Diagnose the multi-hop failures: naming, graph reachability and resolver coverage."""
     with open("data/eval_multihop_all.json", "r", encoding="utf-8") as f:
         dataset = json.load(f)
 

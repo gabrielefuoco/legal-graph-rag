@@ -78,6 +78,7 @@ class SupervisorAgent:
     """Agentic supervisor coordinating user interaction and database tool execution."""
 
     def __init__(self, engine: RagEngine):
+        """Bind the supervisor to the RAG engine it delegates retrieval to."""
         self.engine = engine
         
     def get_graph(self, status_callback=None, config: dict = None):

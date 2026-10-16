@@ -34,6 +34,7 @@ class Reranker:
     """Cross-Encoder reranker supporting GPU acceleration and threshold-based filtering."""
 
     def __init__(self, model_name: str = None):
+        """Load the CrossEncoder on the best available device, if the weights can be fetched."""
         model_name = model_name or settings.RERANKER_MODEL_NAME
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # Support Apple Silicon MPS
@@ -148,6 +149,7 @@ class LLMReranker:
     MAX_DOC_CHARS = 1200
 
     def __init__(self, model_name: str = None):
+        """Build the listwise reranker, defaulting to the configured LLM model."""
         from src.rag.llm_factory import get_llm
 
         self.model_name = model_name or settings.RERANKER_LLM_MODEL or settings.OPENROUTER_MODEL_NAME
@@ -164,6 +166,7 @@ class LLMReranker:
         )
 
     def _build_messages(self, query: str, chunks: List[RetrievedChunk], instruction: str = None):
+        """Build the listwise grading prompt from the query and the truncated chunk texts."""
         from langchain_core.messages import SystemMessage, HumanMessage
 
         docs_text = ""

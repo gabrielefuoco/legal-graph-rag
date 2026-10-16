@@ -41,6 +41,7 @@ neo4j/import/
 neo4j/plugins/
 models_cache/
 scratch/
+.scratch/
 
 # IDEs
 .vscode/

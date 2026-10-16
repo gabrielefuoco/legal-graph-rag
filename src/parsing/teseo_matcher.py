@@ -17,6 +17,7 @@ class TESEOMatcher:
     """
 
     def __init__(self, rdf_path: str = None):
+        """Initialize the empty automaton and embedding caches, loading the ontology if given."""
         self.matcher = ahocorasick.Automaton()
         self.label_to_id = {}
         self.label_embeddings = {}

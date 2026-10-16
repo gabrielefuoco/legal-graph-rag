@@ -212,8 +212,9 @@ METADATA_CONFIGS = [
     GraphConfig("2. TESEO preciso + metadati grafo nel contesto", True, True, True, "on", 0, rerank_top_k=30, final_k=10, teseo_threshold=0.60, teseo_concepts=3, graph_metadata=1),
     GraphConfig("3. TESEO preciso + metadati + citazioni 3", True, True, True, "on", 0, rerank_top_k=30, final_k=10, teseo_threshold=0.60, teseo_concepts=3, graph_metadata=1, citation_limit=3),
 ]
-# promoted them above the golden. Varying the budget keeps the mechanism identical while
-# controlling how much the graph is allowed to displace the base results.
+# Citation-budget sweep: the articles injected by the hop were promoted by the reranker
+# above the golden. Varying the budget keeps the mechanism identical while controlling how much
+# the graph is allowed to displace the base results.
 CITATION_CONFIGS = [
     GraphConfig("1. TESEO preciso + citazioni 10 (attuale)", True, True, True, "on", 0, rerank_top_k=30, final_k=10, teseo_threshold=0.60, teseo_concepts=3, citation_limit=10),
     GraphConfig("2. TESEO preciso + citazioni 3", True, True, True, "on", 0, rerank_top_k=30, final_k=10, teseo_threshold=0.60, teseo_concepts=3, citation_limit=3),
@@ -250,6 +251,7 @@ def _golden_present(chunks: List[RetrievedChunk], expected_id: str) -> bool:
 
 
 def calculate_recall(chunks: List[RetrievedChunk], expected_ids: List[str]) -> float:
+    """Fraction of the expected provisions that appear anywhere in the retrieved chunks."""
     if not expected_ids:
         return 1.0
     hits = sum(1 for e in expected_ids if _golden_present(chunks, e))
@@ -257,6 +259,7 @@ def calculate_recall(chunks: List[RetrievedChunk], expected_ids: List[str]) -> f
 
 
 def calculate_mrr(chunks: List[RetrievedChunk], expected_ids: List[str]) -> float:
+    """Reciprocal rank of the first chunk matching the primary expected provision."""
     if not expected_ids:
         return 1.0
     for rank_0, chunk in enumerate(chunks):
@@ -266,12 +269,14 @@ def calculate_mrr(chunks: List[RetrievedChunk], expected_ids: List[str]) -> floa
 
 
 def calculate_hit_at_k(chunks: List[RetrievedChunk], expected_ids: List[str], k: int = 1) -> float:
+    """1.0 if any expected provision is inside the top-k chunks, 0.0 otherwise."""
     if not expected_ids:
         return 1.0
     return 1.0 if any(_golden_present(chunks[:k], e) for e in expected_ids) else 0.0
 
 
 async def main():
+    """Run the configured ablation arms over a dataset and write the per-query metrics."""
     global _RETRIEVAL_CACHE
     parser = argparse.ArgumentParser(description="Ablazione dei meccanismi del grafo")
     parser.add_argument("--dataset", default="data/eval_dataset.json")
@@ -348,6 +353,7 @@ async def main():
     def make_graded(mode: str, min_keep: int):
         """Return a grading function implementing the requested filtering policy."""
         async def graded(query: str, chunks: List[RetrievedChunk]) -> List[bool]:
+            """Apply the configured grading policy: bypass, judge, or judge with a minimum kept."""
             if mode == "off":
                 return [True] * len(chunks)
             verdicts = await original_grade(query, chunks)

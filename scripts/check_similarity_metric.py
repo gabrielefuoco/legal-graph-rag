@@ -36,6 +36,7 @@ OFF_TOPIC = "Il cielo è azzurro, i gatti dormono sul divano e il treno per Mila
 
 
 def describe(label: str, values: list[float]):
+    """Print mean, median, min and max of a similarity distribution."""
     if not values:
         print(f"{label:<44} nessun dato")
         return
@@ -46,6 +47,7 @@ def describe(label: str, values: list[float]):
 
 
 async def check(dataset_path: str, engine: VectorEngine, limit: int = 15):
+    """Score the similarity metric on one dataset against reference and off-topic texts."""
     with open(dataset_path, "r", encoding="utf-8") as f:
         dataset = json.load(f)[:limit]
     goldens = [d.get("golden_answer", "") for d in dataset]
@@ -74,6 +76,7 @@ async def check(dataset_path: str, engine: VectorEngine, limit: int = 15):
 
 
 async def main():
+    """Run the similarity-metric sanity checks on the evaluation datasets."""
     engine = VectorEngine()
     await check("data/eval_dataset.json", engine)
     await check("data/eval_multihop_all.json", engine, limit=15)

@@ -28,6 +28,7 @@ logger = logging.getLogger("check_baseline")
 
 
 async def main():
+    """Report how many graph-derived fields the baseline actually sees with the graph off."""
     with open("data/eval_dataset.json", "r", encoding="utf-8") as f:
         dataset = json.load(f)
 

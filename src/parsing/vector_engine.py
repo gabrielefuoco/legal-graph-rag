@@ -14,6 +14,7 @@ class VectorEngine:
     """
 
     def __init__(self):
+        """Bind the LangChain embedding model to the configured endpoint and model name."""
         # Using OllamaEmbeddings as a placeholder for the Qwen3 endpoint
         self.embeddings_model = OllamaEmbeddings(
             base_url=settings.QWEN3_ENDPOINT,

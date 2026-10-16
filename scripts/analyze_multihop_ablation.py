@@ -16,6 +16,7 @@ import pandas as pd
 
 
 def main():
+    """Compare the per-query metrics of the multi-hop ablation arms and write a summary."""
     parser = argparse.ArgumentParser(description="Analisi per-query dell'ablation multi-hop")
     parser.add_argument("--csv", default="ablation_multihop_per_query.csv")
     parser.add_argument("--summary-csv", default="ablation_multihop_results.csv")

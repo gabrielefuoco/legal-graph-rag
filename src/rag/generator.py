@@ -14,6 +14,7 @@ class LegalGenerator:
     """Synthesizes final answers using an LLM over retrieved and filtered legal chunks."""
 
     def __init__(self, num_ctx: int = None):
+        """Build the generator LLM, defaulting the context window to the configured value."""
         from src.rag.llm_factory import get_llm
         self.num_ctx = num_ctx or settings.GENERATOR_NUM_CTX
         self.llm = get_llm(num_ctx=self.num_ctx, temperature=0.0, reasoning=False)
@@ -225,6 +226,7 @@ class LegalGenerator:
             
             raw_stream = self.llm.astream(messages)
             async def content_stream():
+                """Yield the raw token stream of the underlying LLM."""
                 async for chunk in raw_stream:
                     yield chunk.content
                     

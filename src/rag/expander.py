@@ -141,6 +141,7 @@ async def expand_citations(state: RagState) -> dict:
 
             if query_embedding is not None:
                 def _score(record) -> float:
+                    """Cosine similarity between the query and a cited article's embedding."""
                     embedding = record.get("embedding")
                     if not embedding:
                         return -1.0
@@ -155,6 +156,7 @@ async def expand_citations(state: RagState) -> dict:
                 query_tokens = set(re.findall(r"[a-zà-ù]{4,}", (state.get("query") or "").lower()))
 
                 def _citation_overlap(record) -> float:
+                    """Fraction of the citation text's tokens that also appear in the query."""
                     text = (record.get("citation_text") or "").lower()
                     tokens = set(re.findall(r"[a-zà-ù]{4,}", text))
                     if not tokens or not query_tokens:
@@ -162,6 +164,7 @@ async def expand_citations(state: RagState) -> dict:
                     return len(tokens & query_tokens) / len(tokens)
 
                 def _combined(record) -> float:
+                    """Ranking key for cited articles; currently the embedding similarity alone."""
                     return _score(record)
 
                 candidates.sort(key=_combined, reverse=True)

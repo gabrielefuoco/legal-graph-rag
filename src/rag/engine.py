@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 class RAGResult(list):
     """Backward-compatible list wrapper of RetrievedChunk with an answer attribute."""
     def __init__(self, chunks, answer: str | None = None):
+        """Build the result list from chunks and attach the optional generated answer."""
         super().__init__(chunks)
         self.answer = answer
 
@@ -163,6 +164,7 @@ class RagEngine:
     """Main facade for the RAG retrieval and generation engine."""
 
     def __init__(self):
+        """Instantiate the retrieval and generation dependencies and compile the graph."""
         # Dependencies
         self.vector_engine = VectorEngine()
         self.teseo_matcher = TESEOMatcher(settings.TESEO_RDF_PATH)

@@ -88,6 +88,7 @@ class AsyncNeo4jLoader:
         
         import re
         def norm(t):
+            """Lowercase, strip punctuation and collapse whitespace for label matching."""
             t = t.lower()
             t = re.sub(r'[^\w\s]', '', t)
             return re.sub(r'\s+', ' ', t).strip()
@@ -109,6 +110,7 @@ class AsyncNeo4jLoader:
             })
 
         async def _execute_teseo(tx):
+            """Write the TESEO concept nodes and their BROADER edges into Neo4j."""
             nodes_query = """
             UNWIND $batch AS row
             MERGE (t:TESEO_Concept {id: row.id})
@@ -371,6 +373,7 @@ class AsyncNeo4jLoader:
         modifies_edges = [e for e in edges_batch if e.get('type') == 'MODIFIES']
 
         async def _execute_all(tx):
+            """Write the whole node/edge batch in a single transaction, by entity type."""
             try:
                 if works:
                     logger.debug(f"Loading {len(works)} WORKS")

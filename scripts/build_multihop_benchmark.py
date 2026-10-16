@@ -142,6 +142,7 @@ async def generate_answer(llm, question: str, golden_text: str) -> str:
 
 
 async def main():
+    """Sample citation triples, verify their eligibility and write the multi-hop benchmark."""
     parser = argparse.ArgumentParser(description="Costruisce il benchmark multi-hop (regola meccanica)")
     parser.add_argument("--samples", type=int, default=40, help="Quante triple candidato provare")
     parser.add_argument("--output", default="data/eval_multihop.json")

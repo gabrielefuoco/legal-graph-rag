@@ -25,6 +25,7 @@ class QueryAnalyzer:
     """
 
     def __init__(self, teseo_matcher: TESEOMatcher, vector_engine: VectorEngine):
+        """Store the TESEO matcher and the vector engine used for query enrichment."""
         self.teseo_matcher = teseo_matcher
         self.vector_engine = vector_engine
 

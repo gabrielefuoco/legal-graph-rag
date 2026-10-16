@@ -115,6 +115,7 @@ class CandidatePoolUnpickler(pickle.Unpickler):
     """Unpickle pools saved while the script ran as `__main__` (module path compatibility)."""
 
     def find_class(self, module, name):
+        """Resolve the pool class saved under `__main__` back to its real definition."""
         if module == "__main__" and name == "QueryCandidatePool":
             return QueryCandidatePool
         return super().find_class(module, name)

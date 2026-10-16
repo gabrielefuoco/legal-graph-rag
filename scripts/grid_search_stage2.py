@@ -182,6 +182,7 @@ def save_retrieval_cache(path: str = None):
 class GenerationCache:
     """JSON-backed generation cache for resilience against network interruptions."""
     def __init__(self, cache_file: str):
+        """Load the cache from disk, tolerating a missing or unreadable file."""
         self.cache_file = cache_file
         self.cache: Dict[str, str] = {}
         if os.path.exists(cache_file):

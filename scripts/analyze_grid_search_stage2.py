@@ -16,11 +16,13 @@ from collections import defaultdict
 
 
 def load_rows(path: str):
+    """Read the grid search CSV into a list of dictionaries."""
     with open(path, "r", encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
 def marginal(rows, key, metric="global_score"):
+    """Average a metric per value of one column, sorted by that value."""
     groups = defaultdict(list)
     for r in rows:
         groups[r[key]].append(float(r[metric]))
@@ -28,6 +30,7 @@ def marginal(rows, key, metric="global_score"):
 
 
 def main():
+    """Print the marginal effect of each Stage 2 parameter and the best configurations."""
     parser = argparse.ArgumentParser(description="Analisi risultati Stadio 2")
     parser.add_argument("--csv", default="grid_search_stage2_results.csv")
     parser.add_argument("--top", type=int, default=10)

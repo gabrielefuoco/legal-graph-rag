@@ -68,11 +68,12 @@ python manage.py retrieve --query "incentivi per la transizione energetica" --ve
 - `--verbose`: Mostra i concetti TESEO identificati e i punteggi dei canali.
 - `--full-text`: Visualizza l'intera espressione normativa.
 
-### 🧪 Interactive Testing Sandbox
-Per un'esperienza di test più visuale e dettagliata, utilizza il notebook interattivo:
-- [`interactive_rag.ipynb`](file:///c:/Users/gabri/APP/Universit%C3%A0/Tesi/interactive_rag.ipynb)
-
-Il notebook offre visualizzazioni Markdown, debug della fase di query analysis e confronto diretto tra i canali di ricerca.
+### 🖥️ Interfaccia Web (Streamlit)
+Per un'esperienza di test più visuale e dettagliata, avvia la UI Streamlit:
+```bash
+python manage.py streamlit
+```
+La UI offre chat multi-turno, pannelli di ispezione XAI sui chunk recuperati e i controlli per lo studio di ablazione.
 
 ---
 
@@ -80,12 +81,12 @@ Il notebook offre visualizzazioni Markdown, debug della fase di query analysis e
 
 ```text
 ├── src/
-│   ├── ingestion/    # Client asincroni per le varie fonti legislative
-│   ├── parsing/      # Parser Akoma Ntoso e trasformatori di dati
-│   ├── rag/          # Engine di retrieval, fusion e query analyzer
-│   ├── graph/        # Logica di interazione con Neo4j
-│   └── utils/        # Utility comuni e configurazione
-├── data/             # Cache dati grezzi e processati
-├── tests/            # Suite di test unitari e di integrazione
-└── manage.py         # Punto di ingresso unico per la gestione del sistema
+│   ├── config.py         # Settings centralizzati (da .env)
+│   ├── ingestion/        # Client asincroni per le varie fonti legislative
+│   ├── parsing/          # Parser Akoma Ntoso e trasformatori di dati
+│   ├── rag/              # Engine di retrieval, fusion e query analyzer
+│   └── ui/               # UI Streamlit
+├── scripts/              # Esperimenti, benchmark e analisi dei risultati
+├── data/                 # Cache dati grezzi e processati
+└── manage.py             # Punto di ingresso unico per la gestione del sistema
 ```

@@ -22,6 +22,11 @@ class ResilientChatOpenAI(ChatOpenAI):
     """ChatOpenAI that hard-limits every call and retries stalled responses."""
 
     async def ainvoke(self, *args, **kwargs):
+        """Invoke the model with a hard timeout, retrying stalled attempts.
+
+        Raises:
+            TimeoutError: if every attempt exceeds OPENROUTER_CALL_TIMEOUT_S.
+        """
         last_error: Optional[Exception] = None
         for attempt in range(1, OPENROUTER_CALL_ATTEMPTS + 1):
             try:

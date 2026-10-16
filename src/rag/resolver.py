@@ -222,6 +222,7 @@ async def _rank_act_articles(session, urn: str, query_embedding, number: str | N
         return []
 
     def _score(record) -> float:
+        """Cosine similarity between the query embedding and an article's embedding."""
         embedding = record.get("embedding")
         if not embedding or query_embedding is None:
             return -1.0

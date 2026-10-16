@@ -33,6 +33,7 @@ STAGE2_MINUTES_PER_CONFIG = 0.7
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the CLI argument parser for the v2 grid search runner."""
     parser = argparse.ArgumentParser(description="Runner dell'esperimento v2 di grid search")
     parser.add_argument("--dataset", default="data/eval_dataset.json", help="Dataset di valutazione")
     parser.add_argument("--tag", default="v2", help="Etichetta dell'esperimento usata nei nomi dei file")
@@ -98,6 +99,7 @@ def run_streamed(cmd, log_path: Path, env) -> int:
 
 
 def main():
+    """Run Stage 1 then Stage 2 as subprocesses and report where the outputs land."""
     configure_stdio()
     args = build_parser().parse_args()
     python = sys.executable

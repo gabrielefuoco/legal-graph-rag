@@ -86,6 +86,7 @@ async def patch_regex_cites():
         """
 
         async def _execute_patch(tx):
+            """Write the extracted citations in chunks to keep each statement small."""
             chunk_size = 5000
             for i in range(0, len(cites_batch), chunk_size):
                 await tx.run(query_cites, batch=cites_batch[i:i+chunk_size])

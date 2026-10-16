@@ -13,6 +13,7 @@ class TopologyExpander:
     """Expands retrieved chunks using graph topology (:NEXT, :PART_OF, :CITES, :MODIFIES)."""
 
     def __init__(self, driver: AsyncDriver):
+        """Bind the expander to the Neo4j driver used for the topology queries."""
         self.driver = driver
 
     async def expand(self, chunks: List[RetrievedChunk], topo_max_chars: int = 6000) -> List[RetrievedChunk]:

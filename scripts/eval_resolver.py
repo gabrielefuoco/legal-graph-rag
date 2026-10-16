@@ -38,6 +38,7 @@ LIMIT 1
 
 
 async def main():
+    """Evaluate the citation resolver alone, without the LLM stages."""
     parser = argparse.ArgumentParser(description="Valuta solo il risolutore di rinvii (senza LLM)")
     parser.add_argument("--dataset", default="data/eval_multihop_all.json")
     parser.add_argument("--verbose", action="store_true")

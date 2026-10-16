@@ -19,11 +19,8 @@ SETS = [
     ("C. Multi-hop (20)", "ablation_base_mh_per_query.csv", "ablation_final_mh_per_query.csv", None, None),
 ]
 
-# Optional extra rows appended when the files exist (class label, baseline CSV, graph CSV, prefixes)
-OPTIONAL_SETS = [
-    ("C2. Multi-hop rigenerato (tutte)", "ablation_base_mh3_per_query.csv", "ablation_graph_mh3_per_query.csv", None, None),
-    ("C3. Multi-hop rigenerato (rinvio risolvibile)", "ablation_base_mh3_subset_per_query.csv", "ablation_graph_mh3_subset_per_query.csv", None, None),
-]
+# Additional sets: none (the measured classes are the ones in SETS)
+OPTIONAL_SETS = []
 
 CONFIGS = [("Baseline (denso+BM25)", 0), ("GraphRAG (config unica)", 1)]
 
@@ -37,6 +34,7 @@ def CONFIGS_WITH_PREFIX(base_prefix, graph_prefix):
 
 
 def _row(label_class: str, label_config: str, df: pd.DataFrame) -> dict:
+    """Aggregate one configuration's per-query CSV into a single results row."""
     sims = [s for s in df["similarity"].tolist() if isinstance(s, (int, float))]
     return {
         "classe": label_class,
@@ -53,6 +51,7 @@ def _row(label_class: str, label_config: str, df: pd.DataFrame) -> dict:
 
 
 def main():
+    """Build the final results table from the per-query ablation outputs (CSV + Markdown)."""
     parser = argparse.ArgumentParser(description="Tabella finale dei risultati")
     parser.add_argument("--output", default="final_results_table.csv")
     parser.add_argument("--markdown", default="final_results_table.md",

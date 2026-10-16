@@ -21,6 +21,7 @@ logger = logging.getLogger("merge_multihop")
 
 
 def main():
+    """Merge the input multi-hop sets into one deduplicated benchmark file."""
     parser = argparse.ArgumentParser(description="Unisce i set di valutazione multi-hop")
     parser.add_argument("--inputs", nargs="+", required=True)
     parser.add_argument("--output", default="data/eval_multihop_all.json")

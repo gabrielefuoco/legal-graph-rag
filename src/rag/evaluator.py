@@ -32,6 +32,7 @@ class RetrievalGrader:
     """Evaluates the relevance of retrieved documents against the query using an LLM judge."""
 
     def __init__(self):
+        """Build the structured relevance judge on top of the supervisor LLM."""
         self.llm = get_llm(
             num_ctx=settings.SUPERVISOR_NUM_CTX,
             temperature=0.0,
@@ -97,6 +98,7 @@ class QueryRewriter:
     """Reformulates queries that yielded no relevant documents to improve retrieval."""
 
     def __init__(self):
+        """Build the query rewriter on top of a slightly non-greedy LLM call."""
         self.llm = get_llm(
             temperature=0.3,  # Slight temperature variability to encourage reformulation
             reasoning=False,

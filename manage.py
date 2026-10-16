@@ -238,7 +238,7 @@ def main():
     gs1.add_argument("--load-candidates", default=None)
 
     gs2 = subparsers.add_parser("grid-search-stage2")
-    gs2.add_argument("--stage1-configs", default="top_stage1_configs.json")
+    gs2.add_argument("--stage1-configs", default="top_stage1_configs_v2.json")
     gs2.add_argument("--dataset", default="data/eval_dataset.json")
     gs2.add_argument("--output", default="grid_search_stage2_results.csv")
     gs2.add_argument("--dry-run", action="store_true")

@@ -75,6 +75,7 @@ def format_reference(urn: str) -> str | None:
 
 
 def article_number(text: str) -> str | None:
+    """Extract the article number from a label such as 'art. 5-bis'."""
     match = re.match(r"\s*art\.?\s*(\d+(?:-[a-z]+)?)", text or "", re.IGNORECASE)
     return match.group(1) if match else None
 
@@ -88,6 +89,7 @@ TEMPLATES = [
 
 
 async def main():
+    """Build the named-reference benchmark from random (act, article) pairs of the graph."""
     parser = argparse.ArgumentParser(description="Costruisce il benchmark sui rinvii nominati")
     parser.add_argument("--samples", type=int, default=15, help="Quante domande costruire")
     parser.add_argument("--output", default="data/eval_reference.json")

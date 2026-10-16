@@ -141,6 +141,7 @@ async def migrate_pair(driver, pair) -> int:
 
 
 async def main():
+    """Relink CITES edges from external-reference stubs to the real Works (dry-run by default)."""
     parser = argparse.ArgumentParser(description="Relink CITES edges from stubs to real Works")
     parser.add_argument("--apply", action="store_true", help="Esegue la migrazione (default: dry-run)")
     parser.add_argument("--clean-markers", action="store_true", help="Rimuove i marker relinked_* da tutti i Work e termina")
