@@ -1,0 +1,22 @@
+# Default: text files are normalised to LF inside the repository.
+* text=auto
+
+# Files where a CRLF would break the Linux container (shell scripts, YAML,
+# Dockerfile) or the Python interpreter get LF in the working tree too,
+# regardless of the host OS (Windows, Ubuntu, macOS).
+*.sh         text eol=lf
+Dockerfile   text eol=lf
+*.yml        text eol=lf
+*.yaml       text eol=lf
+.env*        text eol=lf
+*.py         text eol=lf
+*.md         text eol=lf
+.gitignore   text eol=lf
+.gitattributes text eol=lf
+*.ttl        text eol=lf
+
+# Binary artefacts are never normalised.
+*.pkl        binary
+*.zip        binary
+*.png        binary
+*.jpg        binary

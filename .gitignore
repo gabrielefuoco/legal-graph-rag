@@ -58,4 +58,6 @@ pytest.ini
 *.log
 
 # Ollama
-ollama/
+# The image's entrypoint script is mounted at runtime, so it must stay tracked.
+ollama/data/
+!ollama/entrypoint.sh

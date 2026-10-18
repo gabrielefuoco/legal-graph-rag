@@ -42,7 +42,11 @@ services:
 #              capabilities: [gpu]
 
   streamlit:
-    build: .
+    build:
+      context: .
+      args:
+        # CPU-only hosts (e.g. a GPU-less Ubuntu server): set TORCH_INDEX_URL in .env
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu121}
     container_name: legal-graph-streamlit
     ports:
       - "8501:8501"
@@ -73,7 +77,10 @@ services:
       --server.address=0.0.0.0
 
   jupyter:
-    build: .
+    build:
+      context: .
+      args:
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu121}
     container_name: legal-graph-jupyter
     ports:
       - "8888:8888"

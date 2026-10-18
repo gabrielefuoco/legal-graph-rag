@@ -7,12 +7,20 @@ TESEO_DENSE_THRESHOLD=0.60      TESEO_MAX_CONCEPTS=3
 CITATION_EXPANSION_LIMIT=10     CITATION_EXPANSION_PER_ACT=3     CITATION_HOP_SOURCE_TOP_K=5
 PRIORITY_BASE_CHUNKS=6          RESOLVE_QUERY_CITATIONS=true     GRAPH_METADATA_IN_CONTEXT=false
 RERANKER_BACKEND=llm            RRF_WEIGHT_GRAPH=1.2             RERANK_TOP_K=15   FINAL_K=10
+MAX_CITATION_HOPS=1             GENERATOR_STUFF_THRESHOLD=64000  grader attivo
+```
+
+I pesi e le profondità di retrieval dentro GraphRAG sono quelli vincenti della griglia a due stadi
+(`top_stage1_configs_v2.json`):
+
+```
+weight_vector=1.5  weight_bm25=1.0  weight_graph=1.2  rrf_k=40
+rerank_top_k=15    rerank_min_score=0.0  final_k=10  rag_top_k=30  vector_min_score=0.3
 ```
 
 Tag della versione valutata: **`graphrag-prod-v1`**.
 Tabella completa (tutti i valori calcolati): `final_results_table.csv` — generata da
 `py scripts/analyze_final_results.py`.
-Diario tecnico completo di come ci si è arrivati: `WORK_LOG_GRAPH.md`.
 
 ## Le tre classi di domande
 
@@ -50,6 +58,42 @@ salti di citazione (0 vs 1 in tutte le classi).
   che contiene la risposta e in 20 di queste la disposizione non è identificabile per similarità
   (posizione 13-587 fra gli articoli dell'atto).
 
+## La metrica di similarità regge?
+
+Verifica in `scripts/check_similarity_metric.py`: risposta identica **1,0000**; risposte diverse
+dello **stesso dominio 0,2183**; testo **fuori tema 0,1665**; frase di **fallback 0,2105**. Le
+risposte corrette stanno a ~0,75-0,77: il divario è ~0,5, la metrica discrimina.
+
+Il rumore di una singola generazione LLM è però **±0,04** → le misure finali usano **2 generazioni
+per domanda**; le metriche di retrieval (recall/MRR/Hit@1) sono deterministiche.
+
+**Onestà della misura.** La golden è contata presente se compare per **id**, oppure **dentro un
+chunk fuso** (`metadata['merged_ids']`), oppure come **chunk fratello** (il corpus tiene articolo e
+commi come Expression distinte), oppure con **sovrapposizione di token ≥ 90%** (lo stesso testo è
+reso in modo leggermente diverso in campi diversi). Con il criterio precedente il multi-hop
+risultava al 10%: il passaggio a **30%** è una correzione di misura, non di prestazione.
+
+## Cosa usa davvero la baseline
+
+`scripts/check_baseline_graph_usage.py`, con `enable_graph_search=False` e topologia spenta:
+breadcrumb strutturale **6/6**, finestra di vigenza **6/6**, TESEO **0/6**, citazioni **0/6**,
+topologia **0/6**. I *meccanismi* del grafo sono spenti, ma i chunk restano nodi del grafo con
+gerarchia e vigenza: va dichiarato in tesi. Per questo esiste `PURE_TEXT_BASELINE`, che rimuove
+anche breadcrumb, URN, vigenza e annotazioni — la baseline "puro testo" misura **0,7841** di
+similarità sul set principale.
+
+## Tentativi che NON hanno funzionato
+
+| Tentativo | Misura | Esito |
+|---|---|---|
+| Metadati del grafo nel prompt (istituti TESEO + "richiamata da") | 0,7683 → 0,7691 | **rumore**: `GRAPH_METADATA_IN_CONTEXT` resta `false` |
+| Grader disattivato o `min_keep` 3/5/8 | recall identico in tutte le varianti | il grader non è la causa delle perdite; serve come compressore di contesto (13,5k vs 60k caratteri) |
+| Due salti di citazione | similarità 0,582 | diluisce: `MAX_CITATION_HOPS=1` |
+| Finestra reranker/finale enorme (40/20) | 0,7334 | nessun recupero |
+| Peso del grafo 0,8 | 0,7408 | migliora ma non basta: la leva vera è la precisione TESEO |
+| Rigenerare le domande multi-hop ancorate al contenuto della norma richiamata | 0/71 ammissibili | **tensione strutturale**: se la domanda assomiglia alla risposta la trova anche il RAG naive; se non le assomiglia, nessuno può trovarla perché gli archi citano l'atto, non l'articolo |
+| Vigenza / abrogazioni | 0 `vigenza_end`, 0 archi `:MODIFIES` | non valutabile: le sorgenti Normattiva sono export **monovigente** |
+
 ## Limiti da dichiarare in tesi
 
 1. **Archi di citazione a livello di atto**: è la ragione del tetto della classe C. Con rinvii
@@ -67,36 +111,64 @@ salti di citazione (0 vs 1 in tutte le classi).
    ma un benchmark più grande ridurrebbe l'intervallo di confidenza (`BENCHMARK_PLAN.md`).
 7. **Vigenza/abrogazioni non valutabili**: sorgenti Normattiva *monovigente* (0 `vigenza_end`,
    0 archi `:MODIFIES`). Il meccanismo `_mark_abrogated_chunks` esiste ma non ha dati su cui agire.
+8. **Embedding dei documenti**: l'indice vettoriale è costruito includendo il contesto gerarchico
+   nel payload, quindi il canale vettoriale eredita la gerarchia del grafo **anche nella baseline
+   "puro testo"** (dichiarato; ricostruire l'indice senza gerarchia è un lavoro a sé).
+
+## Correzioni effettuate (cronologia che ha prodotto questi numeri)
+
+1. **Pipeline di tuning sbloccata**: le griglie si interrompevano e Stage 2 ignorava i parametri di
+   Stage 1. Con la pipeline riparata, Stage 1 passa a recall **100%** (era 93,33%) e MRR **0,8611**
+   (era 0,8179): `RAG_TOP_K=30` è la leva principale, `RAG_VECTOR_MIN_SCORE` è inerte.
+2. **Deduplicazione per canale prima della fusione RRF**: il canale vettoriale restituiva ~400
+   righe per 50 richieste, gonfiando il proprio peso e rendendo **inerti** i pesi RRF. Dopo la
+   correzione i pesi tornano a contare (weight_graph 0,8 → 0,9052; 1,0 → 0,8877; 1,2 → 0,8769).
+3. **Rinvii del grafo ricollegati**: 5.156 Work citati erano tutti segnaposto con URN fittizio.
+   `scripts/relink_citations.py` ne ricollega **483** (21.415 archi, 36% dei 59.130) e l'espansione
+   citazioni comincia a trovare qualcosa.
+4. **Espansione citazioni riscritta**: prima restituiva 10 articoli *arbitrari* dell'atto citato
+   (un codice ne ha 1.154). Ora scarica tutti gli articoli citati con il solo embedding, li ordina
+   per similarità con la domanda, applica un **budget per atto** (`CITATION_EXPANSION_PER_ACT=3`) e
+   fa partire l'hop dai **5 migliori chunk fusi** (`CITATION_HOP_SOURCE_TOP_K=5`), non da tutti.
+5. **Risolutore di rinvii** (`src/rag/resolver.py`, nodo `resolve_citations`): le forme ufficiali
+   numeriche ("decreto legislativo 18 aprile 2016, n. 50") mappano direttamente sull'URN dell'atto;
+   l'articolo si prende dal numero che **precede** il riferimento e si seleziona per rilevanza.
+   Gli articoli risolti sono **fissati**: né il reranker né il grader possono scartarli. Risolve
+   **37/41** domande multi-hop (erano 12/41) e porta la classe B da **0% a 83,33%**.
+6. **Pavimento sui chunk base** (`PRIORITY_BASE_CHUNKS=6`): i migliori chunk di vettoriale+BM25 non
+   possono essere spiazzati dal cutoff RRF, dal reranker o dal grader. Il grafo diventa
+   **additivo**: può aggiungere contesto, mai toglierlo (recall sul set principale 86,67% → 100%).
+7. **Metrica di valutazione corretta**: id / chunk fuso / chunk fratello / token ≥ 90% (§ sopra).
+   È una correzione di onestà, non di prestazione.
+8. **Infrastruttura LLM**: thinking mode del provider disattivato e client resiliente (timeout,
+   retry) → generazione **79 s → 2 s**, grading **31-54 s → 2,1 s**, nessuna risposta vuota.
 
 ## Riproduzione
 
 ```bash
-# tabella finale (CSV + Markdown) dai risultati per-query
-py scripts/analyze_final_results.py
+# infrastruttura
+docker compose up -d --pull never neo4j ollama
 
-# diagnosi del multi-hop (popolazione e cause dei fallimenti)
+# tabella finale e diagnosi
+py scripts/analyze_final_results.py
 py scripts/diagnose_multihop.py
 
-# verifica della metrica di similarità e di cosa usa la baseline a grafo spento
-py scripts/check_similarity_metric.py
-py scripts/check_baseline_graph_usage.py
-
-# misura di una classe (esempio: rinvii nominati, baseline vs grafo)
+# le tre classi (baseline vs grafo)
+RERANKER_BACKEND=llm py -u scripts/ablation_graph.py --dataset data/eval_dataset.json \
+    --mode graph --configs 1 3 --with-generation --repeats 2 \
+    --output ablation_main_results.csv --per-query-output ablation_main_per_query.csv
 RERANKER_BACKEND=llm py -u scripts/ablation_graph.py --dataset data/eval_reference.json \
     --mode graph --configs 1 3 --with-generation --repeats 2 \
     --output ablation_ref_results.csv --per-query-output ablation_ref_per_query.csv
+RERANKER_BACKEND=llm py -u scripts/ablation_graph.py --dataset data/eval_multihop_all.json \
+    --queries $(seq 1 20) --mode graph --configs 1 3 --with-generation --repeats 2 \
+    --output ablation_mh_results.csv --per-query-output ablation_mh_per_query.csv
+
+# verifica della metrica e di cosa usa la baseline
+py scripts/check_similarity_metric.py
+py scripts/check_baseline_graph_usage.py
+
+# griglie (opzionale, ~5 ore)
+py scripts/run_grid_search_v2.py
+py scripts/analyze_grid_search_stage2.py
 ```
-
-## Cronologia delle correzioni che hanno prodotto questi numeri
-
-1. **Espansione citazioni**: prima restituiva 10 articoli *arbitrari* dell'atto citato; ora ordina
-   tutti gli articoli citati per similarità con la domanda, con budget per atto.
-2. **Risolutore di rinvii** (`src/rag/resolver.py`): riconosce le forme ufficiali
-   ("decreto legislativo 18 aprile 2016, n. 50") → URN → atto → articolo.
-3. **Pavimento sui chunk base** (`PRIORITY_BASE_CHUNKS`): i migliori chunk di vettoriale+BM25 non
-   possono essere spiazzati dal grafo (era la causa della perdita di recall: 86,7% → 100%).
-4. **Chunk fusi tracciati** (`metadata['merged_ids']`) e **metric corretto** (id / fratelli /
-   sovrapposizione token ≥90%): con il metric precedente i numeri erano sottostimati
-   (multi-hop 10% invece di 30%).
-
-Dettaglio completo, diagnosi e tentativi falliti: `WORK_LOG_GRAPH.md`.

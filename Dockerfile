@@ -16,10 +16,14 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# PyTorch index: CUDA wheels on GPU hosts, CPU wheels on GPU-less ones.
+# Override it from the build args (see docker-compose.yml / .env).
+ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu121
+
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+    && pip install --no-cache-dir torch torchvision torchaudio --index-url ${TORCH_INDEX_URL}
 
 # Copy the rest of the application
 COPY . .

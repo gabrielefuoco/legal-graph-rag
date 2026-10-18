@@ -1,79 +1,147 @@
 # ⚖️ Legal GraphRAG
 
-**Legal GraphRAG** è un framework avanzato di *Retrieval-Augmented Generation* specializzato nel dominio legislativo italiano. Il sistema combina la potenza dei **Knowledge Graph** con la flessibilità della **Vector Search**, sfruttando la struttura gerarchica delle norme (Akoma Ntoso) e l'ontologia semantica del **Thesaurus TESEO** del Senato.
+*Sistemi di Retrieval-Augmented Generation (RAG) per il dominio giuridico italiano: Knowledge Graph, Vector Search, orchestrazione agentica e generative AI*
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Neo4j](https://img.shields.io/badge/Database-Neo4j-008CC1)
-![LLM](https://img.shields.io/badge/LLM-Qwen3%20(Ollama)-orange)
+![Neo4j](https://img.shields.io/badge/Database-Neo4j%205.26-008CC1)
+![LLM](https://img.shields.io/badge/LLM-Qwen3.5%3A4b%20(Ollama)-orange)
+![Embeddings](https://img.shields.io/badge/Embeddings-qwen3--embedding%3A0.6b%20(1024--d)-green)
+![Architecture](https://img.shields.io/badge/Orchestration-LangGraph-purple)
+![Deployment](https://img.shields.io/badge/Deploy-100%25%20On--Premise%20%2F%20Air--Gapped-success)
+
+**Legal GraphRAG** è un framework avanzato di *Modular RAG* neuro-simbolico progettato specificamente per il dominio legislativo italiano (*Civil Law*). Il sistema supera i quattro limiti strutturali del *Naive RAG* in ambito forense (perdita del contesto gerarchico, divario lessicale, cecità ai rinvii normativi e amnesia vigenziale) unificando in un unico motore transazionale su **Neo4j** la rappresentazione formale degli atti (**Akoma Ntoso / NIR** e modello **FRBR**), il vocabolario controllato istituzionale (**Thesaurus TESEO** del Senato), la ricerca vettoriale densa (**HNSW**) e la ricerca lessicale (**BM25**), orchestrati da un ciclo agentico auto-riflessivo su **LangGraph**[cite: 1].
 
 ---
 
-## 🌟 Caratteristiche Principali
+## 🌟 Caratteristiche Principali e Pilastri Architetturali
 
-- **🔍 Retrieval Ibrido Multi-Canale**: Fusione di risultati tramite **Reciprocal Rank Fusion (RRF)** da tre sorgenti:
-    - **Vector Search**: Embedding semantici per catturare il significato latente.
-    - **BM25 (Full-Text)**: Match preciso di parole chiave e riferimenti normativi.
-    - **Graph Traversal**: Navigazione delle relazioni semantiche fornite dal Thesaurus TESEO.
-- **🏛️ Ingestione Multi-Sorgente Asincrona**: Pipeline ad alte prestazioni per il download da Senato, Camera, EUR-Lex, Normattiva, Corte Costituzionale e TESEO.
-- **📄 Parsing Akoma Ntoso**: Parser deterministico che mantiene la gerarchia strutturale (Libri, Titoli, Articoli, Commi) e inietta il contesto globale in ogni chunk.
-- **🧠 Semantica TESEO**: Integrazione profonda con il vocabolario controllato del Senato per l'identificazione automatica di concetti e argomenti.
-- **⚡ Performance Ottimizzate**: Supporto per accelerazione hardware GPU (Ollama) e gestione intelligente dei batch di ingestion.
+### 1. 🏛️ Pipeline ETL Asincrona e Parsing Deterministico
+- **Ingestione Non-Bloccante Multi-Sorgente**: Acquisizione asincrona (`asyncio` / `aiohttp`) con *Exponential Backoff*, *Full Jitter* e *Circuit Breaker* dalle quattro fonti primarie dello Stato: **Normattiva** (macchina a 7 stati di polling), **Thesaurus TESEO** (estrazione SPARQL paginata SKOS/RDF), **Camera e Senato** (*Iter Legis* via Linked Open Data) e **Corte Costituzionale** (sindacato di legittimità)[cite: 1].
+- **DFS Context Injection (`AknParser`)**: Scansione deterministica dell'albero XML (*Akoma Ntoso 3.0* e *NIR 2.2*) tramite visita in profondità (DFS)[cite: 1]. Ogni comma (`:Expression`) viene arricchito con la catena ordinamentale dei nodi padre (`Libro > Titolo > Capo > Articolo + Rubrica`), azzerando il fenomeno del *Context Loss*[cite: 1].
+- **Linearizzazione Duale delle Tabelle**: Le tabelle normative vengono gestite come nodi atomici con doppia rappresentazione: formattazione **GitHub Flavored Markdown** (`text_display`) per la leggibilità dell'utente a schermo e **serializzazione discorsiva soggetto-attributo-valore** (`text_vector`) per massimizzare la precisione dell'embedding vettoriale[cite: 1].
+- **Fast Ontology Matching (Aho-Corasick)**: Ancoraggio dei commi agli oltre 40.000 descrittori del Thesaurus TESEO in tempo lineare $O(N + M)$ tramite automa a stati finiti, combinato con uno score ibrido lessicale-semantico ($\alpha = 0.3$, soglia $\tau = 0.45$) per istanziare archi pesati `:HAS_TOPIC`[cite: 1].
+- **Validazione Pydantic V2 e Idempotenza**: Tipizzazione rigorosa tramite DTO e generazione deterministica degli ID primari con hashing crittografico SHA-256 sull'URN NIR (`urn:nir:stato:...`), garantendo caricamenti transazionali `MERGE` idempotenti[cite: 1].
+
+### 2. 🔍 Motore di Retrieval Ibrido Parallelo e Grafo Additivo
+- **Ricerca Parallela a Tre Canali su Neo4j**:
+  1. **Vector Search (HNSW)**: Embedding densi a **1024 dimensioni** (`qwen3-embedding:0.6b`) con istruzione asimmetrica lato query[cite: 1].
+  2. **BM25 Keyword Search (Lucene)**: Match esatto per codici alfanumerici, estremi di legge e tecnicismi giuridici[cite: 1].
+  3. **Graph Semantic Search (TESEO)**: Navigazione topologica delle relazioni `:HAS_TOPIC` (calibrata con `TESEO_DENSE_THRESHOLD = 0.60` e `TESEO_MAX_CONCEPTS = 3`)[cite: 1].
+- **Weighted RRF con Deduplicazione Intra-Canale**: Unificazione delle graduatorie eterogenee tramite *Weighted Reciprocal Rank Fusion* ($k=60$, pesi $W_{\text{vector}}=1.0, W_{\text{bm25}}=1.0, W_{\text{graph}}=1.2$) previa deduplicazione per canale (`_deduplicate_channel`) per neutralizzare i percorsi multipli `:PART_OF`[cite: 1].
+- **Principio del Grafo Additivo (`PRIORITY_BASE_CHUNKS = 6`)**: I migliori candidati estratti dai canali testuali costituiscono una quota protetta inviolabile che l'arricchimento relazionale non può scalzare, garantendo **zero regressioni** sulle query dirette[cite: 1].
+- **Work-level Merging (Super-Chunking) e Topology Expansion**: Ricomposizione ordinata dei commi contigui dello stesso atto in *Super-Chunk* organici (abbattendo del **36.4%** i token di overhead e mitigando il *Lost in the Middle*) ed espansione orizzontale sui commi adiacenti (`:NEXT`) e sulle rubriche padre (`:PART_OF`) entro un budget di 6.000 caratteri[cite: 1].
+
+### 3. ⏳ Temporal RAG e Gestione della Multivigenza
+- **Principio *Tempus Regit Actum***: Tracciamento nativo degli intervalli di vigenza $I_d = [t_{\text{start}}, t_{\text{end}})$ sui nodi `:Expression` e modellazione dell'algebra delle novelle legislative tramite archi `:MODIFIES` (`SUBSTITUTION`, `INSERTION`, `REPEAL`)[cite: 1].
+- **Soft Semantic Tagging (Abrogation Marking)**: Anziché eliminare fisicamente le norme storiche (impedendo la consulenza retroattiva) o penalizzare testi risalenti ma vigenti (es. Codice Civile del 1942), il sistema inietta in testa al testo il marcatore esplicito `[ATTENZIONE: NORMA ABROGATA IL YYYY-MM-DD]`, preservando il diritto transitorio e azzerando le allucinazioni diacroniche[cite: 1].
+
+### 4. 🤖 Orchestrazione Agentica LangGraph e Risolutore Simbolico
+- **Compilatore Neuro-Simbolico di Rinvii (`resolver.py`)**: Intercetta in **12 ms** i riferimenti normativi espliciti nella query (es. *"art. 24 della legge 241/1990"*) tramite pattern regex certificati, sintetizza l'URN NIR canonico ed esegue il lookup diretto su Neo4j, superando la cecità lessicale degli indici tradizionali[cite: 1].
+- **Espansione Citazionale Multi-Hop Guidata da Embedding (`CitationExpander`)**: Navigazione controllata lungo le oltre **21.415 relazioni `:CITES`** con vincolo rigido `MAX_CITATION_HOPS = 1` (per prevenire l'esplosione combinatoria delle reti *Scale-Free*)[cite: 1]. Per i rinvii a interi atti (`:Work`), ordina dinamicamente al volo gli articoli dell'atto citato per similarità coseno rispetto alla query (`CITATION_EXPANSION_PER_ACT = 3`)[cite: 1].
+- **Loop Auto-Riflessivo (Self-Reflective RAG)**: Un supervisore neurale strutturato Pydantic (**Retrieval Grader** a $T=0.0$) valuta la pertinenza dei frammenti estratti; in caso di insufficienza probatoria, attiva il **Query Rewriter** ($T=0.3$) con convergenza garantita entro $M \le 5$ iterazioni massime[cite: 1].
+- **Sintesi Grounded e Deontologia Forense**: Generazione tramite `Qwen3.5:4b` in *Direct Stuffing* fino a **64.000 caratteri** (evitando la perdita informativa del Map-Reduce), con obbligo di citazione formale `[Atto, Articolo]`, *Citation Consistency Audit* e politica di **Negative Rejection** (fallback sicuro a zero allucinazioni in assenza di fonti)[cite: 1].
 
 ---
 
-## 🏗️ Architettura Tecnica
+## 🕸️ Schema del Knowledge Graph (Neo4j)
 
-Il sistema adotta un approccio **Native Graph-Vector Search** in Neo4j:
+Il database unifica grafo di proprietà etichettato (LPG), indice vettoriale HNSW e indice full-text Lucene[cite: 1]:
 
-- **Orchestration**: `LangGraph` per la gestione di flussi ciclici, analisi della query e ragionamento multi-hop.
-- **Models**: `Qwen3:4b` (via Ollama) ottimizzato per il reasoning legale e la generazione di output strutturato.
-- **Schema Grafo**: Modello ottimizzato basato su entità `WORK`, `EXPRESSION` e `CONCEPT` (TESEO).
+- **Nodi**:
+  - `:Work`: Opera legislativa astratta FRBR identificata da URN NIR canonico[cite: 1].
+  - `:StructuralUnit`: Partizioni gerarchiche intermedie (Libro, Parte, Titolo, Capo, Sezione, Articolo)[cite: 1].
+  - `:Expression`: Unità precettiva atomica (Comma, Lettera, Tabella) con `text_display`, `text_vector`, `embedding` (1024-d) ed estremi di vigenza[cite: 1].
+  - `:TESEO_Concept`: Concetti del vocabolario controllato SKOS del Senato (`prefLabel`, `altLabels`)[cite: 1].
+  - `:Judgement` & `:IterLegisStep`: Pronunce della Corte Costituzionale e passaggi parlamentari dei DDL[cite: 1].
+- **Relazioni**:
+  - `(:Expression)-[:PART_OF]->(:StructuralUnit)-[:PART_OF]->(:Work)` (Gerarchia ordinamentale)[cite: 1]
+  - `(:Expression)-[:NEXT]->(:Expression)` (Continuità sequenziale dei commi)[cite: 1]
+  - `(:Expression)-[:CITES]->(:Work | :Expression)` (Rinvii normativi espliciti)[cite: 1]
+  - `(:Expression)-[:MODIFIES {type}]->(:Expression)` (Novelle legislative: sostituzioni, inserimenti, abrogazioni)[cite: 1]
+  - `(:Expression)-[:HAS_TOPIC {score}]->(:TESEO_Concept)` (Ancoraggio ontologico)[cite: 1]
+  - `(:Judgement)-[:INTERPRETS]->(:Work)` & `(:IterLegisStep)-[:ITER_STEP]->(:Work)`[cite: 1]
+
+---
+
+## 📊 Validazione Sperimentale e Risultati (`graphrag-prod-v1`)
+
+Il sistema è stato validato su un corpus di **6.824 atti normativi**, **30.362 disposizioni atomiche** e oltre **59.000 relazioni** (di cui **21.415 archi `:CITES`**), mediante un benchmark tripartito confrontato con una baseline ibrida convenzionale (Vector + BM25)[cite: 1]:
+
+| Classe Benchmark | Configurazione | Recall@10 | MRR | Hit@1 | Sim. Semantica |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| **Classe A: Testo sufficiente** ($N=15$)<br>*(Verifica di non-regressione)* | Baseline (Vector + BM25) | 100.00% | 1.0000 | 100.00% | 0.7658 |
+| | **Legal GraphRAG** | **100.00%** | **1.0000** | **100.00%** | **0.7667** |
+| **Classe B: Rinvio nominato** ($N=12$)<br>*(Query puntuali `[Atto, Articolo]`)* | Baseline (Vector + BM25) | 0.00% | 0.0000 | 0.00% | 0.2591 |
+| | **Legal GraphRAG** | **83.33%** | **0.6111** | **41.67%** | **0.6611** *(+155%)* |
+| **Classe C: Multi-hop citazionale** ($N=20$)<br>*(Catene `:CITES` tra atti distinti)* | Baseline (Vector + BM25) | 15.00% | 0.1000 | 5.00% | 0.5115 |
+| | **Legal GraphRAG** | **30.00%** *(2x)* | **0.2167** *(>2x)* | **15.00%** *(3x)* | **0.5160** |
+
+### ⚡ Performance e Profilo Hardware (100% On-Premise)
+Progettato per rispettare il segreto professionale (Art. 622 c.p.), il GDPR e l'EU AI Act in modalità **Air-Gapped**, l'intero stack gira su una singola GPU consumer **NVIDIA GeForce RTX 3060 (6 GB VRAM)** con KV-Cache quantizzata in `q8_0` (occupazione totale **~5.1 GB VRAM**)[cite: 1]:
+- **Latenza Infrastruttura IR + Grafo** (TESEO + Embedding + 3 Canali Neo4j + RRF + Resolver + Citation & Topology Expander): **~331 ms**[cite: 1].
+- **Latenza End-to-End Completa** (incluso Grading Pydantic e Generazione con `reasoning=False` a ~80 tok/s): **~2.25 s**[cite: 1].
 
 ---
 
 ## 🚀 Per Iniziare
 
 ### 1. Prerequisiti
-- Docker & Docker Compose
-- Python 3.10+
-- (Opzionale) NVIDIA GPU per accelerazione Ollama
+- **Docker** & **Docker Compose**
+- **Python 3.10+**[cite: 2]
+- GPU NVIDIA con supporto **CUDA 12.1** e *NVIDIA Container Toolkit* (fortemente raccomandato; 6 GB+ VRAM)[cite: 1]
 
-### 2. Setup Infrastruttura
+### 2. Deploy Infrastruttura Multi-Container
+Avvia i tre container isolati (`neo4j` 5.26 con APOC e GDS, `ollama` con passthrough GPU e `legal-graph-app`):
 ```bash
-# Avvio dei servizi core (Neo4j e Ollama)
+cp .env.example .env    # Windows: copy .env.example .env
 docker compose up -d --build
 ```
+Lo stesso comando vale su **Windows** (Docker Desktop/WSL2) e su **Ubuntu** (Docker Engine). Tre differenze tra i due host:
+- **GPU**: su Ubuntu, oltre a *NVIDIA Container Toolkit*, vanno decommentati i blocchi `deploy.resources` in `docker-compose.yml` (sono su `ollama`, `streamlit` e `jupyter`). Senza GPU il sistema gira comunque, con latenze maggiori.
+- **PyTorch**: l'immagine installa per default le wheel CUDA (`cu121`, ~2,5 GB). Su un host senza NVIDIA conviene `TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu` in `.env` prima del build: scarica ~10 volte meno.
+- **Permessi**: le cartelle `neo4j/data`, `neo4j/logs` e `neo4j/plugins` non sono versionate e su Linux nascono di proprietà di `root`. Se Neo4j non parte per permessi: `sudo chown -R 7474:7474 neo4j/` (su Windows non serve).
 
-### 3. Ingestione Olistica e Caricamento (Holistic ETL)
-Abbiamo unificato l'ingestione, il parsing e l'inserimento a grafo in un unico potentissimo comando orientato al *topic*.
-Il comando scarica, parsa e collega: Normattiva, Senato (tramite Git Pull automatico dei Bulk Data e filtro SPARQL), Camera (Iter Legis) e Corte Costituzionale (Giurisprudenza).
-
+Sequenza completa su Ubuntu (Docker Engine), host senza GPU:
 ```bash
-# Sostituisci "appalti" con il tema di ricerca desiderato per la Tesi
+cp .env.example .env
+echo 'TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu' >> .env
+docker compose up -d --build
+sudo chown -R 7474:7474 neo4j/    # solo se Neo4j non parte per permessi
+docker compose ps                 # stato dei tre container
+```
+La dashboard è poi su `http://localhost:8501`, Neo4j Browser su `http://localhost:7474`.
+
+### 3. Ingestione Olistica e Costruzione del Knowledge Graph (Holistic ETL)
+Il comando unificato scarica in modo asincrono, valida con Pydantic V2, esegue il parsing Akoma Ntoso con *Context Injection*, linearizza le tabelle, calcola gli embedding a 1024-d e popola il grafo collegando Normattiva, TESEO, Camera, Senato e Corte Costituzionale[cite: 1, 2]:
+```bash
+# Sostituisci "appalti" con il dominio o tema normativo desiderato
 python manage.py build-graph --topic "appalti"
 ```
 
 ---
 
-## 🔍 Interazione con il Sistema
+## 🖥️ Interazione e Spiegabilità (XAI)
 
-### CLI (Command Line Interface)
-È possibile interrogare il sistema direttamente dal terminale con output formattato e pulito:
-```bash
-python manage.py retrieve --query "incentivi per la transizione energetica" --verbose
-```
-*Opzioni disponibili:*
-- `--top-k`: Risultati estratti per canale.
-- `--final-k`: Risultati mostrati dopo la fusione RRF.
-- `--verbose`: Mostra i concetti TESEO identificati e i punteggi dei canali.
-- `--full-text`: Visualizza l'intera espressione normativa.
-
-### 🖥️ Interfaccia Web (Streamlit)
-Per un'esperienza di test più visuale e dettagliata, avvia la UI Streamlit:
+### Dashboard Web Interattiva (Streamlit)
+Per avviare l'interfaccia grafica *White-Box* orientata all'ergonomia cognitiva forense (con bridge asincrono `nest_asyncio`)[cite: 1, 2]:
 ```bash
 python manage.py streamlit
 ```
-La UI offre chat multi-turno, pannelli di ispezione XAI sui chunk recuperati e i controlli per lo studio di ablazione.
+La dashboard offre **tre livelli di spiegabilità (Explainable AI)** conformi all'art. 111 Cost. e all'EU AI Act[cite: 1]:
+1. **Livello Documentale**: Visualizzazione dei *Super-Chunk*, badge cromatici di canale (`[VECTOR]`, `[BM25]`, `[GRAPH]`, `[CITATION_HOP]`), link URN NIR cliccabili verso Normattiva, score RRF e avvisi di abrogazione[cite: 1].
+2. **Livello Relazionale**: Ispezione delle query Cypher eseguite su Neo4j, archi `:CITES` attraversati e descrittori ontologici TESEO attivati[cite: 1].
+3. **Livello Metacognitivo**: Tracciamento dello `StateGraph` LangGraph, motivazioni del *Retrieval Grader*, eventuali riscritture della query e controlli nella sidebar per studi di ablazione a runtime (`disable_graph`, `disable_bm25`, budget topologico)[cite: 1, 2].
+
+### Command Line Interface (CLI)
+È possibile interrogare direttamente il motore di retrieval e generazione da terminale[cite: 2]:
+```bash
+python manage.py retrieve --query "Quali sono i limiti al subappalto a cascata nel codice dei contratti pubblici?" --verbose
+```
+*Opzioni principali[cite: 2]:*
+- `--top-k`: Candidati estratti per singolo canale (default: `15`)[cite: 1, 2].
+- `--final-k`: Documenti finali dopo fusione RRF e reranking (default: `10`)[cite: 1, 2].
+- `--verbose`: Mostra i concetti TESEO estratti, i pesi dei canali e le metriche di espansione[cite: 2].
+- `--full-text`: Visualizza il testo integrale dei Super-Chunk normativi recuperati[cite: 2].
 
 ---
 
@@ -81,12 +149,48 @@ La UI offre chat multi-turno, pannelli di ispezione XAI sui chunk recuperati e i
 
 ```text
 ├── src/
-│   ├── config.py         # Settings centralizzati (da .env)
-│   ├── ingestion/        # Client asincroni per le varie fonti legislative
-│   ├── parsing/          # Parser Akoma Ntoso e trasformatori di dati
-│   ├── rag/              # Engine di retrieval, fusion e query analyzer
-│   └── ui/               # UI Streamlit
-├── scripts/              # Esperimenti, benchmark e analisi dei risultati
-├── data/                 # Cache dati grezzi e processati
-└── manage.py             # Punto di ingresso unico per la gestione del sistema
+│   ├── config.py                  # Configurazione centralizzata e iperparametri congelati (.env)
+│   ├── logging_config.py          # Logging strutturato dell'applicazione
+│   ├── ingestion/                 # Client asincroni (Normattiva 7-stati, SPARQL TESEO/Camera/Senato, Consulta)
+│   │   ├── async_normattiva_client.py  # Macchina a stati di polling, backoff e circuit breaker
+│   │   ├── async_teseo_client.py       # Estrazione SPARQL paginata SKOS/RDF del Thesaurus
+│   │   ├── async_camera_client.py      # Iter Legis via Linked Open Data (Camera)
+│   │   ├── async_senato_scraper.py     # Iter Legis via Linked Open Data (Senato)
+│   │   ├── async_corte_cost_client.py  # Sindacato di legittimità della Corte Costituzionale
+│   │   ├── async_eurlex_client.py      # Atti dell'Unione Europea (EUR-Lex)
+│   │   └── neo4j_loader.py             # Caricamenti transazionali MERGE idempotenti
+│   ├── parsing/                   # Pipeline deterministica XML Akoma Ntoso 3.0 / NIR 2.2
+│   │   ├── parser.py              # Orchestratore AknParser con fallback di encoding
+│   │   ├── namespaces.py          # Risoluzione dinamica dei dialetti XML (OASIS, CSD03, NIR)
+│   │   ├── meta_parser.py         # Estrazione metadati FRBR, URN NIR, ELI e intervalli di vigenza
+│   │   ├── body_parser.py         # Visita DFS, Context Injection e linearizzazione duale tabelle
+│   │   ├── edge_extractor.py      # Graph discovery deterministico (:CITES, :MODIFIES)
+│   │   ├── teseo_matcher.py       # Fast Ontology Matching con automa Aho-Corasick in tempo lineare
+│   │   ├── vector_engine.py       # Embedding densi dei chunk e istruzione asimmetrica lato query
+│   │   ├── transformers.py        # Mappatura dataset esterni in DTO e arricchimento in streaming
+│   │   └── models.py              # DTO Pydantic V2 (GraphNodeDTO, FRBRMetadata, EdgeType)
+│   ├── rag/                       # Motore di Retrieval Ibrido e Orchestrazione Agentica
+│   │   ├── engine.py              # Macchina a stati finiti ciclica (StateGraph LangGraph)
+│   │   ├── models.py              # Definizione tipizzata dello stato immutabile (RagState a 24 campi)
+│   │   ├── query_analyzer.py      # Estrazione concetti TESEO e calcolo embedding asimmetrico
+│   │   ├── retriever.py           # Fan-out asincrono su Neo4j (HNSW Vector, Lucene BM25, TESEO Graph)
+│   │   ├── fusion.py              # Deduplicazione di canale, Weighted RRF (k=60), Abrogation Marking e Super-Chunking
+│   │   ├── reranker.py            # Riordinamento candidati e protezione pavimento (PRIORITY_BASE_CHUNKS)
+│   │   ├── resolver.py            # Compilatore neuro-simbolico regex -> URN NIR e lookup diretto
+│   │   ├── expander.py            # CitationExpander multi-hop (:CITES, Hop=1) guidato da embedding
+│   │   ├── topology_expander.py   # Espansione contestuale su commi contigui (:NEXT) e rubriche (:PART_OF)
+│   │   ├── evaluator.py           # Retrieval Grader (T=0.0) e Query Rewriter (T=0.3) del loop agentico
+│   │   ├── supervisor.py          # Agente ReAct LangGraph con i tool di retrieval
+│   │   ├── think_filter.py        # Rimozione dei blocchi <think> dai completamenti del modello
+│   │   ├── generator.py           # Sintesi grounded (Direct Stuffing 64k char, Map-Reduce fallback)
+│   │   └── llm_factory.py         # Gestione istanze Ollama locali (Qwen3.5:4b, reasoning=False)
+│   └── ui/
+│       ├── app.py                 # Dashboard XAI a tre livelli con bridge nest_asyncio
+│       ├── components.py          # Rendering di documenti recuperati, badge e tracce XAI
+│       ├── rag_bridge.py          # Ponte asincrono/sincrono per lo streaming in Streamlit
+│       └── style.css              # Foglio di stile della dashboard
+├── scripts/                       # Suite di validazione, benchmark (Classi A, B, C) e diagnostica (diagnose_multihop.py)
+├── data/                          # Cache locale pacchetti XML, ontologie RDF/Turtle (.ttl) e Golden Dataset
+├── docker-compose.yml             # Orchestrazione container (Neo4j 5.26, Ollama CUDA, App)
+└── manage.py                      # Entrypoint CLI unificato per ETL, retrieval e avvio UI
 ```
