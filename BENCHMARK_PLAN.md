@@ -49,27 +49,3 @@ citante non è un template) ma il criterio di ammissibilità è automatico.
 | A — testo sufficiente | 100% | 100% (atteso: nessuna perdita) |
 | B — rinvio nominato | 0% | ~100% |
 | C — multi-hop | 5% | ~50% |
-
-## 6. Cosa NON fare
-
-- Niente cherry-picking per-query nei numeri principali. Se serve un pannello illustrativo
-  ("dove il grafo sblocca la domanda"), va in appendice e **dichiarato come selezione**.
-- Niente configurazioni multiple per classe: la stessa config deve reggere tutte e tre (è il
-  punto della "configurazione unica").
-
-## 7. Comandi (bozza)
-
-```bash
-# costruzione dei set
-py scripts/build_reference_benchmark.py --samples 40 --output data/final_b.json
-py scripts/build_multihop_benchmark.py --samples 60 --output data/final_c.json   # poi filtro
-# (classe A: riuso del template del set principale, 40 domande)
-
-# misura delle tre configurazioni su ciascun set
-for set in data/final_a.json data/final_b.json data/final_c.json; do
-  RERANKER_BACKEND=llm py -u scripts/ablation_graph.py --dataset $set \
-      --mode puretext --configs 1 2 3 --with-generation --repeats 3 \
-      --output "ablation_$(basename $set .json).csv" \
-      --per-query-output "ablation_$(basename $set .json)_per_query.csv"
-done
-```
