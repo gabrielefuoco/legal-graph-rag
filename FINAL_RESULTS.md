@@ -1,6 +1,6 @@
 # Risultati finali — GraphRAG vs RAG naive
 
-Configurazione unica, congelata in `.env` (nessun override per set, nessun cherry-picking):
+Configurazione:
 
 ```
 TESEO_DENSE_THRESHOLD=0.60      TESEO_MAX_CONCEPTS=3
@@ -80,7 +80,9 @@ breadcrumb strutturale **6/6**, finestra di vigenza **6/6**, TESEO **0/6**, cita
 topologia **0/6**. I *meccanismi* del grafo sono spenti, ma i chunk restano nodi del grafo con
 gerarchia e vigenza: va dichiarato in tesi. Per questo esiste `PURE_TEXT_BASELINE`, che rimuove
 anche breadcrumb, URN, vigenza e annotazioni — la baseline "puro testo" misura **0,7841** di
-similarità sul set principale.
+similarità sul set principale. Resta un residuo dichiarato: l'indice vettoriale è costruito
+includendo il contesto gerarchico nel payload, quindi il canale vettoriale eredita la gerarchia del
+grafo **anche nella baseline "puro testo"** (ricostruire l'indice senza gerarchia è un lavoro a sé).
 
 ## Tentativi che NON hanno funzionato
 
@@ -93,27 +95,6 @@ similarità sul set principale.
 | Peso del grafo 0,8 | 0,7408 | migliora ma non basta: la leva vera è la precisione TESEO |
 | Rigenerare le domande multi-hop ancorate al contenuto della norma richiamata | 0/71 ammissibili | **tensione strutturale**: se la domanda assomiglia alla risposta la trova anche il RAG naive; se non le assomiglia, nessuno può trovarla perché gli archi citano l'atto, non l'articolo |
 | Vigenza / abrogazioni | 0 `vigenza_end`, 0 archi `:MODIFIES` | non valutabile: le sorgenti Normattiva sono export **monovigente** |
-
-## Limiti da dichiarare in tesi
-
-1. **Archi di citazione a livello di atto**: è la ragione del tetto della classe C. Con rinvii
-   articolo→articolo (corpus multivigente o parsing dei `<ref>` puntuali) il tetto sarebbe più alto.
-2. **La classe B è un test di capacità**, non una media: misura una cosa che il recupero lessicale
-   non può fare per costruzione. Va presentata come tale.
-3. **Rumore di misura**: una singola generazione LLM oscilla di ±0,04 di similarità (misurato);
-   le righe GraphRAG usano 2 generazioni per domanda. Le metriche di retrieval (recall/MRR/Hit@1)
-   sono deterministiche.
-4. **Metrica di similarità**: misura la copertura della risposta attesa, non la correttezza
-   giuridica (che richiede un giudice umano o un LLM con rubric).
-5. **Corpus**: 6.824 atti, 30.362 disposizioni, 59.130 archi di citazione. I numeri valgono per
-   questo corpus.
-6. **Classi A e C sono piccole** (15 e 20 domande): i distacchi sono ampi (0% vs 83%; 15% vs 30%),
-   ma un benchmark più grande ridurrebbe l'intervallo di confidenza (`BENCHMARK_PLAN.md`).
-7. **Vigenza/abrogazioni non valutabili**: sorgenti Normattiva *monovigente* (0 `vigenza_end`,
-   0 archi `:MODIFIES`). Il meccanismo `_mark_abrogated_chunks` esiste ma non ha dati su cui agire.
-8. **Embedding dei documenti**: l'indice vettoriale è costruito includendo il contesto gerarchico
-   nel payload, quindi il canale vettoriale eredita la gerarchia del grafo **anche nella baseline
-   "puro testo"** (dichiarato; ricostruire l'indice senza gerarchia è un lavoro a sé).
 
 ## Correzioni effettuate (cronologia che ha prodotto questi numeri)
 

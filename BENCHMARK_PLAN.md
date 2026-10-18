@@ -50,27 +50,14 @@ citante non è un template) ma il criterio di ammissibilità è automatico.
 | B — rinvio nominato | 0% | ~100% |
 | C — multi-hop | 5% | ~50% |
 
-## 6. Limiti da dichiarare in tesi
-
-1. **Gli archi `:CITES` sono a livello di atto, non di articolo**: quando la domanda non nomina la
-   disposizione, nessun meccanismo può sapere quale articolo è richiamato (da qui il tetto della
-   classe C). Con un corpus con rinvii articolo→articolo il tetto sarebbe più alto.
-2. **La classe B è un test di capacità, non di media**: misura una cosa che il RAG naive non può
-   fare per costruzione. Va presentata come tale, non come "il grafo è meglio in generale".
-3. **Domande della classe C generate da LLM**: possibile bias di formulazione; mitigato dal
-   criterio di ammissibilità automatico.
-4. **Metrica di similarità**: misura la copertura della risposta attesa, non la correttezza
-   giuridica; un giudice umano/LLM su un campione è il controllo successivo.
-5. **Corpus**: 6.824 atti, 30.362 disposizioni; i risultati valgono per questo corpus.
-
-## 7. Cosa NON fare
+## 6. Cosa NON fare
 
 - Niente cherry-picking per-query nei numeri principali. Se serve un pannello illustrativo
   ("dove il grafo sblocca la domanda"), va in appendice e **dichiarato come selezione**.
 - Niente configurazioni multiple per classe: la stessa config deve reggere tutte e tre (è il
   punto della "configurazione unica").
 
-## 8. Comandi (bozza)
+## 7. Comandi (bozza)
 
 ```bash
 # costruzione dei set

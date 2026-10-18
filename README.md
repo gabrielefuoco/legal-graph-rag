@@ -9,63 +9,63 @@
 ![Architecture](https://img.shields.io/badge/Orchestration-LangGraph-purple)
 ![Deployment](https://img.shields.io/badge/Deploy-100%25%20On--Premise%20%2F%20Air--Gapped-success)
 
-**Legal GraphRAG** è un framework avanzato di *Modular RAG* neuro-simbolico progettato specificamente per il dominio legislativo italiano (*Civil Law*). Il sistema supera i quattro limiti strutturali del *Naive RAG* in ambito forense (perdita del contesto gerarchico, divario lessicale, cecità ai rinvii normativi e amnesia vigenziale) unificando in un unico motore transazionale su **Neo4j** la rappresentazione formale degli atti (**Akoma Ntoso / NIR** e modello **FRBR**), il vocabolario controllato istituzionale (**Thesaurus TESEO** del Senato), la ricerca vettoriale densa (**HNSW**) e la ricerca lessicale (**BM25**), orchestrati da un ciclo agentico auto-riflessivo su **LangGraph**[cite: 1].
+**Legal GraphRAG** è un framework avanzato di *Modular RAG* neuro-simbolico progettato specificamente per il dominio legislativo italiano (*Civil Law*). Il sistema supera i quattro limiti strutturali del *Naive RAG* in ambito forense (perdita del contesto gerarchico, divario lessicale, cecità ai rinvii normativi e amnesia vigenziale) unificando in un unico motore transazionale su **Neo4j** la rappresentazione formale degli atti (**Akoma Ntoso / NIR** e modello **FRBR**), il vocabolario controllato istituzionale (**Thesaurus TESEO** del Senato), la ricerca vettoriale densa (**HNSW**) e la ricerca lessicale (**BM25**), orchestrati da un ciclo agentico auto-riflessivo su **LangGraph**.
 
 ---
 
 ## 🌟 Caratteristiche Principali e Pilastri Architetturali
 
 ### 1. 🏛️ Pipeline ETL Asincrona e Parsing Deterministico
-- **Ingestione Non-Bloccante Multi-Sorgente**: Acquisizione asincrona (`asyncio` / `aiohttp`) con *Exponential Backoff*, *Full Jitter* e *Circuit Breaker* dalle quattro fonti primarie dello Stato: **Normattiva** (macchina a 7 stati di polling), **Thesaurus TESEO** (estrazione SPARQL paginata SKOS/RDF), **Camera e Senato** (*Iter Legis* via Linked Open Data) e **Corte Costituzionale** (sindacato di legittimità)[cite: 1].
-- **DFS Context Injection (`AknParser`)**: Scansione deterministica dell'albero XML (*Akoma Ntoso 3.0* e *NIR 2.2*) tramite visita in profondità (DFS)[cite: 1]. Ogni comma (`:Expression`) viene arricchito con la catena ordinamentale dei nodi padre (`Libro > Titolo > Capo > Articolo + Rubrica`), azzerando il fenomeno del *Context Loss*[cite: 1].
-- **Linearizzazione Duale delle Tabelle**: Le tabelle normative vengono gestite come nodi atomici con doppia rappresentazione: formattazione **GitHub Flavored Markdown** (`text_display`) per la leggibilità dell'utente a schermo e **serializzazione discorsiva soggetto-attributo-valore** (`text_vector`) per massimizzare la precisione dell'embedding vettoriale[cite: 1].
-- **Fast Ontology Matching (Aho-Corasick)**: Ancoraggio dei commi agli oltre 40.000 descrittori del Thesaurus TESEO in tempo lineare $O(N + M)$ tramite automa a stati finiti, combinato con uno score ibrido lessicale-semantico ($\alpha = 0.3$, soglia $\tau = 0.45$) per istanziare archi pesati `:HAS_TOPIC`[cite: 1].
-- **Validazione Pydantic V2 e Idempotenza**: Tipizzazione rigorosa tramite DTO e generazione deterministica degli ID primari con hashing crittografico SHA-256 sull'URN NIR (`urn:nir:stato:...`), garantendo caricamenti transazionali `MERGE` idempotenti[cite: 1].
+- **Ingestione Non-Bloccante Multi-Sorgente**: Acquisizione asincrona (`asyncio` / `aiohttp`) con *Exponential Backoff*, *Full Jitter* e *Circuit Breaker* dalle quattro fonti primarie dello Stato: **Normattiva** (macchina a 7 stati di polling), **Thesaurus TESEO** (estrazione SPARQL paginata SKOS/RDF), **Camera e Senato** (*Iter Legis* via Linked Open Data) e **Corte Costituzionale** (sindacato di legittimità).
+- **DFS Context Injection (`AknParser`)**: Scansione deterministica dell'albero XML (*Akoma Ntoso 3.0* e *NIR 2.2*) tramite visita in profondità (DFS). Ogni comma (`:Expression`) viene arricchito con la catena ordinamentale dei nodi padre (`Libro > Titolo > Capo > Articolo + Rubrica`), azzerando il fenomeno del *Context Loss*.
+- **Linearizzazione Duale delle Tabelle**: Le tabelle normative vengono gestite come nodi atomici con doppia rappresentazione: formattazione **GitHub Flavored Markdown** (`text_display`) per la leggibilità dell'utente a schermo e **serializzazione discorsiva soggetto-attributo-valore** (`text_vector`) per massimizzare la precisione dell'embedding vettoriale.
+- **Fast Ontology Matching (Aho-Corasick)**: Ancoraggio dei commi agli oltre 40.000 descrittori del Thesaurus TESEO in tempo lineare $O(N + M)$ tramite automa a stati finiti, combinato con uno score ibrido lessicale-semantico ($\alpha = 0.3$, soglia $\tau = 0.45$) per istanziare archi pesati `:HAS_TOPIC`.
+- **Validazione Pydantic V2 e Idempotenza**: Tipizzazione rigorosa tramite DTO e generazione deterministica degli ID primari con hashing crittografico SHA-256 sull'URN NIR (`urn:nir:stato:...`), garantendo caricamenti transazionali `MERGE` idempotenti.
 
 ### 2. 🔍 Motore di Retrieval Ibrido Parallelo e Grafo Additivo
 - **Ricerca Parallela a Tre Canali su Neo4j**:
-  1. **Vector Search (HNSW)**: Embedding densi a **1024 dimensioni** (`qwen3-embedding:0.6b`) con istruzione asimmetrica lato query[cite: 1].
-  2. **BM25 Keyword Search (Lucene)**: Match esatto per codici alfanumerici, estremi di legge e tecnicismi giuridici[cite: 1].
-  3. **Graph Semantic Search (TESEO)**: Navigazione topologica delle relazioni `:HAS_TOPIC` (calibrata con `TESEO_DENSE_THRESHOLD = 0.60` e `TESEO_MAX_CONCEPTS = 3`)[cite: 1].
-- **Weighted RRF con Deduplicazione Intra-Canale**: Unificazione delle graduatorie eterogenee tramite *Weighted Reciprocal Rank Fusion* ($k=60$, pesi $W_{\text{vector}}=1.0, W_{\text{bm25}}=1.0, W_{\text{graph}}=1.2$) previa deduplicazione per canale (`_deduplicate_channel`) per neutralizzare i percorsi multipli `:PART_OF`[cite: 1].
-- **Principio del Grafo Additivo (`PRIORITY_BASE_CHUNKS = 6`)**: I migliori candidati estratti dai canali testuali costituiscono una quota protetta inviolabile che l'arricchimento relazionale non può scalzare, garantendo **zero regressioni** sulle query dirette[cite: 1].
-- **Work-level Merging (Super-Chunking) e Topology Expansion**: Ricomposizione ordinata dei commi contigui dello stesso atto in *Super-Chunk* organici (abbattendo del **36.4%** i token di overhead e mitigando il *Lost in the Middle*) ed espansione orizzontale sui commi adiacenti (`:NEXT`) e sulle rubriche padre (`:PART_OF`) entro un budget di 6.000 caratteri[cite: 1].
+  1. **Vector Search (HNSW)**: Embedding densi a **1024 dimensioni** (`qwen3-embedding:0.6b`) con istruzione asimmetrica lato query.
+  2. **BM25 Keyword Search (Lucene)**: Match esatto per codici alfanumerici, estremi di legge e tecnicismi giuridici.
+  3. **Graph Semantic Search (TESEO)**: Navigazione topologica delle relazioni `:HAS_TOPIC` (calibrata con `TESEO_DENSE_THRESHOLD = 0.60` e `TESEO_MAX_CONCEPTS = 3`).
+- **Weighted RRF con Deduplicazione Intra-Canale**: Unificazione delle graduatorie eterogenee tramite *Weighted Reciprocal Rank Fusion* ($k=60$, pesi $W_{\text{vector}}=1.0, W_{\text{bm25}}=1.0, W_{\text{graph}}=1.2$) previa deduplicazione per canale (`_deduplicate_channel`) per neutralizzare i percorsi multipli `:PART_OF`.
+- **Principio del Grafo Additivo (`PRIORITY_BASE_CHUNKS = 6`)**: I migliori candidati estratti dai canali testuali costituiscono una quota protetta inviolabile che l'arricchimento relazionale non può scalzare, garantendo **zero regressioni** sulle query dirette.
+- **Work-level Merging (Super-Chunking) e Topology Expansion**: Ricomposizione ordinata dei commi contigui dello stesso atto in *Super-Chunk* organici (abbattendo del **36.4%** i token di overhead e mitigando il *Lost in the Middle*) ed espansione orizzontale sui commi adiacenti (`:NEXT`) e sulle rubriche padre (`:PART_OF`) entro un budget di 6.000 caratteri.
 
 ### 3. ⏳ Temporal RAG e Gestione della Multivigenza
-- **Principio *Tempus Regit Actum***: Tracciamento nativo degli intervalli di vigenza $I_d = [t_{\text{start}}, t_{\text{end}})$ sui nodi `:Expression` e modellazione dell'algebra delle novelle legislative tramite archi `:MODIFIES` (`SUBSTITUTION`, `INSERTION`, `REPEAL`)[cite: 1].
-- **Soft Semantic Tagging (Abrogation Marking)**: Anziché eliminare fisicamente le norme storiche (impedendo la consulenza retroattiva) o penalizzare testi risalenti ma vigenti (es. Codice Civile del 1942), il sistema inietta in testa al testo il marcatore esplicito `[ATTENZIONE: NORMA ABROGATA IL YYYY-MM-DD]`, preservando il diritto transitorio e azzerando le allucinazioni diacroniche[cite: 1].
+- **Principio *Tempus Regit Actum***: Tracciamento nativo degli intervalli di vigenza $I_d = [t_{\text{start}}, t_{\text{end}})$ sui nodi `:Expression` e modellazione dell'algebra delle novelle legislative tramite archi `:MODIFIES` (`SUBSTITUTION`, `INSERTION`, `REPEAL`).
+- **Soft Semantic Tagging (Abrogation Marking)**: Anziché eliminare fisicamente le norme storiche (impedendo la consulenza retroattiva) o penalizzare testi risalenti ma vigenti (es. Codice Civile del 1942), il sistema inietta in testa al testo il marcatore esplicito `[ATTENZIONE: NORMA ABROGATA IL YYYY-MM-DD]`, preservando il diritto transitorio e azzerando le allucinazioni diacroniche.
 
 ### 4. 🤖 Orchestrazione Agentica LangGraph e Risolutore Simbolico
-- **Compilatore Neuro-Simbolico di Rinvii (`resolver.py`)**: Intercetta in **12 ms** i riferimenti normativi espliciti nella query (es. *"art. 24 della legge 241/1990"*) tramite pattern regex certificati, sintetizza l'URN NIR canonico ed esegue il lookup diretto su Neo4j, superando la cecità lessicale degli indici tradizionali[cite: 1].
-- **Espansione Citazionale Multi-Hop Guidata da Embedding (`CitationExpander`)**: Navigazione controllata lungo le oltre **21.415 relazioni `:CITES`** con vincolo rigido `MAX_CITATION_HOPS = 1` (per prevenire l'esplosione combinatoria delle reti *Scale-Free*)[cite: 1]. Per i rinvii a interi atti (`:Work`), ordina dinamicamente al volo gli articoli dell'atto citato per similarità coseno rispetto alla query (`CITATION_EXPANSION_PER_ACT = 3`)[cite: 1].
-- **Loop Auto-Riflessivo (Self-Reflective RAG)**: Un supervisore neurale strutturato Pydantic (**Retrieval Grader** a $T=0.0$) valuta la pertinenza dei frammenti estratti; in caso di insufficienza probatoria, attiva il **Query Rewriter** ($T=0.3$) con convergenza garantita entro $M \le 5$ iterazioni massime[cite: 1].
-- **Sintesi Grounded e Deontologia Forense**: Generazione tramite `Qwen3.5:4b` in *Direct Stuffing* fino a **64.000 caratteri** (evitando la perdita informativa del Map-Reduce), con obbligo di citazione formale `[Atto, Articolo]`, *Citation Consistency Audit* e politica di **Negative Rejection** (fallback sicuro a zero allucinazioni in assenza di fonti)[cite: 1].
+- **Compilatore Neuro-Simbolico di Rinvii (`resolver.py`)**: Intercetta in **12 ms** i riferimenti normativi espliciti nella query (es. *"art. 24 della legge 241/1990"*) tramite pattern regex certificati, sintetizza l'URN NIR canonico ed esegue il lookup diretto su Neo4j, superando la cecità lessicale degli indici tradizionali.
+- **Espansione Citazionale Multi-Hop Guidata da Embedding (`CitationExpander`)**: Navigazione controllata lungo le oltre **21.415 relazioni `:CITES`** con vincolo rigido `MAX_CITATION_HOPS = 1` (per prevenire l'esplosione combinatoria delle reti *Scale-Free*). Per i rinvii a interi atti (`:Work`), ordina dinamicamente al volo gli articoli dell'atto citato per similarità coseno rispetto alla query (`CITATION_EXPANSION_PER_ACT = 3`).
+- **Loop Auto-Riflessivo (Self-Reflective RAG)**: Un supervisore neurale strutturato Pydantic (**Retrieval Grader** a $T=0.0$) valuta la pertinenza dei frammenti estratti; in caso di insufficienza probatoria, attiva il **Query Rewriter** ($T=0.3$) con convergenza garantita entro $M \le 5$ iterazioni massime.
+- **Sintesi Grounded e Deontologia Forense**: Generazione tramite `Qwen3.5:4b` in *Direct Stuffing* fino a **64.000 caratteri** (evitando la perdita informativa del Map-Reduce), con obbligo di citazione formale `[Atto, Articolo]`, *Citation Consistency Audit* e politica di **Negative Rejection** (fallback sicuro a zero allucinazioni in assenza di fonti).
 
 ---
 
 ## 🕸️ Schema del Knowledge Graph (Neo4j)
 
-Il database unifica grafo di proprietà etichettato (LPG), indice vettoriale HNSW e indice full-text Lucene[cite: 1]:
+Il database unifica grafo di proprietà etichettato (LPG), indice vettoriale HNSW e indice full-text Lucene:
 
 - **Nodi**:
-  - `:Work`: Opera legislativa astratta FRBR identificata da URN NIR canonico[cite: 1].
-  - `:StructuralUnit`: Partizioni gerarchiche intermedie (Libro, Parte, Titolo, Capo, Sezione, Articolo)[cite: 1].
-  - `:Expression`: Unità precettiva atomica (Comma, Lettera, Tabella) con `text_display`, `text_vector`, `embedding` (1024-d) ed estremi di vigenza[cite: 1].
-  - `:TESEO_Concept`: Concetti del vocabolario controllato SKOS del Senato (`prefLabel`, `altLabels`)[cite: 1].
-  - `:Judgement` & `:IterLegisStep`: Pronunce della Corte Costituzionale e passaggi parlamentari dei DDL[cite: 1].
+  - `:Work`: Opera legislativa astratta FRBR identificata da URN NIR canonico.
+  - `:StructuralUnit`: Partizioni gerarchiche intermedie (Libro, Parte, Titolo, Capo, Sezione, Articolo).
+  - `:Expression`: Unità precettiva atomica (Comma, Lettera, Tabella) con `text_display`, `text_vector`, `embedding` (1024-d) ed estremi di vigenza.
+  - `:TESEO_Concept`: Concetti del vocabolario controllato SKOS del Senato (`prefLabel`, `altLabels`).
+  - `:Judgement` & `:IterLegisStep`: Pronunce della Corte Costituzionale e passaggi parlamentari dei DDL.
 - **Relazioni**:
-  - `(:Expression)-[:PART_OF]->(:StructuralUnit)-[:PART_OF]->(:Work)` (Gerarchia ordinamentale)[cite: 1]
-  - `(:Expression)-[:NEXT]->(:Expression)` (Continuità sequenziale dei commi)[cite: 1]
-  - `(:Expression)-[:CITES]->(:Work | :Expression)` (Rinvii normativi espliciti)[cite: 1]
-  - `(:Expression)-[:MODIFIES {type}]->(:Expression)` (Novelle legislative: sostituzioni, inserimenti, abrogazioni)[cite: 1]
-  - `(:Expression)-[:HAS_TOPIC {score}]->(:TESEO_Concept)` (Ancoraggio ontologico)[cite: 1]
-  - `(:Judgement)-[:INTERPRETS]->(:Work)` & `(:IterLegisStep)-[:ITER_STEP]->(:Work)`[cite: 1]
+  - `(:Expression)-[:PART_OF]->(:StructuralUnit)-[:PART_OF]->(:Work)` (Gerarchia ordinamentale)
+  - `(:Expression)-[:NEXT]->(:Expression)` (Continuità sequenziale dei commi)
+  - `(:Expression)-[:CITES]->(:Work | :Expression)` (Rinvii normativi espliciti)
+  - `(:Expression)-[:MODIFIES {type}]->(:Expression)` (Novelle legislative: sostituzioni, inserimenti, abrogazioni)
+  - `(:Expression)-[:HAS_TOPIC {score}]->(:TESEO_Concept)` (Ancoraggio ontologico)
+  - `(:Judgement)-[:INTERPRETS]->(:Work)` & `(:IterLegisStep)-[:ITER_STEP]->(:Work)`
 
 ---
 
 ## 📊 Validazione Sperimentale e Risultati (`graphrag-prod-v1`)
 
-Il sistema è stato validato su un corpus di **6.824 atti normativi**, **30.362 disposizioni atomiche** e oltre **59.000 relazioni** (di cui **21.415 archi `:CITES`**), mediante un benchmark tripartito confrontato con una baseline ibrida convenzionale (Vector + BM25)[cite: 1]:
+Il sistema è stato validato su un corpus di **6.824 atti normativi**, **30.362 disposizioni atomiche** e oltre **59.000 relazioni** (di cui **21.415 archi `:CITES`**), mediante un benchmark tripartito confrontato con una baseline ibrida convenzionale (Vector + BM25):
 
 | Classe Benchmark | Configurazione | Recall@10 | MRR | Hit@1 | Sim. Semantica |
 | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -77,9 +77,9 @@ Il sistema è stato validato su un corpus di **6.824 atti normativi**, **30.362 
 | | **Legal GraphRAG** | **30.00%** *(2x)* | **0.2167** *(>2x)* | **15.00%** *(3x)* | **0.5160** |
 
 ### ⚡ Performance e Profilo Hardware (100% On-Premise)
-Progettato per rispettare il segreto professionale (Art. 622 c.p.), il GDPR e l'EU AI Act in modalità **Air-Gapped**, l'intero stack gira su una singola GPU consumer **NVIDIA GeForce RTX 3060 (6 GB VRAM)** con KV-Cache quantizzata in `q8_0` (occupazione totale **~5.1 GB VRAM**)[cite: 1]:
-- **Latenza Infrastruttura IR + Grafo** (TESEO + Embedding + 3 Canali Neo4j + RRF + Resolver + Citation & Topology Expander): **~331 ms**[cite: 1].
-- **Latenza End-to-End Completa** (incluso Grading Pydantic e Generazione con `reasoning=False` a ~80 tok/s): **~2.25 s**[cite: 1].
+Progettato per rispettare il segreto professionale (Art. 622 c.p.), il GDPR e l'EU AI Act in modalità **Air-Gapped**, l'intero stack gira su una singola GPU consumer **NVIDIA GeForce RTX 3060 (6 GB VRAM)** con KV-Cache quantizzata in `q8_0` (occupazione totale **~5.1 GB VRAM**):
+- **Latenza Infrastruttura IR + Grafo** (TESEO + Embedding + 3 Canali Neo4j + RRF + Resolver + Citation & Topology Expander): **~331 ms**.
+- **Latenza End-to-End Completa** (incluso Grading Pydantic e Generazione con `reasoning=False` a ~80 tok/s): **~2.25 s**.
 
 ---
 
@@ -87,8 +87,8 @@ Progettato per rispettare il segreto professionale (Art. 622 c.p.), il GDPR e l'
 
 ### 1. Prerequisiti
 - **Docker** & **Docker Compose**
-- **Python 3.10+**[cite: 2]
-- GPU NVIDIA con supporto **CUDA 12.1** e *NVIDIA Container Toolkit* (fortemente raccomandato; 6 GB+ VRAM)[cite: 1]
+- **Python 3.10+**
+- GPU NVIDIA con supporto **CUDA 12.1** e *NVIDIA Container Toolkit* (fortemente raccomandato; 6 GB+ VRAM)
 
 ### 2. Deploy Infrastruttura Multi-Container
 Avvia i tre container isolati (`neo4j` 5.26 con APOC e GDS, `ollama` con passthrough GPU e `legal-graph-app`):
@@ -112,7 +112,7 @@ docker compose ps                 # stato dei tre container
 La dashboard è poi su `http://localhost:8501`, Neo4j Browser su `http://localhost:7474`.
 
 ### 3. Ingestione Olistica e Costruzione del Knowledge Graph (Holistic ETL)
-Il comando unificato scarica in modo asincrono, valida con Pydantic V2, esegue il parsing Akoma Ntoso con *Context Injection*, linearizza le tabelle, calcola gli embedding a 1024-d e popola il grafo collegando Normattiva, TESEO, Camera, Senato e Corte Costituzionale[cite: 1, 2]:
+Il comando unificato scarica in modo asincrono, valida con Pydantic V2, esegue il parsing Akoma Ntoso con *Context Injection*, linearizza le tabelle, calcola gli embedding a 1024-d e popola il grafo collegando Normattiva, TESEO, Camera, Senato e Corte Costituzionale:
 ```bash
 # Sostituisci "appalti" con il dominio o tema normativo desiderato
 python manage.py build-graph --topic "appalti"
@@ -123,25 +123,25 @@ python manage.py build-graph --topic "appalti"
 ## 🖥️ Interazione e Spiegabilità (XAI)
 
 ### Dashboard Web Interattiva (Streamlit)
-Per avviare l'interfaccia grafica *White-Box* orientata all'ergonomia cognitiva forense (con bridge asincrono `nest_asyncio`)[cite: 1, 2]:
+Per avviare l'interfaccia grafica *White-Box* orientata all'ergonomia cognitiva forense (con bridge asincrono `nest_asyncio`):
 ```bash
 python manage.py streamlit
 ```
-La dashboard offre **tre livelli di spiegabilità (Explainable AI)** conformi all'art. 111 Cost. e all'EU AI Act[cite: 1]:
-1. **Livello Documentale**: Visualizzazione dei *Super-Chunk*, badge cromatici di canale (`[VECTOR]`, `[BM25]`, `[GRAPH]`, `[CITATION_HOP]`), link URN NIR cliccabili verso Normattiva, score RRF e avvisi di abrogazione[cite: 1].
-2. **Livello Relazionale**: Ispezione delle query Cypher eseguite su Neo4j, archi `:CITES` attraversati e descrittori ontologici TESEO attivati[cite: 1].
-3. **Livello Metacognitivo**: Tracciamento dello `StateGraph` LangGraph, motivazioni del *Retrieval Grader*, eventuali riscritture della query e controlli nella sidebar per studi di ablazione a runtime (`disable_graph`, `disable_bm25`, budget topologico)[cite: 1, 2].
+La dashboard offre **tre livelli di spiegabilità (Explainable AI)** conformi all'art. 111 Cost. e all'EU AI Act:
+1. **Livello Documentale**: Visualizzazione dei *Super-Chunk*, badge cromatici di canale (`[VECTOR]`, `[BM25]`, `[GRAPH]`, `[CITATION_HOP]`), link URN NIR cliccabili verso Normattiva, score RRF e avvisi di abrogazione.
+2. **Livello Relazionale**: Ispezione delle query Cypher eseguite su Neo4j, archi `:CITES` attraversati e descrittori ontologici TESEO attivati.
+3. **Livello Metacognitivo**: Tracciamento dello `StateGraph` LangGraph, motivazioni del *Retrieval Grader*, eventuali riscritture della query e controlli nella sidebar per studi di ablazione a runtime (`disable_graph`, `disable_bm25`, budget topologico).
 
 ### Command Line Interface (CLI)
-È possibile interrogare direttamente il motore di retrieval e generazione da terminale[cite: 2]:
+È possibile interrogare direttamente il motore di retrieval e generazione da terminale:
 ```bash
 python manage.py retrieve --query "Quali sono i limiti al subappalto a cascata nel codice dei contratti pubblici?" --verbose
 ```
-*Opzioni principali[cite: 2]:*
-- `--top-k`: Candidati estratti per singolo canale (default: `15`)[cite: 1, 2].
-- `--final-k`: Documenti finali dopo fusione RRF e reranking (default: `10`)[cite: 1, 2].
-- `--verbose`: Mostra i concetti TESEO estratti, i pesi dei canali e le metriche di espansione[cite: 2].
-- `--full-text`: Visualizza il testo integrale dei Super-Chunk normativi recuperati[cite: 2].
+*Opzioni principali:*
+- `--top-k`: Candidati estratti per singolo canale (default: `15`).
+- `--final-k`: Documenti finali dopo fusione RRF e reranking (default: `10`).
+- `--verbose`: Mostra i concetti TESEO estratti, i pesi dei canali e le metriche di espansione.
+- `--full-text`: Visualizza il testo integrale dei Super-Chunk normativi recuperati.
 
 ---
 
