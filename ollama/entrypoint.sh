@@ -15,7 +15,13 @@ echo "Ollama è pronto!"
 # Scarica i modelli necessari in background
 echo "Eseguo il pull dei modelli necessari (potrebbe richiedere tempo)..."
 ollama pull qwen3-embedding:0.6b
-ollama pull qwen3.5:4b
+# Il modello generativo serve solo con esecuzione locale: con LLM_PROVIDER=openrouter
+# la generazione passa dall'API e l'unico modello necessario è l'embedder.
+if [ "${LLM_PROVIDER:-ollama}" = "ollama" ]; then
+    ollama pull qwen3.5:4b
+else
+    echo "LLM_PROVIDER=${LLM_PROVIDER}: salto il pull di qwen3.5:4b."
+fi
 
 echo "Modelli scaricati e pronti!"
 

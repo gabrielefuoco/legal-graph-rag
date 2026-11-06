@@ -20,10 +20,13 @@ RUN apt-get update && apt-get install -y \
 # Override it from the build args (see docker-compose.yml / .env).
 ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu121
 
-# Install Python dependencies
+# Install Python dependencies. PyTorch goes FIRST: installing requirements.txt before it lets
+# sentence-transformers pull torch from PyPI (a CUDA 13.x build, unusable on older drivers),
+# after which this index-url install would only refresh torchvision/torchaudio.
+RUN pip install --no-cache-dir torch torchvision torchaudio --index-url ${TORCH_INDEX_URL}
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir torch torchvision torchaudio --index-url ${TORCH_INDEX_URL}
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application
 COPY . .

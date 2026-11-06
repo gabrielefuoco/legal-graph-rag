@@ -24,6 +24,8 @@ services:
       - "11434:11434"
     environment:
       - OLLAMA_KV_CACHE_TYPE=q8_0
+      # Letto da entrypoint.sh: con un provider cloud il solo modello necessario è l'embedder
+      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
     volumes:
       - ./ollama/data:/root/.ollama
       - ./ollama/entrypoint.sh:/entrypoint.sh:ro
@@ -75,6 +77,14 @@ services:
       streamlit run src/ui/app.py 
       --server.port=8501 
       --server.address=0.0.0.0
+    # Reranker CrossEncoder sulla GPU dell'host: su CPU misura ~255 s per query, su GPU ~3 s.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   jupyter:
     build:
